@@ -1,0 +1,32 @@
+.toaster-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 10000;
+}
+
+.toaster {
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    color: #fff;
+    font-family: sans-serif;
+    min-width: 250px;
+}
+
+.toaster.success {
+    background-color: #28a745;
+}
+
+.toaster.error {
+    background-color: #dc3545;
+}
+
+.toaster.info {
+    background-color: #17a2b8;
+}
+
+.toaster.warning {
+    background-color: #ffc107;
+    color: #212529;
+}

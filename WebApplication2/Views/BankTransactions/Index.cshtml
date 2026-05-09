@@ -1,0 +1,59 @@
+﻿@using CRM.Domain.Enums
+@using CRM.WebApp.ViewModels.Banking
+@model IEnumerable<BankTransactionViewModel>
+
+@{
+    ViewData["Title"] = "Bank Transactions";
+}
+
+<h2>Bank Transactions</h2>
+
+<form asp-action="Filter" method="get" class="form-inline mb-3">
+    <label for="from">From:</label>
+    <input type="date" name="from" class="form-control mx-2" />
+
+    <label for="to">To:</label>
+    <input type="date" name="to" class="form-control mx-2" />
+
+    <label for="type">Type:</label>
+    <select name="type" class="form-control mx-2">
+        <option value="">All</option>
+        @foreach (var type in Enum.GetValues(typeof(TransactionType)))
+        {
+            <option value="@type">@type</option>
+        }
+    </select>
+
+    <button type="submit" class="btn btn-primary">Filter</button>
+    <a asp-action="Create" class="btn btn-success ml-2">Add New</a>
+</form>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Date</th>
+            <th>Reference</th>
+            <th>Description</th>
+            <th>Amount</th>
+            <th>Type</th>
+            <th>Status</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.TransactionDate.ToShortDateString()</td>
+                <td>@item.ReferenceNumber</td>
+                <td>@item.Description</td>
+                <td>@item.Amount.ToString("C")</td>
+                <td>@item.Type</td>
+                <td>@item.Status</td>
+                <td>
+                    @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn btn-sm btn-danger" })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

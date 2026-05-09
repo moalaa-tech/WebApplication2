@@ -1,0 +1,100 @@
+@using CRM.WebApp.DTOs.InventoryManagement.Product
+@using CRM.WebApp.Paging
+@using CRM.WebApp.ViewModels.InventoryManagement.Product
+@model PaginatedList<ProductDto>
+@{
+    ViewData["Title"] = @Localizer["Shared.Inventory.Index.Title"];
+}
+
+<h2>@Localizer["Shared.Inventory.Index.Title"]</h2>
+<div class="mb-4">
+    <a class="btn btn-primary" asp-action="CreateItem">@Localizer["Shared.Inventory.Action.Create"]</a>
+    <a class="btn btn-success" asp-action="ReceiveGoods">@Localizer["Shared.Inventory.Action.ReceiveGoods"]</a>
+    <a class="btn btn-danger" asp-action="IssueGoods">@Localizer["Shared.Inventory.Action.IssueGoods"]</a>
+    <a class="btn btn-info" asp-action="ReorderSuggestions">@Localizer["Shared.Inventory.Action.ReorderSuggestions"]</a>
+    <a class="btn btn-secondary" asp-action="ScanBarcode">@Localizer["Shared.Inventory.Action.ScanBarcode"]</a>
+</div>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>@Localizer["Shared.Inventory.Field.SKU"]</th>
+            <th>@Localizer["Shared.Inventory.Field.Name"]</th>
+            <th>@Localizer["Shared.Inventory.Field.NameAr"]</th>
+            <th>@Localizer["Shared.Inventory.Field.Cost"]</th>
+            <th>@Localizer["Shared.Inventory.Field.Price"]</th>
+            <th>@Localizer["Shared.Inventory.Field.Stock"]</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Name</td>
+                <td>@item.Name</td>
+                <td>@item.NameAr</td>
+                <td>@item.TotalCost</td>
+                <td>@item.TotalCost</td>
+                <td>@item.CurrentStock</td>
+                <td>
+                    <a class="btn btn-sm btn-info" asp-action="Details" asp-route-id="@item.Id">@Localizer["common.Details"]</a> |
+                    <a class="btn btn-sm btn-info" asp-action="Edit" asp-route-id="@item.Id">@Localizer["common.Edit"]</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+@Localizer["Common.Page"] @Model.PageIndex @Localizer["Common.Of"] @Model.TotalPages
+
+
+<nav aria-label="Page navigation example">
+    <ul class="pagination">
+
+        @{
+            int startPage = Math.Max(1, Model.PageIndex - 2);
+            int endPage = Math.Min(Model.TotalPages, Model.PageIndex + 2);
+
+            if (Model.TotalPages > 5)
+            {
+                if (endPage - startPage < 4)
+                {
+                    startPage = Math.Max(1, endPage - 4);
+                }
+                if (endPage - startPage < 4)
+                {
+                    endPage = Math.Min(Model.TotalPages, startPage + 4);
+                }
+            }
+        }
+
+
+        @for (var i = startPage; i <= endPage; i++)
+        {
+            <li class="page-item @(i == Model.PageIndex ? "active" : "")">
+                <a class="page-link"
+                   asp-action="Index"
+                   asp-route-pageIndex="@i">
+                    @i
+                </a>
+            </li>
+        }
+
+
+        <li class="page-item @(Model.HasNextPage ? "" : "disabled")">
+            <a class="page-link"
+               asp-action="Index"
+               asp-route-pageIndex="@(Model.PageIndex + 1)"
+               aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+            </a>
+        </li>
+
+    </ul>
+</nav>
+<div class="text-center mt-3">
+    <span class="text-muted">
+        Showing Page @Model.PageIndex of @Model.TotalPages
+    </span>
+</div>

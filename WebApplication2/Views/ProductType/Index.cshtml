@@ -1,0 +1,34 @@
+﻿@using CRM.WebApp.DTOs.InventoryManagement.ProductType
+@model IEnumerable<ProductTypeDto>
+
+@{
+    ViewData["Title"] = Localizer["ProductType.Index.Title", "Product Types"];
+}
+
+<h2>@Localizer["ProductType.Index.Title", "Product Types"]</h2>
+
+<a asp-action="Create" class="btn btn-primary mb-2">@Localizer["Common.Create", "Create New"]</a>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>@Localizer["ProductType.Field.Name", "Name"]</th>
+            <th>@Localizer["ProductType.Field.Description", "Description"]</th>
+            <th style="width: 180px;">@Localizer["Common.Actions", "Actions"]</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Name</td>
+                <td>@item.Description</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">@Localizer["Common.Edit", "Edit"]</a>
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info">@Localizer["Common.Details", "Details"]</a>
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">@Localizer["Common.Delete", "Delete"]</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

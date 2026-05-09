@@ -1,0 +1,28 @@
+@model CRM.WebApp.DTOs.Project.TimeEntryDto
+
+<h2>Time Entry Details</h2>
+
+<dl class="row">
+    <dt class="col-sm-4">Phase Name</dt>
+    <dd class="col-sm-8">@Model.PhaseName</dd>
+    <dt class="col-sm-4">User</dt>
+    <dd class="col-sm-8">@Model.UserName (@Model.UserEmail)</dd>
+    <dt class="col-sm-4">Entry Date</dt>
+    <dd class="col-sm-8">@Model.EntryDate.ToShortDateString()</dd>
+    <dt class="col-sm-4">Hours</dt>
+    <dd class="col-sm-8">@Model.Hours</dd>
+    <dt class="col-sm-4">Description</dt>
+    <dd class="col-sm-8">@Model.Description</dd>
+    <dt class="col-sm-4">Is Billable</dt>
+    <dd class="col-sm-8">@Model.IsBillable</dd>
+    <dt class="col-sm-4">Rate</dt>
+    <dd class="col-sm-8">@Model.Rate</dd>
+    <dt class="col-sm-4">Status</dt>
+    <dd class="col-sm-8">@Model.Status</dd>
+    <dt class="col-sm-4">Created Date</dt>
+    <dd class="col-sm-8">@Model.CreatedDate</dd>
+    <dt class="col-sm-4">Modified Date</dt>
+    <dd class="col-sm-8">@Model.ModifiedDate</dd>
+</dl>
+
+<a asp-action="Index" class="btn btn-secondary">Back to List</a>

@@ -1,0 +1,38 @@
+﻿@using CRM.WebApp.ViewModels.SalesManagement
+@model CompleteActivityViewModel
+
+@{
+    ViewData["Title"] = "Complete Activity";
+}
+
+<h1>Complete Activity</h1>
+
+<h4>@Model.Subject</h4>
+<p>Due Date: @Model.DueDate.ToString("g")</p>
+<hr />
+
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Complete">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+
+            <div class="mb-3">
+                <label asp-for="OutcomeNotes" class="form-label"></label>
+                <textarea asp-for="OutcomeNotes" class="form-control" rows="5"></textarea>
+                <span asp-validation-for="OutcomeNotes" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <input type="submit" value="Mark as Complete" class="btn btn-success" />
+                <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

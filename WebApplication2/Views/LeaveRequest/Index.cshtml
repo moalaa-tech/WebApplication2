@@ -1,0 +1,43 @@
+@using CRM.WebApp.DTOs.HumanResources.LeaveRequest
+@model IEnumerable<LeaveRequestDto>
+@inject Microsoft.Extensions.Localization.IStringLocalizer Localizer
+
+<h1>@Localizer["Shared.LeaveRequest.Index.Title"]</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">@Localizer["Shared.Common.Create"]</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>@Localizer["Shared.LeaveRequest.Field.Employee"]</th>
+            <th>@Localizer["Shared.LeaveRequest.Field.LeaveType"]</th>
+            <th>@Localizer["Shared.LeaveRequest.Field.StartDate"]</th>
+            <th>@Localizer["Shared.LeaveRequest.Field.EndDate"]</th>
+            <th>@Localizer["Shared.LeaveRequest.Field.Days"]</th>
+            <th>@Localizer["Shared.LeaveRequest.Field.Status"]</th>
+            <th>@Localizer["Shared.LeaveRequest.Field.RequestedDate"]</th>
+            <th>@Localizer["Shared.Common.Actions"]</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.Employee.Name)</td>
+                <td>@Html.DisplayFor(modelItem => item.LeaveType.Name)</td>
+                <td>@Html.DisplayFor(modelItem => item.LeaveType.NameAr)</td>
+                <td>@Html.DisplayFor(modelItem => item.StartDate)</td>
+                <td>@Html.DisplayFor(modelItem => item.EndDate)</td>
+                <td>@Html.DisplayFor(modelItem => item.NumberOfDays)</td>
+                <td>@Html.DisplayFor(modelItem => item.Status)</td>
+                <td>@Html.DisplayFor(modelItem => item.RequestedDate)</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">@Localizer["Shared.Common.Edit"]</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info">@Localizer["Shared.Common.Details"]</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">@Localizer["Shared.Common.Delete"]</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

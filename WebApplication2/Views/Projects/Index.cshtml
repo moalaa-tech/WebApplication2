@@ -1,0 +1,56 @@
+﻿@using CRM.WebApp.ViewModels.Project
+@model IEnumerable<ProjectDetailsViewModel>;
+
+<h2>@Localizer["Projects.Index.Title", "Projects"]</h2>
+
+<a asp-action="Create" class="btn btn-success">@Localizer["Projects.Index.CreateNewProject", "Create New Project"]</a>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>@Localizer["Projects.Field.ProjectCode", "Project Code"]</th>
+            <th>@Localizer["Projects.Field.Name", "Name"]</th>
+            <th>@Localizer["Projects.Field.Customer", "Customer"]</th>
+            <th>@Localizer["Projects.Field.StartDate", "Start Date"]</th>
+            <th>@Localizer["Projects.Field.Status", "Status"]</th>
+            <th>@Localizer["Projects.Field.Budget", "Budget"]</th>
+            <th>@Localizer["Common.Actions", "Actions"]</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var project in Model)
+        {
+            <tr>
+                <td>@project.ProjectCode</td>
+                <td>@project.Name</td>
+                <td>@project.CustomerName</td>
+                <td>@project.StartDate.ToShortDateString()</td>
+                <td>@project.Status</td>
+                <td>@project.Budget</td>
+                <td>
+                    <div class="btn-group" role="group">
+                        <a asp-action="Details" asp-route-id="@project.Id" class="btn btn-sm btn-info">@Localizer["Common.Details", "Details"]</a>
+                        <a asp-action="Edit" asp-route-id="@project.Id" class="btn btn-sm btn-warning">@Localizer["Common.Edit", "Edit"]</a>
+                        <a asp-action="Delete" asp-route-id="@project.Id" class="btn btn-sm btn-danger">@Localizer["Common.Delete", "Delete"]</a>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+@functions {
+    string GetStatusBadgeClass(string status)
+    {
+        return status switch
+        {
+            "Planning" => "secondary",
+            "Active" => "success",
+            "OnHold" => "warning",
+            "Completed" => "primary",
+            _ => "light"
+        };
+    }
+}

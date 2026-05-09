@@ -1,0 +1,72 @@
+﻿@using CRM.WebApp.Paging;
+@model PaginatedList<CRM.WebApp.DTOs.Customer.CustomerDto>
+
+@{
+    ViewData["Title"] = "Customers";
+}
+
+<h1>@Localizer["Shared.Customer.Index.Title", "Customers"]</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">@Localizer["Shared.Common.Create", "Create New"]</a>
+</p>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>
+                @Localizer["Shared.Customer.Field.Name", "Name"]
+            </th>
+            <th>
+                @Localizer["Shared.Customer.Field.Description", "Description"]
+            </th>
+            <th>
+                @Localizer["Shared.Customer.Field.Email", "Email"]
+            </th>
+            <th>
+                @Localizer["Shared.Customer.Field.Address", "Address"]
+            </th>
+            <th>
+                @Localizer["Shared.Customer.Field.Phone", "Phone"]
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Address)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Phone)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">@Localizer["Common.Edit", "Edit"]</a>
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info">@Localizer["Common.Details", "Details"]</a>
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">@Localizer["Common.Delete", "Delete"]</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+Page @Model.PageIndex of @Model.TotalPages
+@if (Model.PageIndex > 1)
+{
+    <a asp-action="Index" asp-route-page="@(Model.PageIndex - 1)">Previous</a>
+}
+@if (Model.PageIndex < Model.TotalPages)
+{
+    <a asp-action="Index" asp-route-page="@(Model.PageIndex + 1)">Next</a>
+}

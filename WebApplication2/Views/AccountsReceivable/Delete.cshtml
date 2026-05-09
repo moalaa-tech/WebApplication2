@@ -1,0 +1,34 @@
+@model CRM.WebApp.ViewModels.Accounting.AccountsReceivableViewModel
+
+<h2>@Localizer["AccountsReceivable.Delete.Title", "Delete Accounts Receivable"]</h2>
+
+<div class="alert alert-danger">
+    <h4>@Localizer["AccountsReceivable.Delete.Confirm", "Are you sure you want to delete this entry?"]</h4>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <dl class="row">
+            <dt class="col-sm-4">@Localizer["AccountsReceivable.Field.CustomerName", "Customer Name"]</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(model => model.CustomerName)</dd>
+
+            <dt class="col-sm-4">@Localizer["AccountsReceivable.Field.InvoiceNumber", "Invoice Number"]</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(model => model.InvoiceNumber)</dd>
+
+            <dt class="col-sm-4">@Localizer["AccountsReceivable.Field.InvoiceDate", "Invoice Date"]</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(model => model.InvoiceDate)</dd>
+
+            <dt class="col-sm-4">@Localizer["AccountsReceivable.Field.AmountDue", "Amount Due"]</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(model => model.AmountDue)</dd>
+
+            <dt class="col-sm-4">@Localizer["AccountsReceivable.Field.DueDate", "Due Date"]</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(model => model.DueDate)</dd>
+        </dl>
+
+        <form asp-action="Delete">
+            <input type="hidden" asp-for="Id" />
+            <button type="submit" class="btn btn-danger">@Localizer["Common.Delete", "Delete"]</button>
+            <a asp-action="Index" class="btn btn-secondary">@Localizer["Common.Back", "Back to List"]</a>
+        </form>
+    </div>
+</div>

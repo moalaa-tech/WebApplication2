@@ -1,0 +1,25 @@
+@model CRM.WebApp.ViewModels.MarketingAutomation.SocialMediaPostViewModel
+
+<h2>Delete Social Media Post</h2>
+
+<div class="alert alert-danger">
+    <h4>Are you sure you want to delete this post?</h4>
+</div>
+
+<dl class="row">
+    <dt class="col-sm-4">Content</dt>
+    <dd class="col-sm-8">@Model.Content</dd>
+    <dt class="col-sm-4">Scheduled Time</dt>
+    <dd class="col-sm-8">@Model.ScheduledTime</dd>
+    <dt class="col-sm-4">Platform</dt>
+    <dd class="col-sm-8">@Model.Platform</dd>
+    <dt class="col-sm-4">Status</dt>
+    <dd class="col-sm-8">@Model.Status</dd>
+</dl>
+
+<form asp-action="DeleteConfirmed" method="post">
+    <input type="hidden" asp-for="Id" />
+    @Html.AntiForgeryToken()
+    <button type="submit" class="btn btn-danger">Delete</button>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</form>

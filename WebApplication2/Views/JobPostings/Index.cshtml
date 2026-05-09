@@ -1,0 +1,47 @@
+﻿@using CRM.WebApp.DTOs.HumanResources.JobPosting
+<!-- Views/JobPostings/Index.cshtml -->
+@model IEnumerable<JobPostingDto>
+
+<h2>Job Postings</h2>
+
+<a asp-action="Create" class="btn btn-success">Create New Job Posting</a>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Department</th>
+            <th>Posting Date</th>
+            <th>Closing Date</th>
+            <th>Applications</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var posting in Model)
+        {
+            <tr>
+                <td>@posting.Title</td>
+                <td>@posting.DepartmentName</td>
+                <td>@posting.PostingDate.ToShortDateString()</td>
+                <td>@posting.ClosingDate.ToShortDateString()</td>
+                <td>@posting.ApplicationCount</td>
+                <td>
+                    <span class="badge @(posting.IsActive ? "bg-success" : "bg-secondary")">
+                        @(posting.IsActive ? "Active" : "Closed")
+                    </span>
+                </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@posting.Id" class="btn btn-info btn-sm">Details</a>
+                    <a asp-action="Applications" asp-route-id="@posting.Id" class="btn btn-primary btn-sm">View Applications</a>
+                    @if (posting.IsActive)
+                    {
+                        <a asp-action="Close" asp-route-id="@posting.Id" class="btn btn-warning btn-sm">Close</a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+

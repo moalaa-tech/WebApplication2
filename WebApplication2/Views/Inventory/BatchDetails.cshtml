@@ -1,0 +1,54 @@
+@using CRM.WebApp.DTOs.InventoryManagement
+@using CRM.WebApp.DTOs.InventoryManagement.Product
+@model IEnumerable<BatchDto>
+
+@{
+    ViewData["Title"] = @Localizer["Inventory.BatchDetails.Title"];
+}
+
+<div class="container">
+    <h1>@Localizer["Inventory.BatchDetails.Header"]</h1>
+
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>@Localizer["Inventory.BatchDetails.BatchNumber"]</th>
+                    <th>@Localizer["Inventory.BatchDetails.Warehouse"]</th>
+                    <th>@Localizer["Inventory.BatchDetails.InitialQuantity"]</th>
+                    <th>@Localizer["Inventory.BatchDetails.QuantityOnHand"]</th>
+                    <th>@Localizer["Inventory.BatchDetails.ManufactureDate"]</th>
+                    <th>@Localizer["Inventory.BatchDetails.ExpiryDate"]</th>
+                    <th>@Localizer["Inventory.BatchDetails.Actions"]</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var batch in Model)
+                {
+                    <tr>
+                        <td>@batch.BatchNumber</td>
+                        <td>@batch.WarehouseName</td>
+                        <td>@batch.InitialQuantity</td>
+                        <td>@batch.QuantityOnHand</td>
+                        <td>@(batch.ManufactureDate?.ToString("yyyy-MM-dd") ?? "-")</td>
+                        <td>@(batch.ExpiryDate?.ToString("yyyy-MM-dd") ?? "-")</td>
+                        <td>
+                            <a asp-action="IssueGoods" asp-route-batchId="@batch.Id" class="btn btn-sm btn-danger">
+                                @Localizer["Inventory.BatchDetails.IssueGoods"]
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="mt-3">
+        <a asp-action="Details" asp-route-id="@(Model.FirstOrDefault()?.ProductId)" class="btn btn-info">
+            @Localizer["Inventory.BatchDetails.BackToProduct"]
+        </a>
+        <a asp-action="Index" class="btn btn-secondary">
+            @Localizer["Inventory.BatchDetails.BackToInventory"]
+        </a>
+    </div>
+</div>

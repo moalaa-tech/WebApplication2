@@ -1,0 +1,32 @@
+@model CRM.WebApp.DTOs.Project.TimeEntryDto
+
+<h2>Delete Time Entry</h2>
+
+<div class="alert alert-danger">
+    <h4>Are you sure you want to delete this entry?</h4>
+</div>
+
+<dl class="row">
+    <dt class="col-sm-4">Phase Name</dt>
+    <dd class="col-sm-8">@Model.PhaseName</dd>
+    <dt class="col-sm-4">User</dt>
+    <dd class="col-sm-8">@Model.UserName (@Model.UserEmail)</dd>
+    <dt class="col-sm-4">Entry Date</dt>
+    <dd class="col-sm-8">@Model.EntryDate.ToShortDateString()</dd>
+    <dt class="col-sm-4">Hours</dt>
+    <dd class="col-sm-8">@Model.Hours</dd>
+    <dt class="col-sm-4">Description</dt>
+    <dd class="col-sm-8">@Model.Description</dd>
+    <dt class="col-sm-4">Is Billable</dt>
+    <dd class="col-sm-8">@Model.IsBillable</dd>
+    <dt class="col-sm-4">Rate</dt>
+    <dd class="col-sm-8">@Model.Rate</dd>
+    <dt class="col-sm-4">Status</dt>
+    <dd class="col-sm-8">@Model.Status</dd>
+</dl>
+
+<form asp-action="DeleteConfirmed" method="post">
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="btn btn-danger">Delete</button>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</form>

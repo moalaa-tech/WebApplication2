@@ -1,0 +1,37 @@
+@using CRM.Domain.Enums.MarketingAutomation
+@model CRM.WebApp.ViewModels.MarketingAutomation.SocialMediaPostViewModel
+
+<h2>Social Media Post Details</h2>
+
+<dl class="row">
+    <dt class="col-sm-4">Content</dt>
+    <dd class="col-sm-8">@Model.Content</dd>
+    <dt class="col-sm-4">Scheduled Time</dt>
+    <dd class="col-sm-8">@Model.ScheduledTime</dd>
+    <dt class="col-sm-4">Platform</dt>
+    <dd class="col-sm-8">@Model.Platform</dd>
+    <dt class="col-sm-4">Status</dt>
+    <dd class="col-sm-8">@Model.Status</dd>
+    <dt class="col-sm-4">Created By</dt>
+    <dd class="col-sm-8">@Model.CreatedBy</dd>
+    <dt class="col-sm-4">Created Date</dt>
+    <dd class="col-sm-8">@Model.CreatedDate</dd>
+    @if (Model.ModifiedBy != null)
+    {
+        <dt class="col-sm-4">Modified By</dt>
+        <dd class="col-sm-8">@Model.ModifiedBy</dd>
+        <dt class="col-sm-4">Modified Date</dt>
+        <dd class="col-sm-8">@Model.ModifiedDate</dd>
+    }
+</dl>
+
+<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
+<a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger">Delete</a>
+<a asp-action="Index" class="btn btn-secondary">Back to List</a>
+@if (Model.Status == PostStatus.Draft)
+{
+    <form asp-action="Schedule" asp-route-id="@Model.Id" method="post" style="display:inline;">
+        @Html.AntiForgeryToken()
+        <button type="submit" class="btn btn-success">Schedule</button>
+    </form>
+}

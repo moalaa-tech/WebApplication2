@@ -1,0 +1,43 @@
+﻿@using CRM.WebApp.DTOs.Notification;
+@model IEnumerable<NotificationDto>
+
+@{
+    ViewData["Title"] = Localizer["Notifications.Index.Title", "Notifications"];
+}
+
+<h1>@Localizer["Notifications.Index.Title", "Notifications"]</h1>
+
+<p>
+    <a asp-action="Create">@Localizer["Common.Create", "Create New"]</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.Message)</th>
+            <th>@Html.DisplayNameFor(model => model.IsRead)</th>
+            <th>@Html.DisplayNameFor(model => model.DateCreated)</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr class="@(item.IsRead ? "" : "font-weight-bold")">
+                <td>@Html.DisplayFor(modelItem => item.Message)</td>
+                <td>@Html.DisplayFor(modelItem => item.IsRead)</td>
+                <td>@Html.DisplayFor(modelItem => item.DateCreated)</td>
+                <td>
+                    @if (!item.IsRead)
+                    {
+                        <form asp-action="MarkAsRead" asp-route-id="@item.Id" method="post" class="d-inline">
+                            <button type="submit" class="btn btn-sm btn-outline-success">@Localizer["Notifications.Index.MarkAsRead", "Mark as Read"]</button>
+                        </form>
+                    }
+                    <a asp-action="Edit" asp-route-id="@item.Id">@Localizer["Common.Edit", "Edit"]</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">@Localizer["Common.Details", "Details"]</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">@Localizer["Common.Delete", "Delete"]</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

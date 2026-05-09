@@ -1,0 +1,68 @@
+@using CRM.WebApp.DTOs.HumanResources.Department
+@model IEnumerable<DepartmentDto>
+
+@{
+    ViewData["Title"] = "Departments";
+}
+
+<h1>@Localizer["Shared.Department.Index.Title", "Departments"]</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">@Localizer["Shared.Common.Create", "Create New"]</a>
+</p>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>@Localizer["Shared.Department.Field.Name", "Name"]</th>
+            <th>@Localizer["Shared.Department.Field.Description", "Description"]</th>
+            <th>@Localizer["Shared.Department.Field.Status", "Status"]</th>
+            <th>@Localizer["Shared.Common.Actions", "Actions"]</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    <span class="badge @(item.IsActive ? "bg-success" : "bg-secondary")">
+                        @(item.IsActive ? Localizer["Shared.Common.Active", "Active"] : Localizer["Shared.Common.Inactive", "Inactive"])
+                    </span>
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">@Localizer["Shared.Common.Edit", "Edit"]</a>
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info">@Localizer["Shared.Common.Details", "Details"]</a>
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">@Localizer["Shared.Common.Delete", "Delete"]</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<ul id="deptList">
+    
+</ul>
+
+
+@* @section Scripts {
+    <script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
+    <script src="~/js/chat.js"></script>
+    <script>
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl("/departmentHub")
+            .build();
+
+        connection.on("DepartmentAdded", function (department) {
+            const li = document.createElement("li");
+            li.textContent = department.name;
+            document.getElementById("deptList").appendChild(li);
+        });
+
+        connection.start().catch(err => console.error(err));
+    </script>
+} *@

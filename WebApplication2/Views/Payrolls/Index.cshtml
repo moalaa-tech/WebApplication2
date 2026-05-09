@@ -1,0 +1,61 @@
+﻿@using CRM.WebApp.DTOs.HumanResources.Payroll
+@model IEnumerable<PayrollDto>
+
+<h2>Payroll Processing</h2>
+
+
+<a asp-action="Process" class="btn btn-success">Process New Payroll</a>
+
+
+<form method="get" class="mb-4">
+    <div class="row">
+        <div class="col-md-3">
+            <label class="form-label">Start Date</label>
+            <input type="date" name="startDate" class="form-control" value="@DateTime.Today.AddMonths(-1).ToString("yyyy-MM-dd")" />
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">End Date</label>
+            <input type="date" name="endDate" class="form-control" value="@DateTime.Today.ToString("yyyy-MM-dd")" />
+        </div>
+        <div class="col-md-2 align-self-end">
+            <button type="submit" class="btn btn-primary">Filter</button>
+        </div>
+    </div>
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Employee</th>
+            <th>Employee #</th>
+            <th>Period</th>
+            <th>Basic Salary</th>
+            <th>Allowances</th>
+            <th>Deductions</th>
+            <th>Tax</th>
+            <th>Net Salary</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var payroll in Model)
+        {
+            <tr>
+                <td>@payroll.EmployeeName</td>
+                <td>@payroll.EmployeeNumber</td>
+                <td>@payroll.PayPeriodStart.ToShortDateString() - @payroll.PayPeriodEnd.ToShortDateString()</td>
+                <td>@payroll.BasicSalary.ToString("C")</td>
+                <td>@payroll.Allowances.ToString("C")</td>
+                <td>@payroll.Deductions.ToString("C")</td>
+                <td>@payroll.TaxAmount.ToString("C")</td>
+                <td>@payroll.NetSalary.ToString("C")</td>
+                <td>
+                    <span class="badge @(payroll.IsProcessed ? "bg-success" : "bg-warning")">
+                        @(payroll.IsProcessed ? "Processed" : "Pending")
+                    </span>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+

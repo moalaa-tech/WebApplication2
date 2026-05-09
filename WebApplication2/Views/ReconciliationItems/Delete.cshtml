@@ -1,0 +1,33 @@
+@model CRM.WebApp.DTOs.Banking.ReconciliationItemDto
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer Localizer
+
+<h2>@Localizer["Shared.ReconciliationItems.Delete.Title"]</h2>
+
+<div class="alert alert-danger">
+    <h4>@Localizer["Shared.Common.DeleteConfirmation"]</h4>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <dl class="row">
+            <dt class="col-sm-4">@Localizer["Shared.ReconciliationItems.Field.BankTransactionId"]</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(model => model.BankTransactionId)</dd>
+
+            <dt class="col-sm-4">@Localizer["Shared.ReconciliationItems.Field.Status"]</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(model => model.Status)</dd>
+
+            <dt class="col-sm-4">@Localizer["Shared.ReconciliationItems.Field.AdjustedAmount"]</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(model => model.AdjustedAmount)</dd>
+
+            <dt class="col-sm-4">@Localizer["Shared.ReconciliationItems.Field.Notes"]</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(model => model.Notes)</dd>
+        </dl>
+
+        <form asp-action="Delete">
+            <input type="hidden" asp-for="Id" />
+            <button type="submit" class="btn btn-danger">@Localizer["Shared.Common.Delete"]</button>
+            <a asp-controller="Reconciliations" asp-action="Index" class="btn btn-secondary">@Localizer["Shared.Common.BackToList"]</a>
+        </form>
+    </div>
+</div>

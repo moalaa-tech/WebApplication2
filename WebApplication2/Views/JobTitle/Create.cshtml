@@ -1,0 +1,22 @@
+﻿@using CRM.WebApp.DTOs.HumanResources.JobTitle
+@model CreateJobTitleDto;
+@{
+    ViewData["Title"] = "Create Job Title";
+}
+<h2>Create Job Title</h2>
+
+<form asp-action="Create">
+    <div class="form-group">
+        <label asp-for="Title"></label>
+        <input asp-for="Title" class="form-control" />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="DepartmentId"></label>
+        <select asp-for="DepartmentId" asp-items="Model.Departments" class="form-control"></select>
+        <span asp-validation-for="DepartmentId" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save</button>
+</form>

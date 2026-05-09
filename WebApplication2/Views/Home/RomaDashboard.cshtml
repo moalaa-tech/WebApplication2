@@ -1,0 +1,93 @@
+﻿@{
+    ViewData["Title"] = @Localizer["Shared.Home.Roma"];
+}
+
+
+<div class="container mt-4" dir="rtl">
+    <div class="row g-3">
+
+        <!-- إدارة الفواتير -->
+        <div class="col-md-4">
+            <a asp-controller="Order" asp-action="Index" class="text-decoration-none text-dark">
+                <div class="card shadow-sm h-100 text-center clickable-card">
+                    <div class="card-body">
+                        <h5 class="card-title">إدارة الفواتير</h5>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- المخزن -->
+        <div class="col-md-4">
+            <a asp-controller="Product" asp-action="Index" class="text-decoration-none text-dark">
+                <div class="card shadow-sm h-100 text-center clickable-card">
+                    <div class="card-body">
+                        <h5 class="card-title">المخزن</h5>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- شئون العاملين -->
+        <div class="col-md-4">
+            <a asp-controller="Employee" asp-action="Index" class="text-decoration-none text-dark">
+                <div class="card shadow-sm h-100 text-center clickable-card">
+                    <div class="card-body">
+                        <h5 class="card-title">شئون العاملين</h5>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+
+
+        <!-- المصاريف -->
+        <div class="col-md-4">
+            <a asp-controller="Expenses" asp-action="Index" class="text-decoration-none text-dark">
+                <div class="card shadow-sm h-100 text-center clickable-card">
+                    <div class="card-body">
+                        <h5 class="card-title">المصاريف</h5>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+
+        <!-- حسابات المناديب -->
+        <div class="col-md-4">
+            <a asp-controller="Expenses" asp-action="Index" class="text-decoration-none text-dark">
+                <div class="card shadow-sm h-100 text-center clickable-card">
+                    <div class="card-body">
+                        <h5 class="card-title">حسابات المناديب</h5>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+
+        <!-- حسابات عامه -->
+        <div class="col-md-4">
+            <a asp-controller="Expenses" asp-action="MonthlyReport" asp-route-year="@DateTime.Now.Year" class="text-decoration-none text-dark">
+                <div class="card shadow-sm h-100 text-center clickable-card">
+                    <div class="card-body">
+                        <h5 class="card-title">حسابات عامه</h5>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+
+        <!-- حسابات عامه -->
+        <div class="col-md-4">
+            <a asp-controller="Expenses" asp-action="ExpensesDashboard" asp-route-year="@DateTime.Now.Year" class="text-decoration-none text-dark">
+                <div class="card shadow-sm h-100 text-center clickable-card">
+                    <div class="card-body">
+                        <h5 class="card-title">حسابات شهرى</h5>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+
+    </div>
+</div>

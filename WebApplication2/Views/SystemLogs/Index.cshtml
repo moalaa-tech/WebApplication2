@@ -1,0 +1,45 @@
+﻿@using CRM.WebApp.ViewModels.LogEntry
+@model LogIndexViewModel;
+
+@{
+    ViewData["Title"] = "Logs";
+}
+
+<h1>Application Logs</h1>
+
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card text-white bg-primary mb-3">
+            <div class="card-header">Total Logs</div>
+            <div class="card-body">
+                <h5 class="card-title">@Model.LogSummary.TotalCount</h5>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-info mb-3">
+            <div class="card-header">Information</div>
+            <div class="card-body">
+                <h5 class="card-title">@Model.LogSummary.InformationCount</h5>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-warning mb-3">
+            <div class="card-header">Warnings</div>
+            <div class="card-body">
+                <h5 class="card-title">@Model.LogSummary.WarningCount</h5>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-danger mb-3">
+            <div class="card-header">Errors</div>
+            <div class="card-body">
+                <h5 class="card-title">@(Model.LogSummary.ErrorCount + Model.LogSummary.CriticalCount)</h5>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Rest of the view remains the same -->

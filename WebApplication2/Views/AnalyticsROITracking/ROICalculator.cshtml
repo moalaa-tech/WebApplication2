@@ -1,0 +1,60 @@
+﻿@model CRM.WebApp.ViewModels.MarketingAutomation.CampaignAnalytics.ROICalculatorViewModel
+
+@{
+    ViewData["Title"] = Localizer["AnalyticsROITracking.ROICalculator.Title", "ROI Calculator"];
+}
+
+<h1>@Localizer["AnalyticsROITracking.ROICalculator.Title", "ROI Calculator"]</h1>
+
+<div class="row">
+    <div class="col-md-6">
+        <form method="post">
+            <div class="form-group">
+                <label asp-for="Investment" class="control-label">@Localizer["AnalyticsROITracking.Field.Investment", "Investment"]</label>
+                <input asp-for="Investment" class="form-control" />
+                <span asp-validation-for="Investment" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Revenue" class="control-label">@Localizer["AnalyticsROITracking.Field.Revenue", "Revenue"]</label>
+                <input asp-for="Revenue" class="form-control" />
+                <span asp-validation-for="Revenue" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="@Localizer["AnalyticsROITracking.ROICalculator.Calculate", "Calculate"]" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-secondary">@Localizer["AnalyticsROITracking.ROICalculator.Back", "Back to Analytics"]</a>
+            </div>
+
+            @if (Model.CalculatedROI != 0)
+            {
+                <div class="alert @(Model.CalculatedROI >= 0 ? "alert-success" : "alert-danger")">
+                    <h4>@Localizer["AnalyticsROITracking.ROICalculator.ROI", "ROI"]: @Model.CalculatedROI.ToString("0.00")%</h4>
+                </div>
+            }
+        </form>
+    </div>
+
+    <div class="col-md-6">
+        <h4>@Localizer["AnalyticsROITracking.ROICalculator.ChannelPerformance", "Channel Performance"]</h4>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>@Localizer["AnalyticsROITracking.Field.Channel", "Channel"]</th>
+                    <th>@Localizer["AnalyticsROITracking.Field.ROI", "ROI"]</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var channel in Model.ChannelROIs)
+                {
+                    <tr>
+                        <td>@channel.Key</td>
+                        <td class="@(channel.Value >= 0 ? "text-success" : "text-danger")">
+                            @channel.Value.ToString("0.00")%
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

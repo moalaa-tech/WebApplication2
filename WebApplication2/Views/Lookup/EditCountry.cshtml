@@ -1,0 +1,36 @@
+﻿@model CRM.WebApp.ViewModels.CountryViewModel
+@{
+    ViewData["Title"] = "Edit Country";
+}
+
+<h1>Edit Country</h1>
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="Id" />
+
+    <div class="mb-3">
+        <label class="form-label">Name</label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Name (AR)</label>
+        <input asp-for="NameAr" class="form-control" />
+        <span asp-validation-for="NameAr" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">ISO2</label>
+        <input asp-for="ISO2" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label">ISO3</label>
+        <input asp-for="ISO3" class="form-control" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

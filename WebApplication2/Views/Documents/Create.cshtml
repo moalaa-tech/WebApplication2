@@ -1,0 +1,119 @@
+﻿@using CRM.WebApp.ViewModels.DocumentManagement
+@model CreateDocumentViewModel
+
+@{
+    ViewData["Title"] = Localizer["Documents.Create.Title", "Upload Document"];
+    var categories = ViewBag.Categories as IEnumerable<SelectListItem> ?? new List<SelectListItem>();
+}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">@Localizer["Documents.Create.Title", "Upload New Document"]</h3>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Create" method="post" enctype="multipart/form-data">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="Title" class="form-label">@Localizer["Documents.Field.Title", "Title"]</label>
+                                    <input asp-for="Title" class="form-control" />
+                                    <span asp-validation-for="Title" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="DocumentType" class="form-label">@Localizer["Documents.Field.DocumentType", "Document Type"]</label>
+                                    <select asp-for="DocumentType" class="form-control">
+                                        <option value="">@Localizer["Documents.Select.DocumentType", "Select Type"]</option>
+                                        <option value="Contract">@Localizer["Documents.DocumentType.Contract", "Contract"]</option>
+                                        <option value="Report">@Localizer["Documents.DocumentType.Report", "Report"]</option>
+                                        <option value="Proposal">@Localizer["Documents.DocumentType.Proposal", "Proposal"]</option>
+                                        <option value="Invoice">@Localizer["Documents.DocumentType.Invoice", "Invoice"]</option>
+                                        <option value="Manual">@Localizer["Documents.DocumentType.Manual", "Manual"]</option>
+                                        <option value="Policy">@Localizer["Documents.DocumentType.Policy", "Policy"]</option>
+                                        <option value="Other">@Localizer["Documents.DocumentType.Other", "Other"]</option>
+                                    </select>
+                                    <span asp-validation-for="DocumentType" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="Description" class="form-label">@Localizer["Documents.Field.Description", "Description"]</label>
+                            <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+                            <span asp-validation-for="Description" class="text-danger"></span>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="CategoryId" class="form-label">@Localizer["Documents.Field.Category", "Category"]</label>
+                                    <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.Categories">
+                                        <option value="">@Localizer["Documents.Select.Category", "-- Select Category --"]</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="FolderId" class="form-label">@Localizer["Documents.Field.Folder", "Folder"]</label>
+                                    <select asp-for="FolderId" class="form-control" asp-items="ViewBag.Folders">
+                                        <option value="">@Localizer["Documents.Select.Folder", "-- Select Folder --"]</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="ExpiryDate" class="form-label">@Localizer["Documents.Field.ExpiryDate", "Expiry Date"]</label>
+                                    <input asp-for="ExpiryDate" type="date" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="Tags" class="form-label">@Localizer["Documents.Field.Tags", "Tags"]</label>
+                                    <input asp-for="Tags" class="form-control" placeholder="tag1, tag2, tag3" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="form-check">
+                                <input asp-for="IsPublic" class="form-check-input" />
+                                <label asp-for="IsPublic" class="form-check-label">@Localizer["Documents.Field.IsPublic", "Is Public"]</label>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="File" class="form-label">@Localizer["Documents.Field.File", "File"]</label>
+                            <input asp-for="File" class="form-control" accept=".pdf,.doc,.docx,.xls,.xlsx,.txt,.jpg,.jpeg,.png" />
+                            <span asp-validation-for="File" class="text-danger"></span>
+                            <small class="form-text text-muted">
+                                @Localizer["Documents.Create.SupportedFormats", "Supported formats: PDF, Word, Excel, Text, Images (Max: 10MB)"]
+                            </small>
+                        </div>
+
+                        <div class="form-group mt-4">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-upload me-1"></i>@Localizer["Documents.Create.Upload", "Upload Document"]
+                            </button>
+                            <a asp-action="Index" class="btn btn-secondary">@Localizer["Common.Cancel", "Cancel"]</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}}

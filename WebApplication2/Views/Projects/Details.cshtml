@@ -1,0 +1,95 @@
+﻿@using CRM.WebApp.DTOs.Project
+@using CRM.WebApp.ViewModels.Project
+@model ProjectDetailsViewModel
+
+<h2>Project Details</h2>
+
+<div>
+    <h4>@Model.Name (@Model.ProjectCode)</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">Description</dt>
+        <dd class="col-sm-10">@Model.Description</dd>
+
+        <dt class="col-sm-2">Customer</dt>
+        <dd class="col-sm-10">@Model.CustomerName</dd>
+
+        <dt class="col-sm-2">Start Date</dt>
+        <dd class="col-sm-10">@Model.StartDate.ToShortDateString()</dd>
+
+        <dt class="col-sm-2">End Date</dt>
+        <dd class="col-sm-10">@(Model.EndDate?.ToShortDateString() ?? "Ongoing")</dd>
+
+        <dt class="col-sm-2">Status</dt>
+        <dd class="col-sm-10">
+            @Model.Status
+            <span class="badge badge-@GetStatusBadgeClass(Model.Status.ToString())">@Model.Status</span>
+        </dd>
+
+        <dt class="col-sm-2">Budget</dt>
+        <dd class="col-sm-10">@Model.Budget.ToString("C")</dd>
+    </dl>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>Project Phases</h5>
+            </div>
+            <div class="card-body">
+                @if (Model.Phases.Any())
+                {
+                    <ul class="list-group">
+                        @foreach (var phase in Model.Phases)
+                        {
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                @phase.Name (@phase.PhaseCode)
+                                <span class="badge badge-primary badge-pill">@phase.Status</span>
+                            </li>
+                        }
+                    </ul>
+                }
+                else
+                {
+                    <p>No phases defined for this project.</p>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>Quick Actions</h5>
+            </div>
+            <div class="card-body">
+                <div class="btn-group-vertical w-100">
+                    <a asp-action="CostSummary" asp-route-id="@Model.Id" class="btn btn-info mb-2">View Cost Summary</a>
+                    <a asp-action="TimeEntries" asp-route-id="@Model.Id" class="btn btn-secondary mb-2">View Time Entries</a>
+                    <a asp-action="Expenses" asp-route-id="@Model.Id" class="btn btn-secondary mb-2">View Expenses</a>
+                    <a asp-controller="JobPhases" asp-action="Index" asp-route-projectId="@Model.Id" class="btn btn-primary">Manage Phases</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mt-3">
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</div>
+
+@functions {
+    string GetStatusBadgeClass(string status)
+    {
+        return status switch
+        {
+            "Planning" => "secondary",
+            "Active" => "success",
+            "OnHold" => "warning",
+            "Completed" => "primary",
+            _ => "light"
+        };
+    }
+}

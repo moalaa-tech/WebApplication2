@@ -1,0 +1,33 @@
+﻿@using CRM.WebApp.ViewModels.Contact
+@model ContactViewModel
+@{
+    ViewData["Title"] = "Contact Details";
+}
+
+<h2>Contact Details</h2>
+
+<dl class="row">
+    <dt class="col-sm-2">Name</dt>
+    <dd class="col-sm-10">@Model.Name</dd>
+
+    <dt class="col-sm-2">Surname</dt>
+    <dd class="col-sm-10">@Model.Surname</dd>
+
+    <dt class="col-sm-2">Email</dt>
+    <dd class="col-sm-10">@Model.Email</dd>
+
+    <dt class="col-sm-2">Phone</dt>
+    <dd class="col-sm-10">@Model.Phone</dd>
+
+    <dt class="col-sm-2">Position</dt>
+    <dd class="col-sm-10">@Model.Position</dd>
+
+    <dt class="col-sm-2">Company</dt>
+    <dd class="col-sm-10">@Model.CompanyName</dd>
+
+    <dt class="col-sm-2">Status</dt>
+    <dd class="col-sm-10">@Model.Status</dd>
+</dl>
+
+<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
+<a asp-action="Index" class="btn btn-secondary">Back</a>

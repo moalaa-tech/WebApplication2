@@ -1,0 +1,31 @@
+@model CRM.WebApp.ViewModels.CustomerService.ServiceRequestViewModel
+
+<h2>@Localizer["ServiceRequest.Delete.Title", "Delete Service Request"]</h2>
+
+<div class="alert alert-danger">
+    <h4>@Localizer["ServiceRequest.Delete.Confirm", "Are you sure you want to delete this request?"]</h4>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <dl class="row">
+            <dt class="col-sm-4">@Localizer["ServiceRequest.Field.RequestType", "Request Type"]</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(model => model.RequestType)</dd>
+
+            <dt class="col-sm-4">@Localizer["ServiceRequest.Field.Description", "Description"]</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(model => model.Description)</dd>
+
+            <dt class="col-sm-4">@Localizer["ServiceRequest.Field.Status", "Status"]</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(model => model.Status)</dd>
+
+            <dt class="col-sm-4">@Localizer["ServiceRequest.Field.CustomerId", "Customer"]</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(model => model.CustomerId)</dd>
+        </dl>
+
+        <form asp-action="Delete">
+            <input type="hidden" asp-for="Id" />
+            <button type="submit" class="btn btn-danger">@Localizer["Common.Delete", "Delete"]</button>
+            <a asp-action="Index" class="btn btn-secondary">@Localizer["Common.Back", "Back to List"]</a>
+        </form>
+    </div>
+</div>

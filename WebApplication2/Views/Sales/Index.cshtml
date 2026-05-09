@@ -1,0 +1,53 @@
+﻿@using CRM.Domain.Enums
+@using CRM.Domain.Enums.SalesManagement
+@using CRM.WebApp.DTOs.Lead
+@model IEnumerable<LeadDto>
+
+<div class="dropdown">
+    <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+        Dropdown button
+    </button>
+    <ul class="dropdown-menu">
+        <li><a class="dropdown-item" href="#">Action</a></li>
+        <li><a class="dropdown-item" href="#">Another action</a></li>
+        <li><a class="dropdown-item" href="#">Something else here</a></li>
+    </ul>
+</div>
+
+<h2>Sales Leads</h2>
+<a asp-action="Create" class="btn btn-primary">Add Lead</a>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Company</th>
+            <th>Contact</th>
+            <th>Status</th>
+            <th>Score</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var lead in Model)
+        {
+            <tr>
+                <td>@lead.CompanyName</td>
+                <td>@lead.ContactPerson</td>
+                <td>@lead.Status</td>
+                <td>@lead.TotalScore</td>
+
+                <td>
+                    <a asp-action="Details" asp-route-id="@lead.Id">View</a> |
+                    <a asp-action="Edit" asp-route-id="@lead.Id">Edit</a> |
+                    <a asp-action="Delete" asp-route-id="@lead.Id">Delete</a> |
+                    @if (lead.Status != LeadStatus.Converted)
+                    {
+                        <form asp-action="ConvertToOpportunity" asp-route-id="@lead.Id" method="post">
+                            <button type="submit" class="btn btn-success">Convert to Opportunity</button>
+                        </form>
+                    }
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

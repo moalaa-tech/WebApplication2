@@ -1,0 +1,49 @@
+﻿@using CRM.WebApp.DTOs.Setting
+@model IEnumerable<SettingDto>
+
+@{
+    ViewData["Title"] = Localizer["Shared.Setting.Index.Title", "Settings"];
+}
+
+<h1>@Localizer["Shared.Setting.Index.Title", "Settings"]</h1>
+
+<p>
+    <a asp-action="Create">@Localizer["Common.Create", "Create New"]</a>
+</p>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">@Localizer["Common.Edit", "Edit"]</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">@Localizer["Common.Details", "Details"]</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">@Localizer["Common.Delete", "Delete"]</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,26 @@
+﻿@using CRM.WebApp.DTOs.Notification
+@model UpdateNotificationDto
+
+@{
+    ViewData["Title"] = Localizer["Notifications.Edit.Title", "Edit Notification"];
+}
+
+<h1>@Localizer["Notifications.Edit.Title", "Edit Notification"]</h1>
+
+<form asp-action="Edit">
+    <input type="hidden" asp-for="Id" />
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="form-group">
+        <label asp-for="Message" class="control-label">@Localizer["Notifications.Field.Message", "Message"]</label>
+        <input asp-for="Message" class="form-control" />
+        <span asp-validation-for="Message" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <input type="submit" value="@Localizer["Common.Save", "Save"]" class="btn btn-primary" />
+        <a asp-action="Index" class="btn btn-secondary">@Localizer["Common.Back", "Back to List"]</a>
+    </div>
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

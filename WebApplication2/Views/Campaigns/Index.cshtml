@@ -1,0 +1,59 @@
+﻿@using CRM.Domain.Enums.MarketingAutomation
+@using CRM.WebApp.DTOs.MarketingAutomation.Campaign
+
+@model IEnumerable<CampaignDto>
+
+<h2>@Localizer["Shared.Campaigns.Index.Title", "Campaigns"]</h2>
+
+<a asp-controller="EmailTemplate" asp-action="Index" class="btn btn-success">@Localizer["Shared.Campaigns.Index.EmailTemplate", "Email Template"]</a>
+
+<a asp-action="Create" class="btn btn-success">@Localizer["Common.Create", "Create New Campaign"]</a>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>@Localizer["Shared.Campaigns.Field.Name", "Name"]</th>
+            <th>@Localizer["Shared.Campaigns.Field.StartDate", "Start Date"]</th>
+            <th>@Localizer["Shared.Campaigns.Field.EndDate", "End Date"]</th>
+            <th>@Localizer["Shared.Campaigns.Field.Budget", "Budget"]</th>
+            <th>@Localizer["Shared.Campaigns.Field.Status", "Status"]</th>
+            <th>@Localizer["Shared.Campaigns.Field.Contacts", "Contacts"]</th>
+            <th>@Localizer["Common.Actions", "Actions"]</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var campaign in Model)
+        {
+            <tr>
+                <td>@campaign.Name</td>
+                <td>@campaign.StartDate.ToShortDateString()</td>
+                <td>@(campaign.EndDate?.ToShortDateString() ?? Localizer["Common.NotAvailable", "N/A"])</td>
+                <td>@campaign.Budget.ToString("C")</td>
+                <td>
+                    <span class="badge @GetStatusBadgeClass(campaign.Status)">
+                        @campaign.Status
+                    </span>
+                </td>
+                <td>@campaign.ContactCount</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@campaign.Id" class="btn btn-info btn-sm">@Localizer["Common.Details", "Details"]</a>
+                    <a asp-action="Edit" asp-route-id="@campaign.Id" class="btn btn-primary btn-sm">@Localizer["Common.Edit", "Edit"]</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@functions {
+    string GetStatusBadgeClass(CampaignStatus status)
+    {
+        return status switch
+        {
+            CampaignStatus.Active => "bg-success",
+            CampaignStatus.Completed => "bg-primary",
+            CampaignStatus.Paused => "bg-warning",
+            CampaignStatus.Cancelled => "bg-danger",
+            _ => "bg-secondary"
+        };
+    }
+}}

@@ -1,0 +1,110 @@
+﻿@model CRM.WebApp.DTOs.DocumentManagement.DocumentCategoryDto
+
+@{
+    ViewData["Title"] = Localizer["DocumentCategories.Delete.Title", "Delete Category"];
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header bg-danger text-white">
+                <h3 class="card-title">
+                    <i class="fas fa-exclamation-triangle"></i> @Localizer["DocumentCategories.Delete.Title", "Delete Category"]
+                </h3>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-warning">
+                    <h5 class="alert-heading">
+                        <i class="fas fa-exclamation-circle"></i> @Localizer["DocumentCategories.Delete.Warning", "Warning!"]
+                    </h5>
+                    <p class="mb-0">
+                        @Localizer["DocumentCategories.Delete.AboutToDelete", "You are about to delete the category"] <strong>@Model.Name</strong>.
+                        @Localizer["DocumentCategories.Delete.CannotBeUndone", "This action cannot be undone."]
+                    </p>
+                </div>
+
+                <h5>@Localizer["DocumentCategories.Delete.CategoryDetails", "Category Details"]</h5>
+                <dl class="row">
+                    <dt class="col-sm-4">@Localizer["DocumentCategories.Field.Name", "Name"]</dt>
+                    <dd class="col-sm-8">@Model.Name</dd>
+
+                    <dt class="col-sm-4">@Localizer["DocumentCategories.Field.Description", "Description"]</dt>
+                    <dd class="col-sm-8">@(string.IsNullOrEmpty(Model.Description) ? Localizer["Common.NotAvailable", "N/A"] : Model.Description)</dd>
+
+                    <dt class="col-sm-4">@Localizer["DocumentCategories.Field.DocumentCount", "Document Count"]</dt>
+                    <dd class="col-sm-8">@Model.DocumentCount</dd>
+
+                    <dt class="col-sm-4">@Localizer["DocumentCategories.Field.Status", "Status"]</dt>
+                    <dd class="col-sm-8">
+                        <span class="badge @(Model.IsActive ? "badge-success" : "badge-secondary")">
+                            @(Model.IsActive ? Localizer["Common.Active", "Active"] : Localizer["Common.Inactive", "Inactive"])
+                        </span>
+                    </dd>
+                </dl>
+
+                @if (Model.DocumentCount > 0)
+                {
+                    <div class="alert alert-danger">
+                        <h6 class="alert-heading">
+                            <i class="fas fa-ban"></i> @Localizer["DocumentCategories.Delete.CannotDelete", "Cannot Delete"]
+                        </h6>
+                        <p class="mb-0">
+                            @Localizer["DocumentCategories.Delete.ContainsDocuments", "This category contains"] <strong>@Model.DocumentCount @Localizer["DocumentCategories.Delete.Documents", "document(s)"]</strong>.
+                            @Localizer["DocumentCategories.Delete.MoveOrDelete", "You must move or delete all documents before deleting this category."]
+                        </p>
+                    </div>
+                }
+
+                <form asp-action="Delete" method="post">
+                    <input type="hidden" asp-for="Id" />
+
+                    <div class="form-group">
+                        <label for="confirmationText" class="control-label">
+                            @Localizer["DocumentCategories.Delete.TypeToConfirm", "Type"] <strong>DELETE</strong> @Localizer["DocumentCategories.Delete.ToConfirm", "to confirm:"]
+                        </label>
+                        <input type="text" id="confirmationText" name="confirmationText"
+                               class="form-control" required
+                               oninput="toggleDeleteButton(this.value)" />
+                    </div>
+
+                    <div class="form-group mt-4">
+                        <button type="submit" id="deleteButton" class="btn btn-danger" disabled>
+                            <i class="fas fa-trash"></i> @Localizer["DocumentCategories.Delete.DeletePermanently", "Delete Permanently"]
+                        </button>
+                        <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-secondary">
+                            <i class="fas fa-times"></i> @Localizer["Common.Cancel", "Cancel"]
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function toggleDeleteButton(inputText) {
+            const deleteButton = document.getElementById('deleteButton');
+            deleteButton.disabled = inputText.toUpperCase() !== 'DELETE';
+        }
+
+        // Prevent form submission if validation fails
+        document.addEventListener('DOMContentLoaded', function () {
+            const form = document.querySelector('form');
+            form.addEventListener('submit', function (e) {
+                const confirmationText = document.getElementById('confirmationText').value;
+                if (confirmationText.toUpperCase() !== 'DELETE') {
+                    e.preventDefault();
+                    alert('@Localizer["DocumentCategories.Delete.TypeDeleteAlert", "Please type \"DELETE\" to confirm deletion."]');
+                }
+            });
+        });
+    </script>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger mt-3">
+        <i class="fas fa-exclamation-circle"></i> @TempData["ErrorMessage"]
+    </div>
+}

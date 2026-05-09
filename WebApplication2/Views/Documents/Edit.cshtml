@@ -1,0 +1,176 @@
+﻿@using CRM.WebApp.ViewModels.DocumentManagement
+@model EditDocumentViewModel
+
+@{
+    ViewData["Title"] = "Edit Document";
+    var categories = ViewBag.Categories as IEnumerable<SelectListItem> ?? new List<SelectListItem>();
+
+}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Edit Document</h3>
+                    <p class="card-subtitle text-muted">ID: @Model.Id</p>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Edit" method="post" enctype="multipart/form-data">
+                        <input type="hidden" asp-for="Id" />
+
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle me-2"></i>
+                            <strong>Current File:</strong> @Model.CurrentFileName
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="Title" class="form-label"></label>
+                                    <input asp-for="Title" class="form-control" />
+                                    <span asp-validation-for="Title" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="DocumentType" class="form-label"></label>
+                                    <select asp-for="DocumentType" class="form-control">
+                                        <option value="">Select Type</option>
+                                        <option value="Contract">Contract</option>
+                                        <option value="Report">Report</option>
+                                        <option value="Proposal">Proposal</option>
+                                        <option value="Invoice">Invoice</option>
+                                        <option value="Manual">Manual</option>
+                                        <option value="Policy">Policy</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                    <span asp-validation-for="DocumentType" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="Description" class="form-label"></label>
+                            <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+                            <span asp-validation-for="Description" class="text-danger"></span>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="CategoryId" class="form-label"></label>
+                                    <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.Categories">
+                                        <option value="">-- Select Category --</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="FolderId" class="form-label"></label>
+                                    <select asp-for="FolderId" class="form-control" asp-items="ViewBag.Folders">
+                                        <option value="">-- Select Folder --</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="ExpiryDate" class="form-label"></label>
+                                    <input asp-for="ExpiryDate" type="date" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="Status" class="form-label"></label>
+                                    <select asp-for="Status" class="form-control">
+                                        <option value="Active">Active</option>
+                                        <option value="Archived">Archived</option>
+                                        <option value="Expired">Expired</option>
+                                        <option value="Draft">Draft</option>
+                                    </select>
+                                    <span asp-validation-for="Status" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="Tags" class="form-label"></label>
+                                    <input asp-for="Tags" class="form-control" placeholder="tag1, tag2, tag3" />
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label">Access</label>
+                                    <div class="form-check">
+                                        <input asp-for="IsPublic" class="form-check-input" />
+                                        <label asp-for="IsPublic" class="form-check-label">Make Public</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="File" class="form-label">Update File (Optional)</label>
+                            <input asp-for="File" class="form-control" accept=".pdf,.doc,.docx,.xls,.xlsx,.txt,.jpg,.jpeg,.png" />
+                            <span asp-validation-for="File" class="text-danger"></span>
+                            <small class="form-text text-muted">
+                                Leave empty to keep current file. Supported formats: PDF, Word, Excel, Text, Images (Max: 10MB)
+                            </small>
+                        </div>
+
+                        <div class="form-group mt-4">
+                            <button type="submit" class="btn btn-success">
+                                <i class="fas fa-save me-1"></i>Update Document
+                            </button>
+                            <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        $(document).ready(function() {
+            // Set current values for select boxes
+            $('#DocumentType').val('@Model.DocumentType');
+            $('#Status').val('@Model.Status');
+
+            // Form change detection
+            $('form').on('input', function() {
+                window.onbeforeunload = function() {
+                    return 'You have unsaved changes. Are you sure you want to leave?';
+                };
+            });
+
+            $('form').on('submit', function() {
+                window.onbeforeunload = null;
+            });
+
+            // File input change handler
+            $('#File').on('change', function() {
+                const file = this.files[0];
+                if (file) {
+                    const fileSize = file.size / 1024 / 1024; // MB
+                    if (fileSize > 10) {
+                        alert('File size exceeds 10MB limit. Please choose a smaller file.');
+                        this.value = '';
+                    }
+                }
+            });
+        });
+    </script>
+}

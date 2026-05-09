@@ -1,0 +1,46 @@
+@model CRM.WebApp.ViewModels.SupplyChainManagement.ForecastData.ForecastDataViewModel
+
+@{
+    ViewData["Title"] = Localizer["ForecastData.Details.Title", "Forecast Details"];
+}
+
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header">
+            <h2>@Localizer["ForecastData.Details.Title", "Forecast Details"]</h2>
+        </div>
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-3">@Localizer["ForecastData.Field.DataType", "Data Type"]</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(m => m.DataType)</dd>
+
+                <dt class="col-sm-3">@Localizer["ForecastData.Field.DataDate", "Data Date"]</dt>
+                <dd class="col-sm-9">@Model.DataDate.ToShortDateString()</dd>
+
+                <dt class="col-sm-3">@Localizer["ForecastData.Field.Value", "Value"]</dt>
+                <dd class="col-sm-9">@Model.Value.ToString("N2")</dd>
+
+                <dt class="col-sm-3">@Localizer["ForecastData.Field.DemandPlan", "Demand Plan"]</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(m => m.DemandPlanName)</dd>
+
+                <dt class="col-sm-3">@Localizer["ForecastData.Field.Item", "Item"]</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(m => m.ItemName)</dd>
+
+                <dt class="col-sm-3">@Localizer["ForecastData.Field.Notes", "Notes"]</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(m => m.Notes)</dd>
+
+                <dt class="col-sm-3">@Localizer["ForecastData.Field.CreatedDate", "Created Date"]</dt>
+                <dd class="col-sm-9">@Model.CreatedDate.ToShortDateString()</dd>
+
+                <dt class="col-sm-3">@Localizer["ForecastData.Field.ModifiedDate", "Modified Date"]</dt>
+                <dd class="col-sm-9">@(Model.ModifiedDate?.ToShortDateString() ?? Localizer["Common.NotAvailable", "N/A"])</dd>
+            </dl>
+        </div>
+        <div class="card-footer">
+            <div class="btn-group">
+                <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">@Localizer["Common.Edit", "Edit"]</a>
+                <a asp-action="Index" class="btn btn-secondary">@Localizer["Common.Back", "Back to List"]</a>
+            </div>
+        </div>
+    </div>
+</div>

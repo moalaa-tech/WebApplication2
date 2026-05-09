@@ -1,0 +1,56 @@
+@using CRM.WebApp.DTOs.InventoryManagement.Product
+@model IEnumerable<ProductDto>
+
+@{
+    ViewData["Title"] = @Localizer["Shared.Product.Index.Title", "Index"];
+}
+
+<h1>@Localizer["Shared.Product.Index.Title", "Index"]</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">@Localizer["common.Create", "Create"]</a>
+</p>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>
+                @Localizer["Shared.Product.Name"]
+            </th>
+            <th>
+                @Localizer["Shared.Product.NameAR"]
+            </th>
+            <th>
+                @Localizer["Shared.Product.TotalCost"]
+            </th>
+            <th>
+                @Localizer["Shared.Product.ProductTypeName"]
+            </th>
+            <th>@Localizer["common.Actions"]</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NameAr)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TotalCost)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProductTypeName)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">@Localizer["common.Edit"]</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">@Localizer["common.Details"]</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">@Localizer["common.Delete"]</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

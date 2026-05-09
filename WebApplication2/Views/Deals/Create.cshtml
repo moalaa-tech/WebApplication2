@@ -1,0 +1,99 @@
+@using CRM.WebApp.DTOs.Deal
+@model CreateDealDto
+
+<h1>@Localizer["Shared.Deals.Create.Title"]</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-8">
+        <form asp-action="Create" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="AccountName" class="control-label"></label>
+                        <input asp-for="AccountName" class="form-control" />
+                        <span asp-validation-for="AccountName" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="DealOwner" class="control-label"></label>
+                        <input asp-for="DealOwner" class="form-control" />
+                        <span asp-validation-for="DealOwner" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="OpportunityId" class="control-label"></label>
+                        <input asp-for="OpportunityId" class="form-control" />
+                        <span asp-validation-for="OpportunityId" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="ContactId" class="control-label"></label>
+                        <input asp-for="ContactId" class="form-control" />
+                        <span asp-validation-for="ContactId" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label asp-for="Amount" class="control-label"></label>
+                        <input asp-for="Amount" class="form-control" />
+                        <span asp-validation-for="Amount" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label asp-for="FinalValue" class="control-label"></label>
+                        <input asp-for="FinalValue" class="form-control" />
+                        <span asp-validation-for="FinalValue" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label asp-for="ClosingDate" class="control-label"></label>
+                        <input asp-for="ClosingDate" class="form-control" type="date" />
+                        <span asp-validation-for="ClosingDate" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="Type" /> @Html.DisplayNameFor(model => model.Type)
+                </label>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label">Files</label>
+                <input type="file" name="Files" multiple class="form-control-file" />
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+            </div>
+        </form>
+    </div>
+</div>

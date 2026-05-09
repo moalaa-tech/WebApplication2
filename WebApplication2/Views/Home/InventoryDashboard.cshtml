@@ -1,0 +1,80 @@
+﻿<div class="container mt-4">
+    <div class="row g-3">
+        <!-- المنتجات والخدمات -->
+        <div class="col-md-4">
+            <a asp-controller="Product" asp-action="Index" class="text-decoration-none text-dark">
+                <div class="card shadow-sm h-100 text-center clickable-card">
+                    <div class="card-body">
+                        <h5 class="card-title">المنتجات والخدمات</h5>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- إدارة الأذون المخزنية -->
+        <div class="col-md-4">
+            <a asp-controller="InventoryPermission" asp-action="Index" class="text-decoration-none text-dark">
+                <div class="card shadow-sm h-100 text-center clickable-card">
+                    <div class="card-body">
+                        <h5 class="card-title">إدارة الأذون المخزنية</h5>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- قوائم الأسعار -->
+        <div class="col-md-4">
+            <a asp-controller="PriceList" asp-action="Index" class="text-decoration-none text-dark">
+                <div class="card shadow-sm h-100 text-center clickable-card">
+                    <div class="card-body">
+                        <h5 class="card-title">قوائم الأسعار</h5>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- المستودعات -->
+        <div class="col-md-4">
+            <a asp-controller="Warehouse" asp-action="Index" class="text-decoration-none text-dark">
+                <div class="card shadow-sm h-100 text-center clickable-card">
+                    <div class="card-body">
+                        <h5 class="card-title">المستودعات</h5>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- إدارة الجرد -->
+        <div class="col-md-4">
+            <a asp-controller="Inventory" asp-action="StockTaking" class="text-decoration-none text-dark">
+                <div class="card shadow-sm h-100 text-center clickable-card">
+                    <div class="card-body">
+                        <h5 class="card-title">إدارة الجرد</h5>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- إعدادات المخزون -->
+        <div class="col-md-4">
+            <a asp-controller="InventorySettings" asp-action="Index" class="text-decoration-none text-dark">
+                <div class="card shadow-sm h-100 text-center clickable-card">
+                    <div class="card-body">
+                        <h5 class="card-title">إعدادات المخزون</h5>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- إعدادات المنتجات -->
+        <div class="col-md-4">
+            <a asp-controller="ProductSettings" asp-action="Index" class="text-decoration-none text-dark">
+                <div class="card shadow-sm h-100 text-center clickable-card">
+                    <div class="card-body">
+                        <h5 class="card-title">إعدادات المنتجات</h5>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>

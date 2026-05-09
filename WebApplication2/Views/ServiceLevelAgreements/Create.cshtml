@@ -1,0 +1,122 @@
+﻿@using CRM.WebApp.ViewModels.CustomerService.ServiceLevelAgreement
+@model CreateServiceLevelAgreementViewModel
+
+@{
+    ViewData["Title"] = "Create Service Level Agreement";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Create New Service Level Agreement</h3>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Create" method="post">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="Name" class="control-label"></label>
+                                    <input asp-for="Name" class="form-control" />
+                                    <span asp-validation-for="Name" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="ServiceType" class="control-label"></label>
+                                    <input asp-for="ServiceType" class="form-control" />
+                                    <span asp-validation-for="ServiceType" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="Description" class="control-label"></label>
+                            <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+                            <span asp-validation-for="Description" class="text-danger"></span>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="ResponseTime" class="control-label"></label>
+                                    <div class="input-group">
+                                        <input asp-for="ResponseTime" class="form-control" min="1" />
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">hours</span>
+                                        </div>
+                                    </div>
+                                    <span asp-validation-for="ResponseTime" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="ResolutionTime" class="control-label"></label>
+                                    <div class="input-group">
+                                        <input asp-for="ResolutionTime" class="form-control" min="1" />
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">hours</span>
+                                        </div>
+                                    </div>
+                                    <span asp-validation-for="ResolutionTime" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="EscalationProcess" class="control-label"></label>
+                            <textarea asp-for="EscalationProcess" class="form-control" rows="4"
+                                      placeholder="Describe the escalation process..."></textarea>
+                            <span asp-validation-for="EscalationProcess" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="TermsAndConditions" class="control-label"></label>
+                            <textarea asp-for="TermsAndConditions" class="form-control" rows="5"
+                                      placeholder="Enter terms and conditions..."></textarea>
+                            <span asp-validation-for="TermsAndConditions" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> Create SLA
+                            </button>
+                            <a asp-action="Index" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left"></i> Back to List
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        // Optional: Add character counters for text areas
+        $(document).ready(function() {
+            $('#Description').on('input', function() {
+                var length = $(this).val().length;
+                $('#description-counter').text(length + '/1000 characters');
+            });
+
+            $('#EscalationProcess').on('input', function() {
+                var length = $(this).val().length;
+                $('#escalation-counter').text(length + '/2000 characters');
+            });
+
+            $('#TermsAndConditions').on('input', function() {
+                var length = $(this).val().length;
+                $('#terms-counter').text(length + '/4000 characters');
+            });
+        });
+    </script>
+}

@@ -1,0 +1,86 @@
+﻿@model CRM.WebApp.DTOs.DocumentManagement.DocumentCategoryDto
+
+@{
+    ViewData["Title"] = Localizer["DocumentCategories.Details.Title", "Category Details"];
+}
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">@Localizer["DocumentCategories.Details.Title", "Category Details"]</h3>
+            </div>
+            <div class="card-body">
+                <dl class="row">
+                    <dt class="col-sm-3">@Localizer["DocumentCategories.Field.Name", "Name"]</dt>
+                    <dd class="col-sm-9">@Model.Name</dd>
+
+                    <dt class="col-sm-3">@Localizer["DocumentCategories.Field.Description", "Description"]</dt>
+                    <dd class="col-sm-9">@(string.IsNullOrEmpty(Model.Description) ? Localizer["Common.NotAvailable", "N/A"] : Model.Description)</dd>
+
+                    <dt class="col-sm-3">@Localizer["DocumentCategories.Field.ParentCategory", "Parent Category"]</dt>
+                    <dd class="col-sm-9">@(Model.ParentName ?? Localizer["Common.None", "None"])</dd>
+
+                    <dt class="col-sm-3">@Localizer["DocumentCategories.Field.Order", "Order"]</dt>
+                    <dd class="col-sm-9">@Model.Order</dd>
+
+                    <dt class="col-sm-3">@Localizer["DocumentCategories.Field.Status", "Status"]</dt>
+                    <dd class="col-sm-9">
+                        <span class="badge @(Model.IsActive ? "badge-success" : "badge-secondary")">
+                            @(Model.IsActive ? Localizer["Common.Active", "Active"] : Localizer["Common.Inactive", "Inactive"])
+                        </span>
+                    </dd>
+
+                    <dt class="col-sm-3">@Localizer["DocumentCategories.Field.DocumentCount", "Document Count"]</dt>
+                    <dd class="col-sm-9">@Model.DocumentCount</dd>
+
+                    <dt class="col-sm-3">@Localizer["DocumentCategories.Field.CreatedAt", "Created At"]</dt>
+                    <dd class="col-sm-9">@Model.CreatedAt.ToString("yyyy-MM-dd HH:mm")</dd>
+
+                    <dt class="col-sm-3">@Localizer["DocumentCategories.Field.Slug", "Slug"]</dt>
+                    <dd class="col-sm-9">@Model.Slug</dd>
+                </dl>
+
+                <div class="mt-4">
+                    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">
+                        <i class="fas fa-edit"></i> @Localizer["Common.Edit", "Edit"]
+                    </a>
+                    <a asp-action="Index" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> @Localizer["Common.Back", "Back to List"]
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">@Localizer["DocumentCategories.Details.QuickActions", "Quick Actions"]</h3>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <a href="#" class="btn btn-info">
+                        <i class="fas fa-file"></i> @Localizer["DocumentCategories.Details.ViewDocuments", "View Documents"]
+                    </a>
+                    <a href="#" class="btn btn-success">
+                        <i class="fas fa-plus"></i> @Localizer["DocumentCategories.Details.AddSubcategory", "Add Subcategory"]
+                    </a>
+                    <form asp-action="Delete" asp-route-id="@Model.Id" method="post" class="d-grid">
+                        <button type="submit" class="btn btn-danger"
+                                onclick="return confirm('@Localizer["DocumentCategories.Details.ConfirmDelete", "Are you sure you want to delete this category? This action cannot be undone."]')">
+                            <i class="fas fa-trash"></i> @Localizer["DocumentCategories.Details.DeleteCategory", "Delete Category"]
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger mt-3">
+        @TempData["ErrorMessage"]
+    </div>
+}

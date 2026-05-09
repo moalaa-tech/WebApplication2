@@ -1,0 +1,29 @@
+﻿@using CRM.WebApp.DTOs.Accounting
+@model ExpenseCategoryUpdateDto
+
+
+@{
+    ViewData["Title"] = Localizer["Shared.ExpenseCategory.Edit.Title"];
+}
+
+<h1>@Localizer["Shared.ExpenseCategory.Edit.Title", "Employees"]</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">@Localizer["common.Create"]</a>
+</p>
+
+
+<form asp-action="Edit" method="post" class="card p-4 shadow-sm">
+    <input type="hidden" asp-for="Id" value="@ViewBag.Id" />
+    <div class="mb-3">
+        <label>@Localizer["Shared.ExpenseCategory.Create.Field.Name"]</label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label>@Localizer["Shared.ExpenseCategory.Create.Field.NameAR"]</label>
+        <input asp-for="NameAR" class="form-control" />
+        <span asp-validation-for="NameAR" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">@Localizer["common.Update"]</button>
+</form>

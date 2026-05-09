@@ -1,0 +1,16 @@
+﻿<canvas id="pipelineChart"></canvas>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const ctx = document.getElementById('pipelineChart');
+    const chart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: @Html.Raw(ViewBag.ChartLabels),
+            datasets: [{
+                label: 'Opportunities by Stage',
+                data: @Html.Raw(ViewBag.ChartData),
+                backgroundColor: 'rgba(54, 162, 235, 0.5)'
+            }]
+        }
+    });
+</script>

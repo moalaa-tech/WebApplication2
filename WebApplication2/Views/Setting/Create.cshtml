@@ -1,0 +1,36 @@
+﻿@using CRM.WebApp.DTOs.Setting
+@model CreateSettingDto
+
+@{
+    ViewData["Title"] = Localizer["Shared.Setting.Create.Title", "Create Setting"];
+}
+
+<h1>@Localizer["Shared.Setting.Create.Title", "Create Setting"]</h1>
+
+<h4>@Localizer["Shared.Setting.Create.Header", "Setting"]</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label">@Localizer["Shared.Setting.Field.Name", "Name"]</label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group mt-3">
+                <input type="submit" value="@Localizer["Common.Create", "Create"]" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">@Localizer["Common.Back", "Back to List"]</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

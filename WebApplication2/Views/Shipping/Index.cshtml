@@ -1,0 +1,131 @@
+﻿@using CRM.Domain.Entities.SupplyChainManagement
+@model IEnumerable<ShippingCarrier>
+
+@{
+    ViewData["Title"] = "Shipping Management";
+}
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1><i class="fas fa-shipping-fast me-2"></i>Shipping Management</h1>
+        <div>
+            <a asp-action="Calculate" class="btn btn-primary me-2">
+                <i class="fas fa-calculator me-1"></i>Calculate Shipping
+            </a>
+            <a asp-action="CreateLabel" class="btn btn-success">
+                <i class="fas fa-tag me-1"></i>Create Label
+            </a>
+        </div>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Supported Carriers</h5>
+                </div>
+                <div class="card-body">
+                    @if (Model.Any())
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Carrier</th>
+                                        <th>Status</th>
+                                        <th>Supported Services</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var carrier in Model)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <strong>@carrier.Name</strong>
+                                                <br>
+                                                <small class="text-muted">@carrier.Description</small>
+                                            </td>
+                                            <td>
+                                                <span class="badge @(carrier.IsActive ? "bg-success" : "bg-secondary")">
+                                                    @(carrier.IsActive ? "Active" : "Inactive")
+                                                </span>
+                                            </td>
+                                            <td>
+                                                @if (carrier.SupportedServices != null)
+                                                {
+                                                    @string.Join(", ", carrier.SupportedServices)
+                                                }
+                                            </td>
+                                            <td>
+                                                <div class="btn-group btn-group-sm">
+                                                    <a asp-action="Calculate" asp-route-carrierId="@carrier.Id"
+                                                       class="btn btn-outline-primary" title="Calculate Shipping">
+                                                        <i class="fas fa-calculator"></i>
+                                                    </a>
+                                                    <a asp-action="CreateLabel" asp-route-carrierId="@carrier.Id"
+                                                       class="btn btn-outline-success" title="Create Label">
+                                                        <i class="fas fa-tag"></i>
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle me-2"></i>No shipping carriers configured.
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">Quick Actions</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        <a asp-action="Calculate" class="btn btn-primary mb-2">
+                            <i class="fas fa-calculator me-2"></i>Calculate Shipping
+                        </a>
+                        <a asp-action="Quote" class="btn btn-secondary mb-2">
+                            <i class="fas fa-file-invoice-dollar me-2"></i>Get Quote
+                        </a>
+                        <a asp-action="Options" class="btn btn-info mb-2">
+                            <i class="fas fa-list-alt me-2"></i>View Options
+                        </a>
+                        <a asp-action="Track" class="btn btn-warning mb-2">
+                            <i class="fas fa-search me-2"></i>Track Shipment
+                        </a>
+                        <a asp-action="CreateLabel" class="btn btn-success">
+                            <i class="fas fa-tag me-2"></i>Create Label
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,210 @@
+﻿@using CRM.WebApp.ViewModels.SupplyChainManagement.Shipping
+@model ShippingLabelRequestViewModel
+
+@{
+    ViewData["Title"] = "Create Shipping Label";
+}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h4 class="mb-0"><i class="fas fa-tag me-2"></i>Create Shipping Label</h4>
+                </div>
+                <div class="card-body">
+                    <form asp-action="CreateLabel" method="post">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h5 class="border-bottom pb-2 mb-3">Origin Address</h5>
+                                <div class="form-group mb-3">
+                                    <label asp-for="OriginStreet" class="form-label"></label>
+                                    <input asp-for="OriginStreet" class="form-control" />
+                                    <span asp-validation-for="OriginStreet" class="text-danger"></span>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label asp-for="OriginCity" class="form-label"></label>
+                                        <input asp-for="OriginCity" class="form-control" />
+                                        <span asp-validation-for="OriginCity" class="text-danger"></span>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label asp-for="OriginState" class="form-label"></label>
+                                        <input asp-for="OriginState" class="form-control" />
+                                        <span asp-validation-for="OriginState" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label asp-for="OriginZipCode" class="form-label"></label>
+                                        <input asp-for="OriginZipCode" class="form-control" />
+                                        <span asp-validation-for="OriginZipCode" class="text-danger"></span>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label asp-for="OriginCountry" class="form-label"></label>
+                                        <input asp-for="OriginCountry" class="form-control" value="US" />
+                                        <span asp-validation-for="OriginCountry" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <h5 class="border-bottom pb-2 mb-3">Destination Address</h5>
+                                <div class="form-group mb-3">
+                                    <label asp-for="DestinationStreet" class="form-label"></label>
+                                    <input asp-for="DestinationStreet" class="form-control" />
+                                    <span asp-validation-for="DestinationStreet" class="text-danger"></span>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label asp-for="DestinationCity" class="form-label"></label>
+                                        <input asp-for="DestinationCity" class="form-control" />
+                                        <span asp-validation-for="DestinationCity" class="text-danger"></span>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label asp-for="DestinationState" class="form-label"></label>
+                                        <input asp-for="DestinationState" class="form-control" />
+                                        <span asp-validation-for="DestinationState" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label asp-for="DestinationZipCode" class="form-label"></label>
+                                        <input asp-for="DestinationZipCode" class="form-control" />
+                                        <span asp-validation-for="DestinationZipCode" class="text-danger"></span>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label asp-for="DestinationCountry" class="form-label"></label>
+                                        <input asp-for="DestinationCountry" class="form-control" value="US" />
+                                        <span asp-validation-for="DestinationCountry" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-4">
+                            <div class="col-12">
+                                <h5 class="border-bottom pb-2 mb-3">Package Information</h5>
+                                <div id="packages-container">
+                                    @for (int i = 0; i < Model.Packages.Count; i++)
+                                    {
+                                        <div class="package-item card mb-3">
+                                            <div class="card-header bg-light">
+                                                <h6 class="mb-0">Package @(i + 1)</h6>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col-md-3">
+                                                        <label asp-for="Packages[i].Weight" class="form-label"></label>
+                                                        <input asp-for="Packages[i].Weight" class="form-control" />
+                                                        <span asp-validation-for="Packages[i].Weight" class="text-danger"></span>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <label asp-for="Packages[i].Length" class="form-label"></label>
+                                                        <input asp-for="Packages[i].Length" class="form-control" />
+                                                        <span asp-validation-for="Packages[i].Length" class="text-danger"></span>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <label asp-for="Packages[i].Width" class="form-label"></label>
+                                                        <input asp-for="Packages[i].Width" class="form-control" />
+                                                        <span asp-validation-for="Packages[i].Width" class="text-danger"></span>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <label asp-for="Packages[i].Height" class="form-label"></label>
+                                                        <input asp-for="Packages[i].Height" class="form-control" />
+                                                        <span asp-validation-for="Packages[i].Height" class="text-danger"></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                                <button type="button" id="add-package" class="btn btn-secondary mb-3">
+                                    <i class="fas fa-plus me-1"></i>Add Package
+                                </button>
+                            </div>
+                        </div>
+
+                        @* <div class="row mt-4">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="CarrierServiceId" class="form-label">Carrier Service</label>
+                                    <select asp-for="CarrierServiceId" asp-items="Model.AvailableCarriers" class="form-select">
+                                        <option value="">-- Select Service --</option>
+                                    </select>
+                                    <span asp-validation-for="CarrierServiceId" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="ShipDate" class="form-label">Ship Date</label>
+                                    <input asp-for="ShipDate" type="date" class="form-control" />
+                                    <span asp-validation-for="ShipDate" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div> *@
+
+                        <div class="form-group mt-4">
+                            <button type="submit" class="btn btn-success">
+                                <i class="fas fa-print me-1"></i>Create Label
+                            </button>
+                            <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            let packageIndex = @Model.Packages.Count;
+
+            $('#add-package').click(function () {
+                const container = $('#packages-container');
+                const newPackage = `
+                    <div class="package-item card mb-3">
+                        <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                            <h6 class="mb-0">Package ${packageIndex + 1}</h6>
+                            <button type="button" class="btn btn-sm btn-danger remove-package">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <label class="form-label">Weight</label>
+                                    <input name="Packages[${packageIndex}].Weight" class="form-control" />
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">Length</label>
+                                    <input name="Packages[${packageIndex}].Length" class="form-control" />
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">Width</label>
+                                    <input name="Packages[${packageIndex}].Width" class="form-control" />
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">Height</label>
+                                    <input name="Packages[${packageIndex}].Height" class="form-control" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.append(newPackage);
+                packageIndex++;
+            });
+
+            $(document).on('click', '.remove-package', function () {
+                $(this).closest('.package-item').remove();
+            });
+
+            // Set default ship date to today
+            const today = new Date().toISOString().split('T')[0];
+            $('#ShipDate').val(today);
+        });
+    </script>
+}

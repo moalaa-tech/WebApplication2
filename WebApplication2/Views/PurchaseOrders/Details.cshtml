@@ -1,0 +1,54 @@
+@model CRM.WebApp.ViewModels.SupplyChainManagement.Purchase.PurchaseOrderViewModel
+@inject IStringLocalizer Localizer
+
+@{
+    ViewData["Title"] = Localizer["Shared.PurchaseOrders.Details.Title", "Purchase Order Details"];
+}
+
+<h1>@Localizer["Shared.PurchaseOrders.Details.Title", "Purchase Order Details"]</h1>
+<div class="card mb-3">
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">@Localizer["Shared.PurchaseOrders.PONumber", "PO Number"]</dt>
+            <dd class="col-sm-9">@Model.PONumber</dd>
+            <dt class="col-sm-3">@Localizer["Shared.PurchaseOrders.OrderDate", "Order Date"]</dt>
+            <dd class="col-sm-9">@Model.OrderDate.ToShortDateString()</dd>
+            <dt class="col-sm-3">@Localizer["Shared.PurchaseOrders.ExpectedDeliveryDate", "Expected Delivery Date"]</dt>
+            <dd class="col-sm-9">@Model.ExpectedDeliveryDate?.ToShortDateString()</dd>
+            <dt class="col-sm-3">@Localizer["Shared.PurchaseOrders.Supplier", "Supplier"]</dt>
+            <dd class="col-sm-9">@Model.SupplierName</dd>
+            <dt class="col-sm-3">@Localizer["Shared.PurchaseOrders.Description", "Description"]</dt>
+            <dd class="col-sm-9">@Model.Description</dd>
+            <dt class="col-sm-3">@Localizer["Shared.PurchaseOrders.TotalAmount", "Total Amount"]</dt>
+            <dd class="col-sm-9">@Model.TotalAmount.ToString("C")</dd>
+            <dt class="col-sm-3">@Localizer["Shared.PurchaseOrders.Status", "Status"]</dt>
+            <dd class="col-sm-9">@Model.Status</dd>
+        </dl>
+        <h4>@Localizer["Shared.PurchaseOrders.Items", "Items"]</h4>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>@Localizer["Shared.PurchaseOrders.ItemName", "Item Name"]</th>
+                    <th>@Localizer["Shared.PurchaseOrders.ItemCode", "Item Code"]</th>
+                    <th>@Localizer["Shared.PurchaseOrders.Quantity", "Quantity"]</th>
+                    <th>@Localizer["Shared.PurchaseOrders.UnitPrice", "Unit Price"]</th>
+                    <th>@Localizer["Shared.PurchaseOrders.Description", "Description"]</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var item in Model.Items)
+            {
+                <tr>
+                    <td>@item.ItemName</td>
+                    <td>@item.ItemCode</td>
+                    <td>@item.Quantity</td>
+                    <td>@item.UnitPrice.ToString("C")</td>
+                    <td>@item.Description</td>
+                </tr>
+            }
+            </tbody>
+        </table>
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">@Localizer["Shared.Common.Edit", "Edit"]</a>
+        <a asp-action="Index" class="btn btn-secondary">@Localizer["Shared.Common.BackToList", "Back to List"]</a>
+    </div>
+</div>

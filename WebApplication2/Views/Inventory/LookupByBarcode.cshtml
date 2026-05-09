@@ -1,0 +1,75 @@
+﻿@using CRM.WebApp.ViewModels.InventoryManagement.Product
+@model ProductViewModel
+
+@{
+    ViewData["Title"] = @Localizer["Shared.Inventory.ScanBarcode.Result.Title"];
+}
+
+<div class="container mt-4">
+
+    <h1>@Localizer["Shared.Inventory.ScanBarcode.Result.Header", Model.Barcode]</h1>
+    <hr />
+
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">@Model.Name @Localizer["Shared.Inventory.Details.Title"]</h5>
+        </div>
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-3">@Localizer["Shared.Inventory.Fields.SKU"]:</dt>
+                <dd class="col-sm-9">@Model.SKU</dd>
+
+                <dt class="col-sm-3">@Localizer["Shared.Inventory.Fields.ProductId"]:</dt>
+                <dd class="col-sm-9">@Model.Id</dd>
+
+                <dt class="col-sm-3">@Localizer["Shared.Inventory.Fields.TotalStock"]:</dt>
+                <dd class="col-sm-9">
+                    <span class="badge bg-success fs-6">@Model.CurrentStock</span>
+                </dd>
+            </dl>
+        </div>
+    </div>
+
+    @if (Model.Batches.Any())
+    {
+        <h3>@Localizer["Shared.Inventory.BatchBreakdown.Title"]</h3>
+        <table class="table table-bordered table-striped">
+            <thead class="table-light">
+                <tr>
+                    <th>@Localizer["Shared.Inventory.BatchBreakdown.Warehouse"]</th>
+                    <th>@Localizer["Shared.Inventory.BatchBreakdown.BatchNumber"]</th>
+                    <th>@Localizer["Shared.Inventory.BatchBreakdown.Quantity"]</th>
+                    <th>@Localizer["Shared.Inventory.BatchBreakdown.ExpiryDate"]</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var batch in Model.Batches.OrderBy(b => b.ExpiryDate))
+                {
+                    var rowClass = (batch.ExpiryDate.HasValue && batch.ExpiryDate.Value < DateTime.Today) ? "table-danger" : "";
+
+                    <tr class="@rowClass">
+                        <td>@batch.WarehouseName</td>
+                        <td>@batch.BatchNumber</td>
+                        <td>@batch.Quantity</td>
+                        <td>
+                            @(batch.ExpiryDate.HasValue? batch.ExpiryDate.Value.ToShortDateString() : "N/A")
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <div class="alert alert-warning" role="alert">
+            @Localizer["Shared.Inventory.BatchBreakdown.NoBatchInfo", Model.CurrentStock]
+        </div>
+    }
+
+    <div class="mt-4">
+        <a href="#" onclick="history.go(-1);" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i> @Localizer["Shared.Actions.BackToScan"]
+        </a>
+    </div>
+
+</div>

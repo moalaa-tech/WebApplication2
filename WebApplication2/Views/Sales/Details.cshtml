@@ -1,0 +1,52 @@
+﻿@using CRM.WebApp.DTOs.Lead
+@model LeadDto
+
+<h2>Lead Details</h2>
+
+<div>
+    <h4>@Model.FirstName @Model.LastName</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">Email</dt>
+        <dd class="col-sm-10">@Model.Email</dd>
+
+        <dt class="col-sm-2">Phone</dt>
+        <dd class="col-sm-10">@Model.Phone</dd>
+
+        <dt class="col-sm-2">Company</dt>
+        <dd class="col-sm-10">@Model.CompanyName</dd>
+
+     
+        <dt class="col-sm-2">Status</dt>
+        <dd class="col-sm-10">@Model.Status</dd>
+
+        <dt class="col-sm-2">Total Score</dt>
+        <dd class="col-sm-10">@Model.TotalScore</dd>
+    </dl>
+</div>
+
+<h4>Scores</h4>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Criteria</th>
+            <th>Points</th>
+            <th>Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var score in ViewBag.Scores)
+        {
+            <tr>
+                <td>@score.CriteriaName</td>
+                <td>@score.Points</td>
+                <td>@score.ScoredDate.ToString("d")</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</div>

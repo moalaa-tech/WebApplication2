@@ -1,0 +1,147 @@
+﻿@using CRM.WebApp.DTOs.Project
+@model ProjectCostSummaryDto
+
+<h2>Cost Summary for @Model.ProjectName</h2>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h4>Budget Overview</h4>
+            </div>
+            <div class="card-body">
+                <table class="table">
+                    <tr>
+                        <th>Budget</th>
+                        <td>@Model.Budget.ToString("C")</td>
+                    </tr>
+                    <tr>
+                        <th>Total Estimated Cost</th>
+                        <td>@Model.TotalEstimatedCost.ToString("C")</td>
+                    </tr>
+                    <tr>
+                        <th>Total Actual Cost</th>
+                        <td>@Model.TotalActualCost.ToString("C")</td>
+                    </tr>
+                    <tr>
+                        <th>Variance</th>
+                        <td class="@(Model.Variance < 0 ? "text-danger" : "text-success")">
+                            @Model.Variance.ToString("C")
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h4>Cost Breakdown</h4>
+            </div>
+            <div class="card-body">
+                <table class="table">
+                    <tr>
+                        <th>Labor Cost</th>
+                        <td>@Model.LaborCost.ToString("C")</td>
+                    </tr>
+                    <tr>
+                        <th>Expense Cost</th>
+                        <td>@Model.ExpenseCost.ToString("C")</td>
+                    </tr>
+                    <tr>
+                        <th>Total Hours</th>
+                        <td>@Model.TotalHours.ToString("N2")</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h4>Cost Distribution</h4>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <canvas id="costChart" width="400" height="400"></canvas>
+            </div>
+            <div class="col-md-6">
+                <canvas id="hoursChart" width="400" height="400"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mt-3">
+    <a asp-action="Details" asp-route-id="@Model.ProjectId" class="btn btn-secondary">Back to Project</a>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Cost Distribution Pie Chart
+        var costCtx = document.getElementById('costChart').getContext('2d');
+        var costChart = new Chart(costCtx, {
+            type: 'pie',
+            data: {
+                labels: ['Labor Cost', 'Expense Cost'],
+                datasets: [{
+                    data: [@Model.LaborCost, @Model.ExpenseCost],
+                    backgroundColor: [
+                        'rgba(54, 162, 235, 0.7)',
+                        'rgba(255, 99, 132, 0.7)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Cost Distribution'
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return context.label + ': ' + context.raw.toLocaleString('en-US', {style:'currency', currency:'USD'});
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Hours Distribution Bar Chart (if applicable)
+        var hoursCtx = document.getElementById('hoursChart').getContext('2d');
+        var hoursChart = new Chart(hoursCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Total Hours'],
+                datasets: [{
+                    label: 'Hours',
+                    data: [@Model.TotalHours],
+                    backgroundColor: 'rgba(75, 192, 192, 0.7)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Total Hours'
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+}

@@ -1,0 +1,68 @@
+﻿@using CRM.WebApp.DTOs.InventoryManagement.Product
+@model ProductDto;
+
+@{
+    ViewData["Title"] = @Localizer["Shared.Product.Details.Title", "Product Details"];
+}
+
+<h1>@Localizer["Common.Details", "Details"]</h1>
+
+<div>
+    <h4>@Localizer["Shared.Product.Title", "Product"]</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Localizer["Shared.Product.Name", "Name"]
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt class="col-sm-2">
+            @Localizer["Shared.Product.TotalCost", "Total Cost"]
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.TotalCost)
+        </dd>
+        <dt class="col-sm-2">
+            @Localizer["Shared.Product.ShippingCost", "Shipping Cost"]
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ShippingCost)
+        </dd>
+        <dt class="col-sm-2">
+            @Localizer["Shared.Product.FreightCost", "Freight Cost"]
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.FreightCost)
+        </dd>
+        <dt class="col-sm-2">
+            @Localizer["Shared.Product.ProductTypeName", "Product Type"]
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ProductTypeName)
+        </dd>
+        <dt class="col-sm-2">
+            @Localizer["Shared.Product.Image", "Image"]
+        </dt>
+        <dd class="col-sm-10">
+            @if (!string.IsNullOrEmpty(Model.ImageFile))
+            {
+                <img src="~/images/products/@Model.ImageFile" alt="Product Image" style="max-width: 200px; max-height: 200px;" />
+            }
+            else
+            {
+                <span>@Localizer["Shared.Product.Index.NoImage", "No Image"]</span>
+            }
+        </dd>
+        <dt class="col-sm-2">
+            @Localizer["Shared.Product.Description", "Description"]
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id">@Localizer["Common.Edit", "Edit"]</a> |
+    <a asp-action="Index">@Localizer["Common.Back", "Back to List"]</a>
+</div>

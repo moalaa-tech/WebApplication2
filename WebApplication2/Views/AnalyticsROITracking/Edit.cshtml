@@ -1,0 +1,116 @@
+﻿@model CRM.WebApp.ViewModels.MarketingAutomation.CampaignAnalytics.CampaignAnalyticsEditViewModel
+
+@{
+    ViewData["Title"] = Localizer["AnalyticsROITracking.Edit.Title", "Edit Campaign Analytics"];
+}
+
+<h1>@Localizer["AnalyticsROITracking.Edit.Title", "Edit Campaign Analytics"]</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-8">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="CampaignAnalyticsUpdateDto.Id" />
+
+            <div class="form-group">
+                <label asp-for="CampaignAnalyticsUpdateDto.CampaignId" class="control-label">@Localizer["AnalyticsROITracking.Field.CampaignId", "Campaign ID"]</label>
+                <input asp-for="CampaignAnalyticsUpdateDto.CampaignId" class="form-control" readonly />
+                <span asp-validation-for="CampaignAnalyticsUpdateDto.CampaignId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="CampaignAnalyticsUpdateDto.CampaignName" class="control-label">@Localizer["AnalyticsROITracking.Field.CampaignName", "Campaign Name"]</label>
+                <input asp-for="CampaignAnalyticsUpdateDto.CampaignName" class="form-control" />
+                <span asp-validation-for="CampaignAnalyticsUpdateDto.CampaignName" class="text-danger"></span>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="CampaignAnalyticsUpdateDto.StartDate" class="control-label">@Localizer["AnalyticsROITracking.Field.StartDate", "Start Date"]</label>
+                        <input asp-for="CampaignAnalyticsUpdateDto.StartDate" type="date" class="form-control" />
+                        <span asp-validation-for="CampaignAnalyticsUpdateDto.StartDate" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="CampaignAnalyticsUpdateDto.EndDate" class="control-label">@Localizer["AnalyticsROITracking.Field.EndDate", "End Date"]</label>
+                        <input asp-for="CampaignAnalyticsUpdateDto.EndDate" type="date" class="form-control" />
+                        <span asp-validation-for="CampaignAnalyticsUpdateDto.EndDate" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="CampaignAnalyticsUpdateDto.TotalBudget" class="control-label">@Localizer["AnalyticsROITracking.Field.TotalBudget", "Total Budget"]</label>
+                        <input asp-for="CampaignAnalyticsUpdateDto.TotalBudget" class="form-control" />
+                        <span asp-validation-for="CampaignAnalyticsUpdateDto.TotalBudget" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="CampaignAnalyticsUpdateDto.TotalSpent" class="control-label">@Localizer["AnalyticsROITracking.Field.TotalSpent", "Total Spent"]</label>
+                        <input asp-for="CampaignAnalyticsUpdateDto.TotalSpent" class="form-control" />
+                        <span asp-validation-for="CampaignAnalyticsUpdateDto.TotalSpent" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label asp-for="CampaignAnalyticsUpdateDto.Impressions" class="control-label">@Localizer["AnalyticsROITracking.Field.Impressions", "Impressions"]</label>
+                        <input asp-for="CampaignAnalyticsUpdateDto.Impressions" class="form-control" />
+                        <span asp-validation-for="CampaignAnalyticsUpdateDto.Impressions" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label asp-for="CampaignAnalyticsUpdateDto.Clicks" class="control-label">@Localizer["AnalyticsROITracking.Field.Clicks", "Clicks"]</label>
+                        <input asp-for="CampaignAnalyticsUpdateDto.Clicks" class="form-control" />
+                        <span asp-validation-for="CampaignAnalyticsUpdateDto.Clicks" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label asp-for="CampaignAnalyticsUpdateDto.Conversions" class="control-label">@Localizer["AnalyticsROITracking.Field.Conversions", "Conversions"]</label>
+                        <input asp-for="CampaignAnalyticsUpdateDto.Conversions" class="form-control" />
+                        <span asp-validation-for="CampaignAnalyticsUpdateDto.Conversions" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="CampaignAnalyticsUpdateDto.Channel" class="control-label">@Localizer["AnalyticsROITracking.Field.Channel", "Channel"]</label>
+                <select asp-for="CampaignAnalyticsUpdateDto.Channel" class="form-control">
+                    <option value="Social">@Localizer["AnalyticsROITracking.Channel.Social", "Social"]</option>
+                    <option value="Email">@Localizer["AnalyticsROITracking.Channel.Email", "Email"]</option>
+                    <option value="PPC">@Localizer["AnalyticsROITracking.Channel.PPC", "PPC"]</option>
+                    <option value="SEO">@Localizer["AnalyticsROITracking.Channel.SEO", "SEO"]</option>
+                    <option value="Direct">@Localizer["AnalyticsROITracking.Channel.Direct", "Direct"]</option>
+                </select>
+                <span asp-validation-for="CampaignAnalyticsUpdateDto.Channel" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="CampaignAnalyticsUpdateDto.RevenueGenerated" class="control-label">@Localizer["AnalyticsROITracking.Field.RevenueGenerated", "Revenue Generated"]</label>
+                <input asp-for="CampaignAnalyticsUpdateDto.RevenueGenerated" class="form-control" />
+                <span asp-validation-for="CampaignAnalyticsUpdateDto.RevenueGenerated" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="CampaignAnalyticsUpdateDto.Notes" class="control-label">@Localizer["AnalyticsROITracking.Field.Notes", "Notes"]</label>
+                <textarea asp-for="CampaignAnalyticsUpdateDto.Notes" class="form-control" rows="3"></textarea>
+                <span asp-validation-for="CampaignAnalyticsUpdateDto.Notes" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="@Localizer["Common.Save", "Save"]" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-secondary">@Localizer["Common.Back", "Back to List"]</a>
+            </div>
+        </form>
+    </div>
+</div>

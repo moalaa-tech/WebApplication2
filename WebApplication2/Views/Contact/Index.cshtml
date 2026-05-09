@@ -1,0 +1,41 @@
+@using CRM.WebApp.ViewModels.Contact
+@model IEnumerable<ContactViewModel>
+@{
+    ViewData["Title"] = "Contacts";
+}
+
+<h2>@Localizer["Shared.Contact.Index.Title"]</h2>
+
+<a asp-action="Create" class="btn btn-primary mb-3">@Localizer["Shared.Common.Create"]</a>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>@Localizer["Shared.Contact.Field.Name"]</th>
+            <th>@Localizer["Shared.Contact.Field.Surname"]</th>
+            <th>@Localizer["Shared.Contact.Field.Email"]</th>
+            <th>@Localizer["Shared.Contact.Field.Phone"]</th>
+            <th>@Localizer["Shared.Contact.Field.Company"]</th>
+            <th>@Localizer["Shared.Contact.Field.Status"]</th>
+            <th>@Localizer["Shared.Common.Actions"]</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var contact in Model)
+        {
+            <tr>
+                <td>@contact.Name</td>
+                <td>@contact.Surname</td>
+                <td>@contact.Email</td>
+                <td>@contact.Phone</td>
+                <td>@contact.CompanyName</td>
+                <td>@contact.Status</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@contact.Id" class="btn btn-info btn-sm">@Localizer["Shared.Common.Details"]</a>
+                    <a asp-action="Edit" asp-route-id="@contact.Id" class="btn btn-warning btn-sm">@Localizer["Shared.Common.Edit"]</a>
+                    <a asp-action="Delete" asp-route-id="@contact.Id" class="btn btn-danger btn-sm">@Localizer["Shared.Common.Delete"]</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

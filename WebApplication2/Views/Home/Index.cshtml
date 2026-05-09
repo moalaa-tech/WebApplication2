@@ -1,0 +1,332 @@
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <h2>Toaster Examples</h2>
+        <button class="btn btn-primary" onclick="window.toaster.success('This is a success message!')">Success Toaster</button>
+        <button class="btn btn-danger" onclick="window.toaster.error('This is an error message!')">Error Toaster</button>
+        <button class="btn btn-info" onclick="window.toaster.info('This is an info message!')">Info Toaster</button>
+        <button class="btn btn-warning" onclick="window.toaster.warning('This is a warning message!')">Warning Toaster</button>
+        <a asp-action="ShowServerToaster" class="btn btn-secondary">Show Server Toaster</a>
+    </div>
+</div>
+
+<br />
+
+<div class="row">
+    <div class="col-md-3">
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                @Localizer["Shared.Home.Finance"]
+            </button>
+            <ul class="dropdown-menu">
+                <li> <a class="dropdown-item" asp-controller="GeneralLedger" asp-action="Index">@Localizer["Shared.Home.Finance.GeneralLedger"]</a></li>
+                <li> <a class="dropdown-item" asp-controller="AccountsPayable" asp-action="Index">@Localizer["Shared.Home.Finance.AccountsPayable"]</a></li>
+                <li> <a class="dropdown-item" asp-controller="AccountsReceivable" asp-action="Index">@Localizer["Shared.Home.Finance.AccountsReceivable"]</a></li>
+                <li> <a class="dropdown-item" asp-controller="FixedAssets" asp-action="Index">@Localizer["Shared.Home.Finance.FixedAssets"]</a></li>
+                <li> <a class="dropdown-item" asp-controller="Reconciliations" asp-action="Index">@Localizer["Shared.Home.Finance.BankReconciliation"]</a></li>
+                <li> <a class="dropdown-item" asp-controller="Budgeting & Forecasting" asp-action="">@Localizer["Shared.Home.Finance.Budgeting"]</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                @Localizer["Home.HR"]
+            </button>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" asp-controller="Employee" asp-action="Index">@Localizer["Home.HR.EmployeeRecords"]</a></li>
+                <li><a class="dropdown-item" asp-controller="Payrolls" asp-action="Index">@Localizer["Home.HR.Payroll"]</a></li>
+                <li><a class="dropdown-item" asp-controller="LeaveRequest" asp-action="Index">@Localizer["Home.HR.Attendance"]</a></li>
+                <li><a class="dropdown-item" asp-controller="JobPostings" asp-action="Index">@Localizer["Home.HR.Recruitment"]</a></li>
+                <li><a class="dropdown-item" asp-controller="Department" asp-action="Index">@Localizer["Home.HR.Department"]</a></li>
+
+            </ul>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                @Localizer["Home.Inventory"]
+            </button>
+            <ul class="dropdown-menu">
+                
+                <li> <a class="dropdown-item" asp-controller="Inventory" asp-action="dashboard">@Localizer["Home.Inventory"]</a></li>
+
+                <li> <a class="dropdown-item" asp-controller="Inventory" asp-action="Index">@Localizer["Home.Inventory.StockLevels"]</a></li>
+                <li> <a class="dropdown-item" asp-controller="Warehouse Management" asp-action="Index">@Localizer["Home.Inventory.Warehouse"]</a></li>
+                <li> <a class="dropdown-item" asp-controller="Batches & Expiry Tracking" asp-action="Index">@Localizer["Home.Inventory.Batches"]</a></li>
+                <li> <a class="dropdown-item" asp-controller="Barcode Integration" asp-action="Index">@Localizer["Home.Inventory.Barcode"]</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                @Localizer["Home.Procurement"]
+            </button>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" asp-controller="Vendors" asp-action="Index">@Localizer["Home.Procurement.Vendors"]</a></li>
+                <li><a class="dropdown-item" asp-controller="Order" asp-action="Index">@Localizer["Home.Procurement.PurchaseOrders"]</a></li>
+                <li><a class="dropdown-item" asp-controller="" asp-action="">@Localizer["Home.Procurement.GRN"]</a></li>
+                <li><a class="dropdown-item" asp-controller="" asp-action="">@Localizer["Home.Procurement.InvoiceMatching"]</a></li>
+            </ul>
+        </div>
+    </div>
+
+</div>
+
+<br />
+
+<div class="row">
+    <div class="col-md-3">
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                @Localizer["Home.CRM"]
+            </button>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" asp-controller="Sales" asp-action="Index">@Localizer["Home.CRM.Sales"]</a></li>
+                <li><a class="dropdown-item" asp-controller="Customer" asp-action="Index">@Localizer["Home.CRM.Customer"]</a></li>
+                <li><a class="dropdown-item" asp-controller="Order" asp-action="Index">@Localizer["Home.CRM.Invoicing"]</a></li>
+                <li><a class="dropdown-item" asp-controller="Discounts & Promotions" asp-action="">@Localizer["Home.CRM.Discounts"]</a></li>
+                <li><a class="dropdown-item" asp-controller="Sales Analytics" asp-action="">@Localizer["Home.CRM.Analytics"]</a></li>
+            </ul>
+        </div>
+    </div>
+
+
+    <div class="col-md-3">
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                @Localizer["Home.MRP"]
+            </button>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" asp-controller="Bill of Materials (BOM)" asp-action="">@Localizer["Home.MRP.BOM"]</a></li>
+                <li><a class="dropdown-item" asp-controller="Work Orders" asp-action="">@Localizer["Home.MRP.WorkOrders"]</a></li>
+                <li><a class="dropdown-item" asp-controller="Production Scheduling" asp-action="">@Localizer["Home.MRP.Scheduling"]</a></li>
+                <li><a class="dropdown-item" asp-controller="Resource Planning" asp-action="">@Localizer["Home.MRP.ResourcePlanning"]</a></li>
+                <li><a class="dropdown-item" asp-controller="Quality Control" asp-action="">@Localizer["Home.MRP.Quality"]</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                @Localizer["Home.Projects"]
+            </button>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" asp-controller="Projects" asp-action="Index">@Localizer["Home.Projects.ProjectPlanning"]</a></li>
+                <li><a class="dropdown-item" asp-controller="Time Tracking" asp-action="">@Localizer["Home.Projects.TimeTracking"]</a></li>
+                <li><a class="dropdown-item" asp-controller="Cost Estimation" asp-action="">@Localizer["Home.Projects.CostEstimation"]</a></li>
+                <li><a class="dropdown-item" asp-controller="Resource Allocation" asp-action="">@Localizer["Home.Projects.ResourceAllocation"]</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                @Localizer["Home.Assets"]
+            </button>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" asp-controller="FixedAssets" asp-action="Index">@Localizer["Home.Assets.Registry"]</a></li>
+                <li><a class="dropdown-item" asp-controller="Depreciation Tracking" asp-action="">@Localizer["Home.Assets.Depreciation"]</a></li>
+                <li><a class="dropdown-item" asp-controller="Maintenance Schedules" asp-action="">@Localizer["Home.Assets.Maintenance"]</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+
+    <div class="col-md-3">
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                @Localizer["Home.SupplyChain"]
+            </button>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" asp-controller="DemandPlans" asp-action="Index">@Localizer["Home.SupplyChain.Procurement"]</a></li>
+                <li><a class="dropdown-item" asp-controller="DemandPlans" asp-action="Index">@Localizer["Home.SupplyChain.Inventory"]</a></li>
+                <li><a class="dropdown-item" asp-controller="DemandPlans" asp-action="Index">@Localizer["Home.SupplyChain.Production"]</a></li>
+                <li><a class="dropdown-item" asp-controller="DemandPlans" asp-action="Index">@Localizer["Home.SupplyChain.Logistics"]</a></li>
+                <li><a class="dropdown-item" asp-controller="DemandPlans" asp-action="Index">@Localizer["Home.SupplyChain.DemandPlanning"]</a></li>
+                <li><a class="dropdown-item" asp-controller="DemandPlans" asp-action="Index">@Localizer["Home.SupplyChain.OrderManagement"]</a></li>
+                <li><a class="dropdown-item" asp-controller="DemandPlans" asp-action="Index">@Localizer["Home.SupplyChain.Analytics"]</a></li>
+
+            </ul>
+        </div>
+    </div>
+</div>
+
+<br />
+
+<div class="row">
+    <div class="col-md-3">
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                @Localizer["Home.POS"]
+            </button>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" asp-controller="Retail Sales" asp-action="">@Localizer["Home.POS.Retail"]</a></li>
+                <li><a class="dropdown-item" asp-controller="Cash Register Integration" asp-action="">@Localizer["Home.POS.CashRegister"]</a></li>
+                <li><a class="dropdown-item" asp-controller="Shift/Drawer Management" asp-action="">@Localizer["Home.POS.Shift"]</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                @Localizer["Home.Reports"]
+            </button>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" asp-controller="" asp-action="">@Localizer["Home.Reports.KPI"]</a></li>
+                <li><a class="dropdown-item" asp-controller="" asp-action="">@Localizer["Home.Reports.Builder"]</a></li>
+                <li><a class="dropdown-item" asp-controller="" asp-action="">@Localizer["Home.Reports.Export"]</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <h1 class="display-6">
+        @Localizer["Home.CRM.Title"]
+    </h1>
+
+
+    <div class="col-md-3">
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                @Localizer["Home.CRM.Sales"]
+            </button>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" asp-controller="Lead" asp-action="Index">@Localizer["Home.CRM.LeadManagement"]</a></li>
+                <li><a class="dropdown-item" asp-controller="Opportunity" asp-action="Index">Opportunity  Management</a></li>
+                <li><a class="dropdown-item" asp-controller="Deals" asp-action="Index">Deal Management</a></li>
+                <li><a class="dropdown-item" asp-controller="Quotes" asp-action="Index">@Localizer["Home.CRM.QuoteManagement"]</a></li>
+                <li><a class="dropdown-item" asp-controller="Customer" asp-action="Index">@Localizer["Home.CRM.CustomerManagement"]</a></li>
+                <li><a class="dropdown-item" asp-controller="SalesPipeline" asp-action="Index">@Localizer["Home.CRM.Pipeline"]</a></li>
+                <li><a class="dropdown-item" asp-controller="ActivityTracking" asp-action="Index">@Localizer["Home.CRM.ActivityTracking"]</a></li>
+            </ul>
+        </div>
+    </div>
+
+
+    <div class="col-md-3">
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                @Localizer["Home.Marketing"]
+            </button>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" asp-controller="Campaigns" asp-action="Index">@Localizer["Home.Marketing.Campaigns"]</a></li>
+                <li><a class="dropdown-item" asp-controller="EmailTemplate" asp-action="Index">@Localizer["Home.Marketing.Email"]</a></li>
+                <li><a class="dropdown-item" asp-controller="LeadScoring" asp-action="Index">@Localizer["Home.Marketing.LeadScoring"]</a></li>
+                <li><a class="dropdown-item" asp-controller="Segmentation" asp-action="Index">@Localizer["Home.Marketing.Segmentation"]</a></li>
+                <li><a class="dropdown-item" asp-controller="SocialMediaIntegration" asp-action="Index">@Localizer["Home.Marketing.SocialMedia"]</a></li>
+                <li><a class="dropdown-item" asp-controller="AnalyticsROITracking" asp-action="Index">@Localizer["Home.Marketing.Analytics"]</a></li>
+            </ul>
+        </div>
+    </div>
+
+
+    <div class="col-md-3">
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                @Localizer["Home.Support"]
+            </button>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" asp-controller="Tickets" asp-action="Index">@Localizer["Home.Support.Tickets"]</a></li>
+                <li><a class="dropdown-item" asp-controller="" asp-action="Index">@Localizer["Home.Support.CaseAssignment"]</a></li>
+                <li><a class="dropdown-item" asp-controller="" asp-action="Index">@Localizer["Home.Support.KnowledgeBase"]</a></li>
+                <li><a class="dropdown-item" asp-controller="" asp-action="Index">@Localizer["Home.Support.SLA"]</a></li>
+                <li><a class="dropdown-item" asp-controller="" asp-action="Index">@Localizer["Home.Support.LiveChat"]</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                @Localizer["Home.ContactAccount"]
+            </button>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" asp-controller="" asp-action="Index">@Localizer["Home.ContactAccount.ContactDetails"]</a></li>
+                <li><a class="dropdown-item" asp-controller="" asp-action="Index">@Localizer["Home.ContactAccount.CompanyAccounts"]</a></li>
+                <li><a class="dropdown-item" asp-controller="" asp-action="Index">@Localizer["Home.ContactAccount.CommunicationHistory"]</a></li>
+                <li><a class="dropdown-item" asp-controller="" asp-action="Index">@Localizer["Home.ContactAccount.NotesDocuments"]</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<br />
+
+<div class="row">
+    <div class="col-md-3">
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                @Localizer["Home.Tasks"]
+            </button>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" asp-controller="Tasks, Calls, Meetings Scheduling" asp-action="Index">@Localizer["Home.Tasks.Scheduling"]</a></li>
+                <li><a class="dropdown-item" asp-controller="Reminders & Follow-Ups" asp-action="Index">@Localizer["Home.Tasks.Reminders"]</a></li>
+                <li><a class="dropdown-item" asp-controller="Recurring Activities" asp-action="Index">@Localizer["Home.Tasks.Recurring"]</a></li>
+                <li><a class="dropdown-item" asp-controller="Calendar Integration (Google/Outlook)" asp-action="Index">@Localizer["Home.Tasks.CalendarIntegration"]</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                @Localizer["Home.Reports"]
+            </button>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" asp-controller="Sales Reports" asp-action="Index">@Localizer["Home.Reports.Sales"]</a></li>
+                <li><a class="dropdown-item" asp-controller="Performance Dashboards" asp-action="Index">@Localizer["Home.Reports.Performance"]</a></li>
+                <li><a class="dropdown-item" asp-controller="Funnel & Conversion Analysis" asp-action="Index">@Localizer["Home.Reports.Funnel"]</a></li>
+                <li><a class="dropdown-item" asp-controller="Custom Report Builder" asp-action="Index">@Localizer["Home.Reports.CustomBuilder"]</a></li>
+                <li><a class="dropdown-item" asp-controller="Real-time KPIs" asp-action="Index">@Localizer["Home.Reports.RealtimeKPI"]</a></li>
+            </ul>
+        </div>
+    </div>
+
+
+    <div class="col-md-3">
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                @Localizer["Home.Workflow"]
+            </button>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" asp-controller="Rule-Based Triggers" asp-action="Index">@Localizer["Home.Workflow.RuleBased"]</a></li>
+                <li><a class="dropdown-item" asp-controller="Lead Assignment Rules" asp-action="Index">@Localizer["Home.Workflow.LeadAssignment"]</a></li>
+                <li><a class="dropdown-item" asp-controller="Notification & Approval Flows" asp-action="Index">@Localizer["Home.Workflow.NotificationApproval"]</a></li>
+                <li><a class="dropdown-item" asp-controller="Auto-Email / SMS Notifications" asp-action="Index">@Localizer["Home.Workflow.AutoNotifications"]</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                @Localizer["Home.Documents"]
+            </button>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" asp-controller="Documents" asp-action="Index">@Localizer["Home.Documents.Uploads"]</a></li>
+                <li><a class="dropdown-item" asp-controller="" asp-action="Index">@Localizer["Home.Documents.Sharing"]</a></li>
+                <li><a class="dropdown-item" asp-controller="DocumentFolders" asp-action="Index">@Localizer["Home.Documents.Folders"]</a></li>
+
+                <li><a class="dropdown-item" asp-controller="" asp-action="Index">@Localizer["Home.Documents.Versioning"]</a></li>
+                <li><a class="dropdown-item" asp-controller="" asp-action="Index">@Localizer["Home.Documents.CloudIntegration"]</a></li>
+            </ul>
+        </div>
+    </div>
+
+
+</div>

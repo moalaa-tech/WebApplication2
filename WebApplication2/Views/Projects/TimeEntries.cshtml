@@ -1,0 +1,52 @@
+﻿@using CRM.WebApp.DTOs.Project
+@model IEnumerable<TimeEntryDto>
+
+<h2>Time Entries</h2>
+
+<form method="get" class="form-inline mb-3">
+    <input type="hidden" name="id" value="@ViewBag.ProjectId" />
+
+    <div class="form-group mr-2">
+        <label for="fromDate" class="mr-2">From:</label>
+        <input type="date" name="fromDate" class="form-control" value="@(ViewBag.FromDate?.ToString("yyyy-MM-dd"))" />
+    </div>
+
+    <div class="form-group mr-2">
+        <label for="toDate" class="mr-2">To:</label>
+        <input type="date" name="toDate" class="form-control" value="@(ViewBag.ToDate?.ToString("yyyy-MM-dd"))" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Filter</button>
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Date</th>
+            <th>Phase</th>
+            <th>User</th>
+            <th>Hours</th>
+            <th>Rate</th>
+            <th>Amount</th>
+            <th>Description</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var entry in Model)
+        {
+            <tr>
+                <td>@entry.EntryDate.ToShortDateString()</td>
+                <td>@entry.PhaseName</td>
+                <td>@entry.UserName</td>
+                <td>@entry.Hours.ToString("N2")</td>
+                <td>@entry.Rate.ToString("C")</td>
+                <td>@((entry.Hours * entry.Rate).ToString("C"))</td>
+                <td>@entry.Description</td>
+                <td>@entry.Status</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a asp-action="Details" asp-route-id="@ViewBag.ProjectId" class="btn btn-secondary">Back to Project</a>

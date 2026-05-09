@@ -1,0 +1,146 @@
+﻿@using CRM.WebApp.ViewModels.CustomerService.ServiceLevelAgreement
+@model EditServiceLevelAgreementViewModel
+
+@{
+    ViewData["Title"] = "Edit Service Level Agreement";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Edit Service Level Agreement</h3>
+                    <p class="card-subtitle text-muted">ID: @Model.Id</p>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Edit" method="post">
+                        <input type="hidden" asp-for="Id" />
+
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="Name" class="control-label"></label>
+                                    <input asp-for="Name" class="form-control" />
+                                    <span asp-validation-for="Name" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="ServiceType" class="control-label"></label>
+                                    <input asp-for="ServiceType" class="form-control" />
+                                    <span asp-validation-for="ServiceType" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="Description" class="control-label"></label>
+                            <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+                            <span asp-validation-for="Description" class="text-danger"></span>
+                            <small class="form-text text-muted">
+                                <span id="description-counter">@(Model.Description?.Length ?? 0)/1000 characters</span>
+                            </small>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="ResponseTime" class="control-label"></label>
+                                    <div class="input-group">
+                                        <input asp-for="ResponseTime" class="form-control" min="1" />
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">hours</span>
+                                        </div>
+                                    </div>
+                                    <span asp-validation-for="ResponseTime" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="ResolutionTime" class="control-label"></label>
+                                    <div class="input-group">
+                                        <input asp-for="ResolutionTime" class="form-control" min="1" />
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">hours</span>
+                                        </div>
+                                    </div>
+                                    <span asp-validation-for="ResolutionTime" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="EscalationProcess" class="control-label"></label>
+                            <textarea asp-for="EscalationProcess" class="form-control" rows="4"></textarea>
+                            <span asp-validation-for="EscalationProcess" class="text-danger"></span>
+                            <small class="form-text text-muted">
+                                <span id="escalation-counter">@(Model.EscalationProcess?.Length ?? 0)/2000 characters</span>
+                            </small>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="TermsAndConditions" class="control-label"></label>
+                            <textarea asp-for="TermsAndConditions" class="form-control" rows="5"></textarea>
+                            <span asp-validation-for="TermsAndConditions" class="text-danger"></span>
+                            <small class="form-text text-muted">
+                                <span id="terms-counter">@(Model.TermsAndConditions?.Length ?? 0)/4000 characters</span>
+                            </small>
+                        </div>
+
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-success">
+                                <i class="fas fa-check"></i> Update SLA
+                            </button>
+                            <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-info">
+                                <i class="fas fa-eye"></i> View Details
+                            </a>
+                            <a asp-action="Index" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left"></i> Back to List
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        $(document).ready(function() {
+            // Character counters
+            $('#Description').on('input', function() {
+                var length = $(this).val().length;
+                $('#description-counter').text(length + '/1000 characters');
+            });
+
+            $('#EscalationProcess').on('input', function() {
+                var length = $(this).val().length;
+                $('#escalation-counter').text(length + '/2000 characters');
+            });
+
+            $('#TermsAndConditions').on('input', function() {
+                var length = $(this).val().length;
+                $('#terms-counter').text(length + '/4000 characters');
+            });
+
+            // Form confirmation on navigation
+            $('form').on('input', function() {
+                window.onbeforeunload = function() {
+                    return 'You have unsaved changes. Are you sure you want to leave?';
+                };
+            });
+
+            $('form').on('submit', function() {
+                window.onbeforeunload = null;
+            });
+        });
+    </script>
+}

@@ -1,0 +1,42 @@
+﻿@{
+    ViewData["Title"] = Localizer["Shared.Employee.Index.Title", "Employees"];
+}
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">@Localizer["common.Create"]</a>
+</p>
+
+
+@{
+    ViewData["Title"] = "Dashboard";
+    var totals = (decimal[])ViewBag.MonthlyTotals;
+    var year = ViewBag.Year;
+}
+<h2>لوحة التحكم - المصاريف لسنة @year</h2>
+
+<canvas id="monthlyChart" width="800" height="300"></canvas>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+@section Scripts {
+    <script>
+        const labels = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+        const data = {
+          labels: labels,
+          datasets: [{
+            label: 'المصروفات',
+            data: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(totals)),
+            fill: false,
+            tension: 0.1
+          }]
+        };
+        const config = {
+          type: 'line',
+          data: data,
+          options: { scales: { y: { beginAtZero: true } } }
+        };
+        const myChart = new Chart(
+          document.getElementById('monthlyChart'),
+          config
+        );
+    </script>
+}

@@ -1,0 +1,69 @@
+@model IEnumerable<CRM.WebApp.ViewModels.SupplyChainManagement.ForecastData.ForecastDataViewModel>
+
+@{
+    ViewData["Title"] = Localizer["ForecastData.Index.Title", "Forecast Data"];
+}
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1>@Localizer["ForecastData.Index.Header", "Forecast Data"]</h1>
+        <div class="btn-group">
+            <a asp-action="Create" class="btn btn-primary">
+                <i class="fas fa-plus"></i> @Localizer["ForecastData.Index.AddNew", "Add New"]
+            </a>
+            <a asp-action="Filter" class="btn btn-outline-secondary">
+                <i class="fas fa-filter"></i> @Localizer["ForecastData.Index.Filter", "Filter"]
+            </a>
+            <a asp-action="Summary" class="btn btn-outline-info">
+                <i class="fas fa-chart-bar"></i> @Localizer["ForecastData.Index.Summary", "Summary"]
+            </a>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>@Html.DisplayNameFor(m => m.DataType)</th>
+                            <th>@Html.DisplayNameFor(m => m.DataDate)</th>
+                            <th>@Html.DisplayNameFor(m => m.Value)</th>
+                            <th>@Html.DisplayNameFor(m => m.DemandPlanName)</th>
+                            <th>@Html.DisplayNameFor(m => m.ItemName)</th>
+                            <th>@Html.DisplayNameFor(m => m.ModifiedDate)</th>
+                            <th>@Localizer["Common.Actions", "Actions"]</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@Html.DisplayFor(m => item.DataType)</td>
+                                <td>@item.DataDate.ToShortDateString()</td>
+                                <td>@item.Value.ToString("N2")</td>
+                                <td>@Html.DisplayFor(m => item.DemandPlanName)</td>
+                                <td>@Html.DisplayFor(m => item.ItemName)</td>
+                                <td>@(item.ModifiedDate?.ToShortDateString() ?? Localizer["Common.NotAvailable", "N/A"])
+                                </td>
+                                <td>
+                                    <div class="btn-group">
+                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-info">
+                                            <i class="fas fa-info-circle"></i>
+                                        </a>
+                                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger">
+                                            <i class="fas fa-trash"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

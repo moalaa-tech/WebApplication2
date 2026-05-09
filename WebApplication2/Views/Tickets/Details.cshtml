@@ -1,0 +1,53 @@
+@using CRM.Domain.Enums.CustomerService
+@using CRM.WebApp.DTOs.CustomerService.Ticket
+@model TicketDto
+
+<h2>Ticket Details</h2>
+
+<dl class="row">
+    <dt class="col-sm-3">Subject</dt>
+    <dd class="col-sm-9">@Model.Subject</dd>
+
+    <dt class="col-sm-3">Description</dt>
+    <dd class="col-sm-9">@Model.Description</dd>
+
+    <dt class="col-sm-3">Status</dt>
+    <dd class="col-sm-9">
+        <span class="badge bg-@(Model.Status switch {
+            TicketStatus.Open => "primary",
+            TicketStatus.InProgress => "info",
+            TicketStatus.OnHold => "warning",
+            TicketStatus.Resolved => "success",
+            TicketStatus.Closed => "secondary",
+            _ => "light"
+        })">@Model.Status</span>
+    </dd>
+
+    <dt class="col-sm-3">Priority</dt>
+    <dd class="col-sm-9">
+        <span class="badge bg-@(Model.Priority switch {
+            TicketPriority.Critical => "danger",
+            TicketPriority.High => "warning",
+            TicketPriority.Medium => "info",
+            TicketPriority.Low => "success",
+            _ => "light"
+        })">@Model.Priority</span>
+    </dd>
+
+    <dt class="col-sm-3">Customer ID</dt>
+    <dd class="col-sm-9">@Model.Customer.Name</dd>
+
+    <dt class="col-sm-3">Assigned To</dt>
+    <dd class="col-sm-9">@(Model.AssignedTo ?? -1)</dd>
+
+    <dt class="col-sm-3">Created Date</dt>
+    <dd class="col-sm-9">@Model.CreatedDate</dd>
+
+    <dt class="col-sm-3">Last Updated</dt>
+    <dd class="col-sm-9">@Model.LastUpdated</dd>
+</dl>
+
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</div>

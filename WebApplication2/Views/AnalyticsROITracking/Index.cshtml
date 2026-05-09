@@ -1,0 +1,72 @@
+﻿@model CRM.WebApp.ViewModels.MarketingAutomation.CampaignAnalytics.CampaignAnalyticsIndexViewModel
+
+@{
+    ViewData["Title"] = Localizer["AnalyticsROITracking.Index.Title", "Campaign Analytics"];
+}
+
+<h1>@Localizer["AnalyticsROITracking.Index.Title", "Campaign Analytics"]</h1>
+
+<div class="row mb-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>@Localizer["AnalyticsROITracking.Index.OverallROI", "Overall ROI"]: @Model.TotalROI.ToString("0.00")%</h5>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mb-4">
+    @foreach (var channel in Model.ChannelPerformance)
+    {
+        <div class="col-md-2 mb-3">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h6 class="card-title">@channel.Key</h6>
+                    <p class="card-text @(channel.Value >= 0 ? "text-success" : "text-danger")">
+                        @channel.Value.ToString("0.00")%
+                    </p>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">@Localizer["Common.Create", "Create New"]</a>
+    <a asp-action="ROICalculator" class="btn btn-secondary">@Localizer["AnalyticsROITracking.Index.ROICalculator", "ROI Calculator"]</a>
+</p>
+
+<table class="table table-striped table-bordered">
+    <thead class="thead-dark">
+        <tr>
+            <th>@Localizer["AnalyticsROITracking.Field.Campaign", "Campaign"]</th>
+            <th>@Localizer["AnalyticsROITracking.Field.Channel", "Channel"]</th>
+            <th>@Localizer["AnalyticsROITracking.Field.Dates", "Dates"]</th>
+            <th>@Localizer["AnalyticsROITracking.Field.Spent", "Spent"]</th>
+            <th>@Localizer["AnalyticsROITracking.Field.Revenue", "Revenue"]</th>
+            <th>@Localizer["AnalyticsROITracking.Field.ROI", "ROI"]</th>
+            <th>@Localizer["Common.Actions", "Actions"]</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Analytics)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.CampaignName)</td>
+                <td>@Html.DisplayFor(modelItem => item.Channel)</td>
+                <td>@item.StartDate.ToString("MM/dd/yyyy") - @item.EndDate.ToString("MM/dd/yyyy")</td>
+                <td>@item.TotalSpent.ToString("C")</td>
+                <td>@item.RevenueGenerated.ToString("C")</td>
+                <td class="@(item.ROIPercentage >= 0 ? "text-success" : "text-danger")">
+                    @item.ROIPercentage.ToString("0.00")%
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">@Localizer["Common.Edit", "Edit"]</a>
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info">@Localizer["Common.Details", "Details"]</a>
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">@Localizer["Common.Delete", "Delete"]</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,98 @@
+﻿@using CRM.WebApp.DTOs.Project;
+@model IEnumerable<TimeEntryDto>
+
+<h2>My Time Entries</h2>
+
+<div class="card mb-4">
+    <div class="card-header">
+        <h4>Filter Options</h4>
+    </div>
+    <div class="card-body">
+        <form method="get" class="form-inline">
+            <div class="form-group mr-3">
+                <label for="fromDate" class="mr-2">From:</label>
+                <input type="date" name="fromDate" class="form-control" value="@(ViewBag.FromDate?.ToString("yyyy-MM-dd"))" />
+            </div>
+
+            <div class="form-group mr-3">
+                <label for="toDate" class="mr-2">To:</label>
+                <input type="date" name="toDate" class="form-control" value="@(ViewBag.ToDate?.ToString("yyyy-MM-dd"))" />
+            </div>
+
+            <button type="submit" class="btn btn-primary mr-2">Apply Filter</button>
+            <a asp-action="Index" class="btn btn-secondary">Clear Filter</a>
+        </form>
+    </div>
+</div>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Date</th>
+            <th>Phase</th>
+            <th>Hours</th>
+            <th>Description</th>
+            <th>Rate</th>
+            <th>Amount</th>
+            <th>Status</th>
+            <th>Billable</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var entry in Model)
+        {
+            <tr>
+                <td>@entry.EntryDate.ToShortDateString()</td>
+                <td>@entry.PhaseName</td>
+                <td>@entry.Hours.ToString("N2")</td>
+                <td>@entry.Description</td>
+                <td>@entry.Rate.ToString("C")</td>
+                <td>@((entry.Hours * entry.Rate).ToString("C"))</td>
+                <td><span class="badge badge-@GetStatusBadgeClass(entry.Status)">@entry.Status</span></td>
+                <td>
+                    @if (entry.IsBillable)
+                    {
+                        <span class="badge badge-success">Yes</span>
+                    }
+                    else
+                    {
+                        <span class="badge badge-secondary">No</span>
+                    }
+                </td>
+                <td>
+                    <div class="btn-group" role="group">
+                        <a asp-action="Details" asp-route-id="@entry.Id" class="btn btn-sm btn-info">Details</a>
+                        <a asp-action="Edit" asp-route-id="@entry.Id" class="btn btn-sm btn-warning">Edit</a>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr class="table-info">
+            <td colspan="2"><strong>Total</strong></td>
+            <td><strong>@Model.Sum(e => e.Hours).ToString("N2")</strong></td>
+            <td colspan="3"><strong>@Model.Sum(e => e.Hours * e.Rate).ToString("C")</strong></td>
+            <td colspan="3"></td>
+        </tr>
+    </tfoot>
+</table>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Create New Entry</a>
+</p>
+
+@functions {
+    string GetStatusBadgeClass(string status)
+    {
+        return status switch
+        {
+            "Entered" => "secondary",
+            "Submitted" => "info",
+            "Approved" => "success",
+            "Billed" => "primary",
+            _ => "light"
+        };
+    }
+}

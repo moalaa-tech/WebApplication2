@@ -1,0 +1,60 @@
+@* <div class="loader-overlay"></div>
+<div class="loader"></div>
+ *@
+
+
+@{
+    var LoaderOn = TempData["LoaderOn"] as string;
+    var LoaderOff = TempData["LoaderOn"] as string;
+
+}
+
+@if (!string.IsNullOrEmpty(LoaderOn))
+{
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            showLoader();
+        });
+    </script>
+}
+
+@if (!string.IsNullOrEmpty(LoaderOff))
+{
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            hideLoader();
+        });
+    </script>
+}
+
+
+<script>
+
+     function showLoader() {
+        if (document.querySelector('.loader-overlay')) {
+            return;
+        }
+
+        const overlay = document.createElement('div');
+        overlay.className = 'loader-overlay';
+
+        const loader = document.createElement('div');
+        loader.className = 'loader';
+
+        document.body.appendChild(overlay);
+        document.body.appendChild(loader);
+    }
+
+    function hideLoader() {
+        const overlay = document.querySelector('.loader-overlay');
+        const loader = document.querySelector('.loader');
+
+        if (overlay) {
+            overlay.remove();
+        }
+
+        if (loader) {
+            loader.remove();
+        }
+    }
+</script>

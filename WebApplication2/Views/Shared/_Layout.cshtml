@@ -1,0 +1,185 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - CRM</title>
+    <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link id="bootstrapRtlCss" rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.rtl.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/loader.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/toaster.css" asp-append-version="true" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">ERP</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-controller="Home" asp-action="Index">@Localizer["Shared.Home", "Home"]</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-controller="Home" asp-action="RomaDashboard">@Localizer["Shared.Home.Roma", "Roma"]</a>
+                        </li>
+
+                       @*  <li class="nav-item">
+                            <a asp-controller="Company" asp-action="Index" class="nav-link text-dark">@Localizer["Shared.Company", "Company"]</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a asp-controller="Setting" asp-action="Index" class="nav-link text-dark">@Localizer["Shared.Settings", "Settings"]</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a asp-controller="Product" asp-action="Index" class="nav-link">@Localizer["Shared.Product", "Product"]</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a asp-controller="User" asp-action="Index" class="nav-link">@Localizer["Shared.UserManagement", "User Management"]</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a asp-controller="Role" asp-action="Index" class="nav-link">@Localizer["Shared.RoleManagement", "Role Management"]</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a asp-controller="Employee" asp-action="OrganizationChart" class="nav-link">@Localizer["Shared.OrganizationChart"]</a>
+                        </li> *@
+
+                        <li class="nav-item">
+                            <a asp-controller="Home" asp-action="InventoryDashboard" class="nav-link">@Localizer["Shared.InventoryManagement"]</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a asp-controller="Home" asp-action="ProcurementManagementDashboard" class="nav-link">@Localizer["Shared.ProcurementManagement"]</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a asp-controller="Home" asp-action="CustomersManagementDashboard" class="nav-link">@Localizer["Shared.CustomersManagementDashboard"]</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a asp-controller="Home" asp-action="SalesManagementDashboard" class="nav-link">@Localizer["Shared.SalesManagementDashboard"]</a>
+                        </li>
+
+
+                        <li class="nav-item">
+                            <a asp-controller="Home" asp-action="EmployeeManagementDashboard" class="nav-link">@Localizer["Shared.EmployeeManagementDashboard"]</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a asp-controller="Home" asp-action="FinanceManagementDashboard" class="nav-link">@Localizer["Shared.FinanceManagementDashboard"]</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a asp-controller="Home" asp-action="GeneralAccountingManagementDashboard" class="nav-link">@Localizer["Shared.GeneralAccountingManagementDashboard"]</a>
+                        </li>
+
+
+                        <li class="nav-item">
+                            <a asp-controller="Home" asp-action="TemplatesManagementDashboard" class="nav-link">@Localizer["Shared.TemplatesManagementDashboard"]</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a asp-controller="Home" asp-action="SettingsManagementDashboard" class="nav-link">@Localizer["Shared.SettingsManagementDashboard"]</a>
+                        </li>
+
+
+                    
+
+                        
+                    @*     <li class="nav-item">
+                            <a asp-controller="Authentication" asp-action="Register" class="nav-link text-dark">@Localizer["Shared.Register", "Register"]</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a asp-controller="Authentication" asp-action="Login" class="nav-link text-dark">@Localizer["Shared.Login", "Login"]</a>
+                        </li> *@
+
+                    </ul>
+                    <div class="d-flex align-items-center gap-2">
+                        <form asp-controller="Home" asp-action="SetLanguage" method="post" class="d-flex align-items-center" id="langForm">
+                            <input type="hidden" name="returnUrl" value="@Context.Request.Path@Context.Request.QueryString" />
+                            <select name="culture" id="cultureSelect" class="form-select form-select-sm" onchange="this.form.submit()">
+                                @{
+                                    var currentLang = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+                                }
+                                @if(currentLang == "en"){
+                                    <option value="en" selected>English</option>
+                                } else {
+                                    <option value="en">English</option>
+                                }
+                                @if(currentLang == "ar"){
+                                    <option value="ar" selected>العربية</option>
+                                } else {
+                                    <option value="ar">العربية</option>
+                                }
+                            </select>
+                        </form>
+
+                        @await Html.PartialAsync("_LoginPartial")
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+            <partial name="_Toaster" />
+            <partial name="_Loader" />
+
+        </main>
+    </div>
+
+@*     <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2024 - CRM.WebApp - <a asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+ *@
+
+        <footer class="text-center footer text-muted border-top">
+        <small>
+            © 2025 - <strong>@Localizer["Shared.App.Name"]</strong> |
+            @Localizer["Shared.Footer.AllRightsReserved"] |
+            <a asp-controller="Home" asp-action="Privacy">@Localizer["Shared.Footer.Privacy"]</a> |
+            <a asp-controller="Home" asp-action="Terms">@Localizer["Shared.Footer.Terms"]</a>
+        </small>
+    </footer>
+
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Localization object for JavaScript
+        window.__i18n = {
+            Details: '@Localizer["Common.Details", "Details"]',
+            Edit: '@Localizer["Common.Edit", "Edit"]',
+            Delete: '@Localizer["Common.Delete", "Delete"]',
+            Back: '@Localizer["Common.Back", "Back"]',
+            Create: '@Localizer["Common.Create", "Create"]',
+            Save: '@Localizer["Common.Save", "Save"]',
+            Cancel: '@Localizer["Common.Cancel", "Cancel"]',
+            Submit: '@Localizer["Common.Submit", "Submit"]',
+            Search: '@Localizer["Common.Search", "Search"]',
+            Loading: '@Localizer["Common.Loading", "Loading..."]',
+            NoDataAvailable: '@Localizer["Common.NoDataAvailable", "No data available"]',
+            AreYouSure: '@Localizer["Common.AreYouSure", "Are you sure?"]',
+            ConfirmDelete: '@Localizer["Common.ConfirmDelete", "Are you sure you want to delete this item?"]'
+        };
+    </script>
+    <script src="~/js/loader.js" asp-append-version="true"></script>
+    <script src="~/js/toaster.js" asp-append-version="true"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

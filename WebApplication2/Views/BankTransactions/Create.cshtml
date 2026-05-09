@@ -1,0 +1,33 @@
+﻿@using CRM.Domain.Enums
+@using CRM.WebApp.ViewModels.Banking
+@model CreateBankTransactionViewModel;
+
+<h2>Create Transaction</h2>
+
+<form asp-action="Create" method="post">
+    <div class="form-group">
+        <label asp-for="TransactionDate"></label>
+        <input asp-for="TransactionDate" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="ReferenceNumber"></label>
+        <input asp-for="ReferenceNumber" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="Description"></label>
+        <input asp-for="Description" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="Amount"></label>
+        <input asp-for="Amount" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="Type"></label>
+        <select asp-for="Type" asp-items="Html.GetEnumSelectList<TransactionType>()" class="form-control"></select>
+    </div>
+    <div class="form-group">
+        <label asp-for="Status"></label>
+        <select asp-for="Status" asp-items="Html.GetEnumSelectList<TransactionStatus>()" class="form-control"></select>
+    </div>
+    <input type="submit" value="Save" class="btn btn-primary" />
+</form>

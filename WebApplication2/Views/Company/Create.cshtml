@@ -1,0 +1,57 @@
+﻿@model CRM.WebApp.DTOs.Company.CreateCompanyDto;
+
+@{
+    ViewData["Title"] = Localizer["Company.Create.Title", "Create Company"];
+}
+
+<h1>@Localizer["Company.Create.Title", "Create Company"]</h1>
+
+<form asp-action="Create">
+    <div class="form-group">
+        <label asp-for="Name">@Localizer["Company.Field.Name", "Name"]</label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="NameAr">@Localizer["Company.Field.NameAr", "Arabic Name"]</label>
+        <input asp-for="NameAr" class="form-control" />
+        <span asp-validation-for="NameAr" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="BusinessId" class="control-label">@Localizer["Company.Field.BusinessId", "Business Type"]</label>
+        <select asp-for="BusinessId" class="form-control" asp-items="ViewBag.ProductTypes">
+            <option value="">@Localizer["Company.Select.BusinessId", "-- Select Business Type --"]</option>
+        </select>
+        <span asp-validation-for="BusinessId" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Address" class="control-label">@Localizer["Company.Field.Address", "Address"]</label>
+        <input asp-for="Address" class="form-control" />
+        <span asp-validation-for="Address" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="City" class="control-label">@Localizer["Company.Field.City", "City"]</label>
+        <input asp-for="City" class="form-control" />
+        <span asp-validation-for="City" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="UserId" class="control-label">@Localizer["Company.Field.UserId", "Product Type"]</label>
+        <select asp-for="UserId" class="form-control" asp-items="ViewBag.ProductTypes">
+            <option value="">@Localizer["Company.Select.UserId", "-- Select Product Type --"]</option>
+        </select>
+        <span asp-validation-for="UserId" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mt-3">
+        <input type="submit" value="@Localizer["Common.Create", "Create"]" class="btn btn-primary" />
+        <a asp-action="Index" class="btn btn-secondary">@Localizer["Common.Back", "Back to List"]</a>
+    </div>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }    
+}

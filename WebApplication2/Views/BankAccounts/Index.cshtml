@@ -1,0 +1,31 @@
+﻿@using CRM.WebApp.ViewModels.Banking
+@model IEnumerable<BankAccountViewModel>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Account #</th>
+            <th>Bank</th>
+            <th>Name</th>
+            <th>Currency</th>
+            <th>Balance</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.AccountNumber</td>
+                <td>@item.BankName</td>
+                <td>@item.AccountName</td>
+                <td>@item.Currency</td>
+                <td>@item.CurrentBalance.ToString("C")</td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

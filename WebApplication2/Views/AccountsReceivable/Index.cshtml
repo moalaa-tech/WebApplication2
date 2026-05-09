@@ -1,0 +1,36 @@
+@model IEnumerable<CRM.WebApp.ViewModels.Accounting.AccountsReceivableViewModel>
+
+<h2>@Localizer["AccountsReceivable.Index.Title", "Accounts Receivable"]</h2>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">@Localizer["Common.Create", "Create New"]</a>
+</p>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.CustomerName)</th>
+            <th>@Html.DisplayNameFor(model => model.InvoiceNumber)</th>
+            <th>@Html.DisplayNameFor(model => model.InvoiceDate)</th>
+            <th>@Html.DisplayNameFor(model => model.AmountDue)</th>
+            <th>@Html.DisplayNameFor(model => model.DueDate)</th>
+            <th>@Localizer["Common.Actions", "Actions"]</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.CustomerName)</td>
+                <td>@Html.DisplayFor(modelItem => item.InvoiceNumber)</td>
+                <td>@Html.DisplayFor(modelItem => item.InvoiceDate.ToShortDateString())</td>
+                <td>@Html.DisplayFor(modelItem => item.AmountDue)</td>
+                <td>@Html.DisplayFor(modelItem => item.DueDate.ToShortDateString())</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-primary">@Localizer["Common.Edit", "Edit"]</a>
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">@Localizer["Common.Delete", "Delete"]</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

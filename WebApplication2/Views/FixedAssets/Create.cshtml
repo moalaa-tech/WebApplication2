@@ -1,0 +1,220 @@
+﻿@using CRM.WebApp.DTOs.AssetsManagment
+@model CreateFixedAssetDto
+
+@{
+    ViewData["Title"] = "Create Fixed Asset";
+    var parentAssets = ViewBag.ParentAssets as IEnumerable<SelectListItem> ?? new List<SelectListItem>();
+    var depreciationMethods = ViewBag.DepreciationMethods as IEnumerable<SelectListItem> ?? new List<SelectListItem>();
+}
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h3 class="card-title mb-0">
+                    <i class="fas fa-plus-circle"></i> Create New Fixed Asset
+                </h3>
+            </div>
+            <div class="card-body">
+                <form asp-action="Create" id="createForm">
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label asp-for="AssetNumber" class="form-label fw-bold"></label>
+                                <div class="input-group">
+                                    <input asp-for="AssetNumber" class="form-control" placeholder="e.g., FA-00001" />
+                                    <button type="button" class="btn btn-outline-secondary" onclick="generateAssetNumber()">
+                                        <i class="fas fa-sync"></i> Generate
+                                    </button>
+                                </div>
+                                <span asp-validation-for="AssetNumber" class="text-danger small"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label asp-for="Name" class="form-label fw-bold"></label>
+                                <input asp-for="Name" class="form-control" placeholder="Enter asset name" />
+                                <span asp-validation-for="Name" class="text-danger small"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label asp-for="Description" class="form-label fw-bold"></label>
+                        <textarea asp-for="Description" class="form-control" rows="3" placeholder="Asset description..."></textarea>
+                        <span asp-validation-for="Description" class="text-danger small"></span>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group mb-3">
+                                <label asp-for="AcquisitionDate" class="form-label fw-bold"></label>
+                                <input asp-for="AcquisitionDate" type="date" class="form-control" />
+                                <span asp-validation-for="AcquisitionDate" class="text-danger small"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group mb-3">
+                                <label asp-for="AcquisitionCost" class="form-label fw-bold"></label>
+                                <div class="input-group">
+                                    <span class="input-group-text">$</span>
+                                    <input asp-for="AcquisitionCost" class="form-control" placeholder="0.00" />
+                                </div>
+                                <span asp-validation-for="AcquisitionCost" class="text-danger small"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group mb-3">
+                                <label asp-for="SalvageValue" class="form-label fw-bold"></label>
+                                <div class="input-group">
+                                    <span class="input-group-text">$</span>
+                                    <input asp-for="SalvageValue" class="form-control" placeholder="0.00" />
+                                </div>
+                                <span asp-validation-for="SalvageValue" class="text-danger small"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group mb-3">
+                                <label asp-for="UsefulLife" class="form-label fw-bold"></label>
+                                <div class="input-group">
+                                    <input asp-for="UsefulLife" class="form-control" placeholder="Months" />
+                                    <span class="input-group-text">months</span>
+                                </div>
+                                <span asp-validation-for="UsefulLife" class="text-danger small"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group mb-3">
+                                <label asp-for="DepreciationMethod" class="form-label fw-bold"></label>
+                                <select asp-for="DepreciationMethod" class="form-select" asp-items="depreciationMethods">
+                                    <option value="">Select Method</option>
+                                </select>
+                                <span asp-validation-for="DepreciationMethod" class="text-danger small"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group mb-3">
+                                <label asp-for="ParentAssetId" class="form-label fw-bold">Parent Asset</label>
+                                <select asp-for="ParentAssetId" class="form-select" asp-items="parentAssets">
+                                    <option value="">None (Top Level)</option>
+                                </select>
+                                <span asp-validation-for="ParentAssetId" class="text-danger small"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" checked disabled />
+                            <label class="form-check-label text-muted">
+                                Asset will be created as active
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-success">
+                            <i class="fas fa-save"></i> Create Asset
+                        </button>
+                        <a asp-action="Index" class="btn btn-secondary">
+                            <i class="fas fa-times"></i> Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header bg-info text-white">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-info-circle"></i> Asset Information
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-info">
+                    <h6 class="alert-heading">
+                        <i class="fas fa-lightbulb"></i> Quick Tips
+                    </h6>
+                    <ul class="mb-0 ps-3">
+                        <li>Asset numbers must be unique</li>
+                        <li>Useful life is in months (12 months = 1 year)</li>
+                        <li>Salvage value is the estimated resale value</li>
+                        <li>Parent assets allow for hierarchical organization</li>
+                    </ul>
+                </div>
+
+                <div class="mt-3">
+                    <h6>Depreciation Methods:</h6>
+                    <dl class="row small">
+                        <dt class="col-sm-4">Straight Line:</dt>
+                        <dd class="col-sm-8">Equal depreciation each period</dd>
+
+                        <dt class="col-sm-4">Declining Balance:</dt>
+                        <dd class="col-sm-8">Higher depreciation in early periods</dd>
+
+                        <dt class="col-sm-4">Double Declining:</dt>
+                        <dd class="col-sm-8">200% of straight-line rate</dd>
+                    </dl>
+                </div>
+
+                <div class="mt-3 p-3 bg-light rounded">
+                    <h6>Estimated Monthly Depreciation:</h6>
+                    <div id="depreciationEstimate" class="text-center fw-bold text-primary fs-5">
+                        $0.00
+                    </div>
+                    <small class="text-muted d-block text-center">Based on current inputs</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        function generateAssetNumber() {
+            // Simple client-side generation - in real app, call API
+            const randomNum = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
+            document.getElementById('AssetNumber').value = 'FA-' + randomNum;
+        }
+
+        function calculateDepreciation() {
+            const cost = parseFloat(document.getElementById('AcquisitionCost').value) || 0;
+            const salvage = parseFloat(document.getElementById('SalvageValue').value) || 0;
+            const life = parseInt(document.getElementById('UsefulLife').value) || 1;
+
+            const monthlyDepreciation = (cost - salvage) / life;
+            document.getElementById('depreciationEstimate').textContent = '$' + monthlyDepreciation.toFixed(2);
+        }
+
+        // Recalculate when inputs change
+        ['AcquisitionCost', 'SalvageValue', 'UsefulLife'].forEach(id => {
+            document.getElementById(id).addEventListener('input', calculateDepreciation);
+        });
+
+        // Initial calculation
+        calculateDepreciation();
+
+        // Form validation
+        document.getElementById('createForm').addEventListener('submit', function (e) {
+            const cost = parseFloat(document.getElementById('AcquisitionCost').value);
+            const salvage = parseFloat(document.getElementById('SalvageValue').value);
+
+            if (salvage > cost) {
+                e.preventDefault();
+                alert('Salvage value cannot be greater than acquisition cost.');
+                return false;
+            }
+        });
+    </script>
+}

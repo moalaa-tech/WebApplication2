@@ -1,0 +1,36 @@
+﻿@using CRM.Domain.IdentityEntity
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+@if (SignInManager.IsSignedIn(User))
+{
+    var currentUser = await UserManager.GetUserAsync(User);
+    <div class="dropdown">
+        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+            <i class="bi bi-person-circle"></i> @User.Identity!.Name
+        </a>
+        <ul class="dropdown-menu dropdown-menu-end">
+            <li>
+                <a class="dropdown-item" asp-controller="Account" asp-action="Profile">
+                    <i class="bi bi-person"></i> @Localizer["Shared.MyAccount", "My Account"]
+                </a>
+            </li>
+            <li><hr class="dropdown-divider" /></li>
+            <li>
+                <form asp-controller="Account" asp-action="Logout" method="post" class="dropdown-item p-0">
+                    <button type="submit" class="btn btn-link text-start w-100">
+                        <i class="bi bi-box-arrow-right"></i>@Localizer["Shared.Logout", "Logout"]
+                    </button>
+                </form>
+            </li>
+        </ul>
+    </div>
+}
+else
+{
+    <div class="d-flex align-items-center gap-2">
+        <a asp-controller="Account" asp-action="Login" class="btn btn-outline-primary btn-sm">@Localizer["Shared.Login", "Login"]</a>
+        <a asp-controller="Account" asp-action="Register" class="btn btn-primary btn-sm">@Localizer["Shared.Register", "Register"]</a>
+    </div>
+}

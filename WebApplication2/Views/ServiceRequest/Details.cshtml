@@ -1,0 +1,20 @@
+@model CRM.WebApp.ViewModels.CustomerService.ServiceRequestViewModel
+
+<h2>@Localizer["ServiceRequest.Details.Title", "Service Request Details"]</h2>
+
+<dl class="row">
+    <dt class="col-sm-4">@Localizer["ServiceRequest.Field.RequestType", "Request Type"]</dt>
+    <dd class="col-sm-8">@Model.RequestType</dd>
+    <dt class="col-sm-4">@Localizer["ServiceRequest.Field.Description", "Description"]</dt>
+    <dd class="col-sm-8">@Model.Description</dd>
+    <dt class="col-sm-4">@Localizer["ServiceRequest.Field.Status", "Status"]</dt>
+    <dd class="col-sm-8">@Model.Status</dd>
+    <dt class="col-sm-4">@Localizer["ServiceRequest.Field.CustomerId", "Customer"]</dt>
+    <dd class="col-sm-8">@Model.CustomerId</dd>
+    <dt class="col-sm-4">@Localizer["ServiceRequest.Field.CreatedDate", "Created Date"]</dt>
+    <dd class="col-sm-8">@Model.CreatedDate</dd>
+    <dt class="col-sm-4">@Localizer["ServiceRequest.Field.ResolutionNotes", "Resolution Notes"]</dt>
+    <dd class="col-sm-8">@Model.ResolutionNotes</dd>
+</dl>
+
+<a asp-action="Index" class="btn btn-secondary">@Localizer["Common.Back", "Back to List"]</a>

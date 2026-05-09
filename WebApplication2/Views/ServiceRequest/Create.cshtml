@@ -1,0 +1,28 @@
+@model CRM.WebApp.ViewModels.CustomerService.CreateServiceRequestViewModel
+
+<h2>@Localizer["ServiceRequest.Create.Title", "Create Service Request"]</h2>
+
+<form asp-action="Create">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="mb-3">
+        <label asp-for="RequestType" class="form-label">@Localizer["ServiceRequest.Field.RequestType", "Request Type"]</label>
+        <input asp-for="RequestType" class="form-control" />
+        <span asp-validation-for="RequestType" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Description" class="form-label">@Localizer["ServiceRequest.Field.Description", "Description"]</label>
+        <textarea asp-for="Description" class="form-control"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="CustomerId" class="form-label">@Localizer["ServiceRequest.Field.CustomerId", "Customer"]</label>
+        <input asp-for="CustomerId" class="form-control" />
+        <span asp-validation-for="CustomerId" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">@Localizer["Common.Create", "Create"]</button>
+    <a asp-action="Index" class="btn btn-secondary">@Localizer["Common.Back", "Back to List"]</a>
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

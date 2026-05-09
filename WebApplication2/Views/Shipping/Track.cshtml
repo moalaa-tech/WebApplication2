@@ -1,0 +1,83 @@
+﻿@using CRM.WebApp.ViewModels.SupplyChainManagement.Shipping
+@model TrackShipmentViewModel
+
+@{
+    ViewData["Title"] = "Track Shipment";
+}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header bg-warning text-white">
+                    <h4 class="mb-0"><i class="fas fa-search me-2"></i>Track Shipment</h4>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Track" method="post">
+                        <div class="row justify-content-center">
+                            <div class="col-md-8">
+                                <div class="form-group text-center">
+                                    <label asp-for="TrackingNumber" class="form-label fs-5">Enter Tracking Number</label>
+                                    <input asp-for="TrackingNumber" class="form-control form-control-lg"
+                                           placeholder="e.g., 1Z1234567890123456" />
+                                    <span asp-validation-for="TrackingNumber" class="text-danger"></span>
+                                </div>
+
+                                <div class="form-group mt-4 text-center">
+                                    <button type="submit" class="btn btn-warning btn-lg">
+                                        <i class="fas fa-search-location me-2"></i>Track Shipment
+                                    </button>
+                                    <a asp-action="Index" class="btn btn-secondary btn-lg">Cancel</a>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                    <div class="mt-5">
+                        <h5 class="text-center mb-3">Recent Tracking Numbers</h5>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-header bg-light">
+                                        <h6 class="mb-0">Outgoing Shipments</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <ul class="list-group list-group-flush">
+                                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                1Z1234567890123456
+                                                <span class="badge bg-success">Delivered</span>
+                                            </li>
+                                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                1Z9876543210987654
+                                                <span class="badge bg-primary">In Transit</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-header bg-light">
+                                        <h6 class="mb-0">Incoming Shipments</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <ul class="list-group list-group-flush">
+                                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                1Z5555555555555555
+                                                <span class="badge bg-warning">Out for Delivery</span>
+                                            </li>
+                                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                1Z6666666666666666
+                                                <span class="badge bg-info">Processing</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

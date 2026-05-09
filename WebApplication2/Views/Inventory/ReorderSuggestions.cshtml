@@ -1,0 +1,52 @@
+@using CRM.WebApp.DTOs.InventoryManagement
+@using CRM.WebApp.DTOs.InventoryManagement.Product
+@model IEnumerable<ReorderSuggestionDto>
+
+@{
+    ViewData["Title"] = @Localizer["Shared.Inventory.ReorderSuggestions.Title"];
+}
+
+<div class="container">
+    <h1>@Localizer["Shared.Inventory.ReorderSuggestions.Header"]</h1>
+
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>@Localizer["Shared.Inventory.Fields.Product"]</th>
+                    <th>@Localizer["Shared.Inventory.Fields.SKU"]</th>
+                    <th>@Localizer["Shared.Inventory.Fields.CurrentStock"]</th>
+                    <th>@Localizer["Shared.Inventory.Fields.MinimumStockLevel"]</th>
+                    <th>@Localizer["Shared.Inventory.Fields.SuggestedOrderQuantity"]</th>
+                    <th>@Localizer["Shared.Inventory.Fields.Actions"]</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.ProductName</td>
+                        <td>@item.SKU</td>
+                        <td>@item.CurrentStock</td>
+                        <td>@item.MinimumStockLevel</td>
+                        <td>@item.SuggestedOrderQuantity</td>
+                        <td>
+                            <a asp-action="Details" asp-route-id="@item.ProductId" class="btn btn-sm btn-info">
+                                @Localizer["Shared.Inventory.Actions.Details"]
+                            </a>
+                            <a asp-action="ReceiveGoods" asp-route-itemId="@item.ProductId" class="btn btn-sm btn-success">
+                                @Localizer["Shared.Inventory.Actions.Receive"]
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="mt-3">
+        <a asp-action="Index" class="btn btn-secondary">
+            @Localizer["Shared.Inventory.Actions.BackToInventory"]
+        </a>
+    </div>
+</div>

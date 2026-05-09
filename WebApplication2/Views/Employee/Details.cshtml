@@ -1,0 +1,23 @@
+﻿@using CRM.WebApp.DTOs.HumanResources.Employee
+@model EmployeeDto
+
+@{
+    ViewData["Title"] = Localizer["Shared.Employee.Details.Title", "Employee Details"];
+}
+
+<h1>@Localizer["Shared.Employee.Details.Title", "Employee Details"]</h1>
+
+<dl class="row">
+    <dt class="col-sm-2">@Localizer["Shared.Employee.Field.FirstName", "First Name"]</dt>
+    <dd class="col-sm-10">@Model.FirstName</dd>
+    <dt class="col-sm-2">@Localizer["Shared.Employee.Field.LastName", "Last Name"]</dt>
+    <dd class="col-sm-10">@Model.LastName</dd>
+    <dt class="col-sm-2">@Localizer["Shared.Employee.Field.Description", "Description"]</dt>
+    <dd class="col-sm-10">@Model.Description</dd>
+    <dt class="col-sm-2">@Localizer["Shared.Employee.Field.Department", "Department"]</dt>
+    <dd class="col-sm-10">@Model.Department.Name</dd>
+    @* <dt class="col-sm-2">@Localizer["Shared.Employee.Field.Gender", "Gender"]</dt>
+    <dd class="col-sm-10">@Model.GenderName</dd> *@
+</dl>
+<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">@Localizer["Common.Edit", "Edit"]</a>
+<a asp-action="Index" class="btn btn-secondary">@Localizer["Common.Back", "Back to List"]</a>

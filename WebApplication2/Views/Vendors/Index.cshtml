@@ -1,0 +1,44 @@
+﻿@using CRM.WebApp.DTOs.Vendor
+@model IEnumerable<VendorDto>
+@{
+    ViewData["Title"] = "Vendors";
+}
+
+<h2>Vendors</h2>
+
+<form method="get" asp-action="Index" class="mb-3">
+    <div class="input-group">
+        <input type="text" name="search" value="@ViewBag.Search" class="form-control" placeholder="Search vendors..." />
+        <button type="submit" class="btn btn-outline-secondary">Search</button>
+    </div>
+</form>
+
+<a asp-action="Create" class="btn btn-primary mb-3">Add Vendor</a>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Contact</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th style="width: 150px;">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var vendor in Model)
+        {
+            <tr>
+                <td>@vendor.Name</td>
+                <td>@vendor.ContactPerson</td>
+                <td>@vendor.Email</td>
+                <td>@vendor.Phone</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@vendor.Id" class="btn btn-sm btn-warning">Edit</a>
+                    <a asp-action="Details" asp-route-id="@vendor.Id" class="btn btn-sm btn-info">Details</a>
+                    <a asp-action="Delete" asp-route-id="@vendor.Id" class="btn btn-sm btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

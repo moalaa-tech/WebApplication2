@@ -1,0 +1,44 @@
+﻿@using CRM.Domain.Enums.MarketingAutomation
+@using CRM.WebApp.ViewModels.MarketingAutomation
+@model IEnumerable<SocialMediaPostViewModel>
+
+<h2>@Localizer["SocialMediaIntegration.Index.Title", "Social Media Posts"]</h2>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">@Localizer["Common.Create", "Create New"]</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>@Localizer["SocialMediaIntegration.Field.Content", "Content"]</th>
+            <th>@Localizer["SocialMediaIntegration.Field.Platform", "Platform"]</th>
+            <th>@Localizer["SocialMediaIntegration.Field.ScheduledTime", "Scheduled Time"]</th>
+            <th>@Localizer["SocialMediaIntegration.Field.Status", "Status"]</th>
+            <th>@Localizer["Common.Actions", "Actions"]</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.Content)</td>
+                <td>@Html.DisplayFor(modelItem => item.Platform)</td>
+                <td>@Html.DisplayFor(modelItem => item.ScheduledTime)</td>
+                <td>@Html.DisplayFor(modelItem => item.Status)</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">@Localizer["Common.Edit", "Edit"]</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">@Localizer["Common.Details", "Details"]</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">@Localizer["Common.Delete", "Delete"]</a>
+                    @if (item.Status == PostStatus.Draft)
+                    {
+                        <form asp-action="Schedule" method="post" style="display: inline;">
+                            <input type="hidden" name="id" value="@item.Id" />
+                            <button type="submit" class="btn btn-link">@Localizer["SocialMediaIntegration.Index.Schedule", "Schedule"]</button>
+                        </form>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

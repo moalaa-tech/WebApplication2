@@ -1,0 +1,142 @@
+﻿@using CRM.Domain.Enums
+@model CRM.WebApp.DTOs.Order.UpdateOrderDto
+
+@{
+    ViewData["Title"] = @Localizer["Shared.Order.Edit.Title", "Product"];
+}
+
+<h1>@Localizer["Shared.Order.Edit.Title", "Product"]</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit" asp-antiforgery="true">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+
+
+            <div class="form-group">
+                <label asp-for="Id" class="control-label">@Localizer["Shared.Order.Edit.Header", "Product"]</label>
+                <input disabled asp-for="Id" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Status" class="control-label">@Localizer["Shared.Order.Field.Status"]</label>
+                <select name="Status" class="form-select">
+                    <option value="">@Localizer["common.All"]</option>
+                    @foreach (var status in Enum.GetValues(typeof(InvoiceStatus)))
+                    {
+                        <option value="@status" selected="@(Model.Status == (InvoiceStatus)status)">
+                            @Localizer[$"common.{status}"]
+                        </option>
+                    }
+                </select>
+                <span asp-validation-for="Status" class="text-danger"></span>
+            </div>
+
+
+            <div class="form-group">
+                <label asp-for="OrderDate" class="control-label">@Localizer["Shared.Order.Field.Date"]</label>
+                <input asp-for="OrderDate" class="form-control" />
+                <span asp-validation-for="OrderDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TotalAmount" class="control-label">@Localizer["Shared.Order.Field.TotalAmount"]</label>
+                <input asp-for="TotalAmount" class="form-control" />
+                <span asp-validation-for="TotalAmount" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label">@Localizer["Shared.Order.Field.Description"]</label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="@Localizer["common.Submit", "Order Number"]" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+
+    <button type="button" class="btn btn-success mb-2"
+            data-bs-toggle="modal" data-bs-target="#addProductModal">
+        + @Localizer["Shared.Order.AddProduct"]
+    </button>
+
+    <table class="table table-bordered table-striped mt-2">
+        <thead class="table-light">
+            <tr>
+                <th>@Localizer["Shared.Order.Field.ItemsCount", "Items Count"]</th>
+                <th>@Localizer["Shared.Order.Field.ProductName", "Product Name"]</th>
+                <th>@Localizer["Shared.Order.Field.ProductNameAr", "ProductNameAr"]</th>
+                <th>@Localizer["Shared.Order.Field.ProductTypeName", "Product Type"]</th>
+                <th>@Localizer["Shared.Order.Field.TotalCost", "Total Cost"]</th>
+                <th>@Localizer["Shared.Order.Field.UTMCampaign", "UTM Campaign"]</th>
+                <th>@Localizer["Shared.Order.Field.UTMSource", "UTM Source"]</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.OrderDetails)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.ItemsCount)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Product.Name)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Product.NameAr)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Product.ProductTypeName)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Product.TotalCost)</td>
+                    <td>@Html.DisplayFor(modelItem => item.UTMCampaign)</td>
+                    <td>@Html.DisplayFor(modelItem => item.UTMSource)</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+
+</div>
+
+<div>
+    <a asp-action="Index">@Localizer["common.BackToList", "Back To List"]</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+
+            const modal = document.getElementById('addProductModal');
+            modal.addEventListener('shown.bs.modal', function () {
+
+                // تحميل الفورم عبر AJAX
+                fetch('@Url.Action("AddProduct", "Orders", new { id = Model.Id })')
+                    .then(res => res.text())
+                    .then(html => {
+                        document.getElementById('addProductModalBody').innerHTML = html;
+                    });
+            });
+
+        });
+    </script>
+}
+
+
+
+<!-- Add Product Modal -->
+<div class="modal fade" id="addProductModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">@Localizer["Shared.Order.AddProduct"]</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body" id="addProductModalBody">
+                <!-- سيتم تحميل المحتوى من Partial View عبر AJAX -->
+                <div class="text-center p-4">
+                    <div class="spinner-border"></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

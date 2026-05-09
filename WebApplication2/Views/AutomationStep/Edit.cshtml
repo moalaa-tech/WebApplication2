@@ -1,0 +1,53 @@
+﻿@using CRM.Domain.Enums
+@using CRM.Domain.Enums.MarketingAutomation
+@using CRM.WebApp.ViewModels.AutomationStep
+@model AutomationStepViewModel
+@{
+    ViewData["Title"] = "Edit Automation Step";
+}
+<h2>Edit Automation Step</h2>
+
+<form asp-action="Edit">
+    <input type="hidden" asp-for="Id" />
+    <div class="form-group">
+        <label asp-for="Order"></label>
+        <input asp-for="Order" class="form-control" />
+        <span asp-validation-for="Order" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Action"></label>
+        <select asp-for="Action" class="form-control" asp-items="Html.GetEnumSelectList<AutomationAction>()"></select>
+        <span asp-validation-for="Action" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="EmailTemplateId"></label>
+        <input asp-for="EmailTemplateId" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="WaitDays"></label>
+        <input asp-for="WaitDays" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="StatusValue"></label>
+        <input asp-for="StatusValue" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="CampaignId"></label>
+        <input asp-for="CampaignId" class="form-control" />
+    </div>
+
+    <input type="hidden" asp-for="AutomationId" />
+
+    <button type="submit" class="btn btn-primary">Update</button>
+    <a asp-action="Index" class="btn btn-secondary">Back</a>
+</form>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

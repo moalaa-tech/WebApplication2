@@ -1,0 +1,47 @@
+﻿@using CRM.WebApp.DTOs.InventoryManagement
+@model StockAdjustmentDto
+@{
+    ViewData["Title"] = "Adjust Stock";
+}
+
+<h2 class="mb-4">Adjust Stock</h2>
+
+<div class="card shadow-sm">
+    <div class="card-body">
+
+        <form asp-action="Adjust" method="post">
+
+            <div asp-validation-summary="All" class="text-danger"></div>
+
+            <div class="mb-3">
+                <label class="form-label">Product</label>
+                <select asp-for="ProductId" class="form-select" asp-items="ViewBag.Products">
+                    <option value="">-- select product --</option>
+                </select>
+                <span asp-validation-for="ProductId" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">New Quantity</label>
+                <input asp-for="NewQuantity" class="form-control" />
+                <span asp-validation-for="NewQuantity" class="text-danger"></span>
+            </div>
+
+            <div class="alert alert-info">
+                ⚠️ This will set the quantity directly to the number you enter, regardless of previous stock.
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Notes (Optional)</label>
+                <textarea asp-for="Notes" rows="3" class="form-control"></textarea>
+            </div>
+
+            <button class="btn btn-warning">Adjust Stock</button>
+        </form>
+
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

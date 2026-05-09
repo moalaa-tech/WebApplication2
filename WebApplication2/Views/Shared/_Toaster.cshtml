@@ -1,0 +1,24 @@
+@{
+    var toasterMessage = TempData["ToasterMessage"] as string;
+    var toasterType = TempData["ToasterType"] as string ?? "info";
+}
+
+@if (!string.IsNullOrEmpty(toasterMessage))
+{
+    <div class="toaster-container">
+        <div class="toaster @toasterType">
+            @toasterMessage
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            setTimeout(function () {
+                var toasterContainer = document.querySelector('.toaster-container');
+                if (toasterContainer) {
+                    toasterContainer.remove();
+                }
+            }, 5000);
+        });
+    </script>
+}

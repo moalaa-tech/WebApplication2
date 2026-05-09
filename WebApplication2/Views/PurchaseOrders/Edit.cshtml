@@ -1,0 +1,98 @@
+@model CRM.WebApp.ViewModels.SupplyChainManagement.Purchase.EditPurchaseOrderViewModel
+
+@{
+    ViewData["Title"] = "Edit Purchase Order";
+}
+
+<h1>Edit Purchase Order</h1>
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="Id" />
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="mb-3">
+                <label asp-for="PONumber" class="form-label"></label>
+                <input asp-for="PONumber" class="form-control" />
+                <span asp-validation-for="PONumber" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="OrderDate" class="form-label"></label>
+                <input asp-for="OrderDate" class="form-control" type="date" />
+                <span asp-validation-for="OrderDate" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="ExpectedDeliveryDate" class="form-label"></label>
+                <input asp-for="ExpectedDeliveryDate" class="form-control" type="date" />
+                <span asp-validation-for="ExpectedDeliveryDate" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="SupplierId" class="form-label"></label>
+                <select asp-for="SupplierId" class="form-select"
+                        asp-items="@(new SelectList(Model.AvailableSuppliers, "Id", "Name"))">
+                    <option value="">-- Select Supplier --</option>
+                </select>
+                <span asp-validation-for="SupplierId" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Description" class="form-label"></label>
+                <textarea asp-for="Description" class="form-control"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Status" class="form-label"></label>
+                <input asp-for="Status" class="form-control" readonly />
+            </div>
+            <div class="mb-3">
+                <label asp-for="TotalAmount" class="form-label"></label>
+                <input asp-for="TotalAmount" class="form-control" readonly />
+            </div>
+        </div>
+        <div class="col-md-6">
+            <h4>Items</h4>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Item Name</th>
+                        <th>Item Code</th>
+                        <th>Quantity</th>
+                        <th>Unit Price</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                @for (int i = 0; i < Model.Items.Count; i++)
+                {
+                    <tr>
+                        <td>
+                            <input asp-for="@Model.Items[i].ItemName" class="form-control" />
+                            <span asp-validation-for="@Model.Items[i].ItemName" class="text-danger"></span>
+                        </td>
+                        <td>
+                            <input asp-for="@Model.Items[i].ItemCode" class="form-control" />
+                            <span asp-validation-for="@Model.Items[i].ItemCode" class="text-danger"></span>
+                        </td>
+                        <td>
+                            <input asp-for="@Model.Items[i].Quantity" class="form-control" type="number" min="1" />
+                            <span asp-validation-for="@Model.Items[i].Quantity" class="text-danger"></span>
+                        </td>
+                        <td>
+                            <input asp-for="@Model.Items[i].UnitPrice" class="form-control" type="number" step="0.01" min="0.01" />
+                            <span asp-validation-for="@Model.Items[i].UnitPrice" class="text-danger"></span>
+                        </td>
+                        <td>
+                            <input asp-for="@Model.Items[i].Description" class="form-control" />
+                            <span asp-validation-for="@Model.Items[i].Description" class="text-danger"></span>
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

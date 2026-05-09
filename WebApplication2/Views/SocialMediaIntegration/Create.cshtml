@@ -1,0 +1,33 @@
+﻿@using CRM.Domain.Enums.MarketingAutomation
+@using CRM.WebApp.DTOs.MarketingAutomation
+@model SocialMediaPostDto
+
+<h2>@Localizer["SocialMediaIntegration.Create.Title", "Create Post"]</h2>
+
+<form asp-action="Create">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div class="form-group">
+        <label asp-for="Content" class="control-label">@Localizer["SocialMediaIntegration.Field.Content", "Content"]</label>
+        <textarea asp-for="Content" class="form-control" rows="5"></textarea>
+        <span asp-validation-for="Content" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Platform" class="control-label">@Localizer["SocialMediaIntegration.Field.Platform", "Platform"]</label>
+        <select asp-for="Platform" class="form-control"
+                asp-items="Html.GetEnumSelectList<SocialMediaPlatform>()"></select>
+        <span asp-validation-for="Platform" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="ScheduledTime" class="control-label">@Localizer["SocialMediaIntegration.Field.ScheduledTime", "Scheduled Time"]</label>
+        <input asp-for="ScheduledTime" class="form-control" />
+        <span asp-validation-for="ScheduledTime" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <input type="submit" value="@Localizer["Common.Save", "Save"]" class="btn btn-primary" />
+        <a asp-action="Index" class="btn btn-secondary">@Localizer["Common.Back", "Back to List"]</a>
+    </div>
+</form>

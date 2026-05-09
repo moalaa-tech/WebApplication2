@@ -1,0 +1,52 @@
+@model CRM.WebApp.ViewModels.MarketingAutomation.LeadScore.LeadScoreCreateViewModel
+
+<h2>@Localizer["Shared.LeadScoring.Create.Title"]</h2>
+
+<form asp-action="Create" method="post" class="mt-3">
+    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+    <div class="mb-3">
+        <label asp-for="LeadScoreCreateDto.Name" class="form-label">@Localizer["Shared.LeadScoring.Field.Name"]</label>
+        <input asp-for="LeadScoreCreateDto.Name" class="form-control" />
+        <span asp-validation-for="LeadScoreCreateDto.Name" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="LeadScoreCreateDto.Description" class="form-label">@Localizer["Shared.LeadScoring.Field.Description"]</label>
+        <textarea asp-for="LeadScoreCreateDto.Description" class="form-control"></textarea>
+        <span asp-validation-for="LeadScoreCreateDto.Description" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="LeadScoreCreateDto.Score" class="form-label">@Localizer["Shared.LeadScoring.Field.Score"]</label>
+        <input asp-for="LeadScoreCreateDto.Score" class="form-control" type="number" min="0" max="100" />
+        <span asp-validation-for="LeadScoreCreateDto.Score" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="LeadScoreCreateDto.ScoreType" class="form-label">@Localizer["Shared.LeadScoring.Field.ScoreType"]</label>
+        <input asp-for="LeadScoreCreateDto.ScoreType" class="form-control" />
+        <span asp-validation-for="LeadScoreCreateDto.ScoreType" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="LeadScoreCreateDto.Criteria" class="form-label">@Localizer["Shared.LeadScoring.Field.Criteria"]</label>
+        <input asp-for="LeadScoreCreateDto.Criteria" class="form-control" />
+        <span asp-validation-for="LeadScoreCreateDto.Criteria" class="text-danger"></span>
+    </div>
+
+    <div class="d-flex gap-2">
+        <button type="submit" class="btn btn-primary">
+            @Localizer["Form.Create"]
+        </button>
+        <a asp-action="Index" class="btn btn-secondary">
+            @Localizer["Form.BackToList"]
+        </a>
+    </div>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

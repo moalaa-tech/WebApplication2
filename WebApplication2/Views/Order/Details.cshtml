@@ -1,0 +1,116 @@
+﻿@using CRM.Domain.Enums
+@model CRM.WebApp.DTOs.Order.OrderDto
+
+@{
+    ViewData["Title"] = Localizer["Shared.Order.Details.Title", "Order Details"];
+}
+
+@{
+    var status = Enum.GetValues(typeof(InvoiceStatus));
+    
+}
+
+<h1>@Localizer["Shared.Order.Details.Title", "Order Details"]</h1>
+
+<div>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Localizer["Shared.Order.Field.OrderNumber", "Order ID"]
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Id)
+        </dd>
+
+
+        <dt class="col-sm-2">
+            @Localizer["Shared.Order.Field.Status"]
+        </dt>
+        <dd class="col-sm-10">
+            @Localizer[$"Shared.InvoiceStatus.{Model.Status}"]
+        </dd>
+
+
+        <dt class="col-sm-2">
+            @Localizer["Shared.Order.Field.TotalAmount", "Order ID"]
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.TotalAmount)
+        </dd>
+
+
+        <dt class="col-sm-2">
+            @Localizer["Shared.Order.Field.DateCreated", "Date Created"]
+        </dt>
+        <dd class="col-sm-10">
+            @Model.DateCreated.ToString("dd/MM/yyyy")
+        </dd>
+
+        <dt class="col-sm-2">
+            @Localizer["Shared.Order.Field.CustomerName", "Customer Name"]
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Customer.Name)
+        </dd>
+
+        <dt class="col-sm-2">
+            @Localizer["Shared.Order.Field.CustomerAddress", "Customer Address"]
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Customer.Address)
+        </dd>
+
+        <dt class="col-sm-2">
+            @Localizer["Shared.Order.Field.CustomerPhone", "Customer Phone"]
+        </dt>
+        <dd class="col-sm-10">
+            <span>0</span>@Html.DisplayFor(model => model.Customer.Phone)
+        </dd>
+    </dl>
+
+    <h4 class="mt-4">@Localizer["Shared.Order.Details.ItemsHeader", "Order Items"]</h4>
+
+    <table class="table table-bordered table-striped mt-2">
+        <thead class="table-light">
+            <tr>
+                <th>@Localizer["Shared.Order.Field.ItemsCount", "Items Count"]</th>
+                <th>@Localizer["Shared.Order.Field.ProductName", "Product Name"]</th>
+                <th>@Localizer["Shared.Order.Field.ProductNameAr", "ProductNameAr"]</th>
+                <th>@Localizer["Shared.Order.Field.ProductTypeName", "Product Type"]</th>
+                <th>@Localizer["Shared.Order.Field.SalesPrice", "Sales Price"]</th>
+                <th>@Localizer["Shared.Order.Field.TotalCost", "Total Cost"]</th>
+               
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.OrderDetails)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.ItemsCount)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Product.Name)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Product.NameAr)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Product.ProductTypeName)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Product.SalesPrice)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Product.TotalCost)</td>
+                   
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div class="mt-3">
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">
+        @Localizer["Common.Edit", "Edit"]
+    </a>
+    <a asp-action="Index" class="btn btn-secondary">
+        @Localizer["Common.BackToList", "Back to List"]
+    </a>
+    <a asp-controller="" asp-action="Index" class="btn btn-secondary">
+        @Localizer["Shared.Order.Index.Warehouse"]
+    </a>
+
+    <button type="button" class="btn btn-primary" onclick="window.print()">
+        @Localizer["Common.Print", "Print"]
+    </button>
+</div>

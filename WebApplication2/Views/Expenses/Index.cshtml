@@ -1,0 +1,81 @@
+﻿@using CRM.WebApp.Paging;
+@using CRM.WebApp.ViewModels.Accounting;
+@model ExpenseListViewModel
+@{
+    ViewData["Title"] = Localizer["Shared.Expenses.Index.Title", "Employees"];
+}
+
+<h1>@Localizer["Shared.Expenses.Index.Title", "Employees"]</h1>
+
+
+<form method="get" class="row g-2 mb-3">
+    <div class="col-auto">
+        <input type="date" name="from" value="@(Model.From?.ToString("yyyy-MM-dd"))" class="form-control" />
+    </div>
+    <div class="col-auto">
+        <input type="date" name="to" value="@(Model.To?.ToString("yyyy-MM-dd"))" class="form-control" />
+    </div>
+    <div class="col-auto">
+        <select name="categoryId" class="form-select">
+            <option value="">--@Localizer["Shared.Expenses.Index.Field.AllCategories"]--</option>
+            @foreach (var c in Model.Categories ?? Enumerable.Empty<SelectListItem>())
+            {
+                var selected = Model.CategoryId?.ToString() == c.Value ? "selected" : "";
+                <option value="@c.Value" selected="@selected">@c.Text</option>
+            }
+        </select>
+    </div>
+    <div class="col-auto">
+        <button class="btn btn-primary">تصفية</button>
+        <a href="/Expenses" class="btn btn-secondary">إعادة</a>
+    </div>
+    <div class="col text-end">
+        <a class="btn btn-success" asp-action="Create">@Localizer["Shared.Expenses.Create.Title"]</a>
+        <a class="btn btn-success" asp-controller="ExpenseCategories" asp-action="Index">@Localizer["Shared.ExpenseCategory.Index.Title"]</a>
+
+    </div>
+</form>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>@Localizer["Shared.Expenses.Index.Field.Date"]</th>
+            <th>@Localizer["Shared.Expenses.Index.Field.Title"]</th>
+            <th>@Localizer["Shared.Expenses.Index.Field.Category"]</th>
+            <th>@Localizer["Shared.Expenses.Index.Field.Amount"]</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var it in Model.Items)
+        {
+            <tr>
+                <td>@it.Date.ToString("yyyy-MM-dd")</td>
+                <td>@it.Title</td>
+                <td>@it.CategoryName</td>
+                <td>@it.Amount.ToString("N2")</td>
+                <td>
+                    <a class="btn btn-sm btn-info" href="/Expenses/Details/@it.Id">@Localizer["common.Details"]</a>
+                    <a class="btn btn-sm btn-warning" href="/Expenses/Edit/@it.Id">@Localizer["common.Edit"]</a>
+                    <form method="post" action="/Expenses/Delete/@it.Id" style="display:inline" onsubmit="return confirm('هل تريد الحذف؟');">
+                        <button class="btn btn-sm btn-danger">@Localizer["common.Delete"]</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<nav>
+    <ul class="pagination">
+        @{
+            var totalPages = (int)Math.Ceiling(Model.TotalCount / (double)Model.PageSize);
+            for (int p = 1; p <= totalPages; p++)
+            {
+                <li class="page-item @(p == Model.Page ? "active" : "")">
+                    <a class="page-link" href="?page=@p&from=@(Model.From?.ToString("yyyy-MM-dd"))&to=@(Model.To?.ToString("yyyy-MM-dd"))&categoryId=@(Model.CategoryId)">@p</a>
+                </li>
+            }
+        }
+    </ul>
+</nav>

@@ -1,0 +1,135 @@
+﻿@using CRM.WebApp.ViewModels.SalesManagement
+@model QuoteViewModel
+
+@{
+    ViewData["Title"] = "Quote Details";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1>Quote Details</h1>
+    <div>
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
+        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+        <a asp-action="GeneratePdf" asp-route-id="@Model.Id" class="btn btn-primary">Download PDF</a>
+    </div>
+</div>
+
+<div class="card mb-3">
+    <div class="card-header">
+        <h5 class="mb-0">Quote Information</h5>
+    </div>
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">Quote Number</dt>
+            <dd class="col-sm-9">@Model.QuoteNumber</dd>
+
+            <dt class="col-sm-3">Issue Date</dt>
+            <dd class="col-sm-9">@Model.IssueDate.ToShortDateString()</dd>
+
+            <dt class="col-sm-3">Expiry Date</dt>
+            <dd class="col-sm-9">@Model.ExpiryDate.ToShortDateString()</dd>
+
+            <dt class="col-sm-3">Subtotal</dt>
+            <dd class="col-sm-9">@Model.SubTotal.ToString("C")</dd>
+
+            <dt class="col-sm-3">Tax</dt>
+            <dd class="col-sm-9">@Model.TaxAmount.ToString("C")</dd>
+
+            <dt class="col-sm-3">Total Amount</dt>
+            <dd class="col-sm-9">@Model.TotalAmount.ToString("C")</dd>
+
+            <dt class="col-sm-3">Notes</dt>
+            <dd class="col-sm-9">@Model.Notes</dd>
+
+            <dt class="col-sm-3">Terms and Conditions</dt>
+            <dd class="col-sm-9">@Model.TermsAndConditions</dd>
+        </dl>
+    </div>
+</div>
+
+<div class="card mb-3">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">Line Items</h5>
+        @if (Model.Deals == null || !Model.Deals.Any())
+        {
+            <a asp-action="AssociateDeal" asp-route-id="@Model.Id" class="btn btn-sm btn-primary">Associate with Deal</a>
+        }
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Description</th>
+                        <th>Quantity</th>
+                        <th>Unit Price</th>
+                        <th>Discount</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.LineItems)
+                    {
+                        <tr>
+                            <td>@item.ProductName</td>
+                            <td>@item.Description</td>
+                            <td>@item.Quantity</td>
+                            <td>@item.UnitPrice.ToString("C")</td>
+                            <td>@item.DiscountPercentage.ToString("P0")</td>
+                            <td>@item.LineTotal.ToString("C")</td>
+                        </tr>
+                    }
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th colspan="5" class="text-right">Subtotal:</th>
+                        <th>@Model.SubTotal.ToString("C")</th>
+                    </tr>
+                    <tr>
+                        <th colspan="5" class="text-right">Tax:</th>
+                        <th>@Model.TaxAmount.ToString("C")</th>
+                    </tr>
+                    <tr>
+                        <th colspan="5" class="text-right">Total:</th>
+                        <th>@Model.TotalAmount.ToString("C")</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>
+
+@if (Model.Deals != null && Model.Deals.Any())
+{
+    <div class="card">
+        <div class="card-header">
+            <h5 class="mb-0">Associated Deals</h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Deal Name</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                            <th>Expected Close Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var deal in Model.Deals)
+                        {
+                            <tr>
+                                <td><a asp-controller="Deals" asp-action="Details" asp-route-id="@deal.Id">@deal.Name</a></td>
+                                <td>@deal.Amount.ToString("C")</td>
+                                <td>@deal.Status</td>
+                                <td>@deal.ExpectedCloseDate.ToShortDateString()</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+}

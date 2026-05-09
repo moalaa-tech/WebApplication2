@@ -1,0 +1,94 @@
+﻿@using CRM.WebApp.DTOs.Project
+@model IEnumerable<PhaseExpenseDto>
+
+<h2>Expenses for Project</h2>
+
+<div class="card mb-4">
+    <div class="card-header">
+        <h4>Filter Options</h4>
+    </div>
+    <div class="card-body">
+        <form method="get" class="form-inline">
+            <input type="hidden" name="id" value="@ViewBag.ProjectId" />
+
+            <div class="form-group mr-3">
+                <label for="fromDate" class="mr-2">From:</label>
+                <input type="date" name="fromDate" class="form-control" value="@(ViewBag.FromDate?.ToString("yyyy-MM-dd"))" />
+            </div>
+
+            <div class="form-group mr-3">
+                <label for="toDate" class="mr-2">To:</label>
+                <input type="date" name="toDate" class="form-control" value="@(ViewBag.ToDate?.ToString("yyyy-MM-dd"))" />
+            </div>
+
+            <button type="submit" class="btn btn-primary mr-2">Apply Filter</button>
+            <a asp-action="Expenses" asp-route-id="@ViewBag.ProjectId" class="btn btn-secondary">Clear Filter</a>
+        </form>
+    </div>
+</div>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Date</th>
+            <th>Phase</th>
+            <th>Description</th>
+            <th>Amount</th>
+            <th>Vendor</th>
+            <th>Receipt #</th>
+            <th>Category</th>
+            <th>Status</th>
+            <th>Billable</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var expense in Model)
+        {
+            <tr>
+                <td>@expense.ExpenseDate.ToShortDateString()</td>
+                <td>@expense.PhaseName</td>
+                <td>@expense.Description</td>
+                <td>@expense.Amount.ToString("C")</td>
+                <td>@expense.Vendor</td>
+                <td>@expense.ReceiptNumber</td>
+                <td>@expense.Category</td>
+                <td><span class="badge badge-@GetStatusBadgeClass(expense.Status)">@expense.Status</span></td>
+                <td>
+                    @if (expense.IsBillable)
+                    {
+                        <span class="badge badge-success">Yes</span>
+                    }
+                    else
+                    {
+                        <span class="badge badge-secondary">No</span>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr class="table-info">
+            <td colspan="3"><strong>Total</strong></td>
+            <td><strong>@Model.Sum(e => e.Amount).ToString("C")</strong></td>
+            <td colspan="5"></td>
+        </tr>
+    </tfoot>
+</table>
+
+<div class="mt-3">
+    <a asp-action="Details" asp-route-id="@ViewBag.ProjectId" class="btn btn-secondary">Back to Project</a>
+</div>
+
+@functions {
+    string GetStatusBadgeClass(string status)
+    {
+        return status switch
+        {
+            "Entered" => "secondary",
+            "Submitted" => "info",
+            "Approved" => "success",
+            "Billed" => "primary",
+            _ => "light"
+        };
+    }
+}

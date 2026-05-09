@@ -1,0 +1,86 @@
+@using CRM.WebApp.ViewModels.InventoryManagement
+@model ProductDetailsViewModel
+
+@{
+    ViewData["Title"] = @Localizer["Shared.Inventory.Details.ProductDetails"];
+}
+
+<div class="container">
+    <h1>@Localizer["Shared.Inventory.Details.ProductDetails"]</h1>
+
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h3>@Model.Product.Name</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>@Localizer["Shared.Inventory.Field.SKU"]:</strong> @Model.Product.SKU</p>
+                            <p><strong>@Localizer["Shared.Product.Description"]:</strong> @Model.Product.Description</p>
+                            <p><strong>@Localizer["Shared.Product.CurrentStock"]:</strong> @Model.Product.CurrentStock</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>@Localizer["Shared.Product.CostPrice"]:</strong> @Model.Product.TotalCost.Value.ToString("C")</p>
+                            <p><strong>@Localizer["Shared.Product.SalePrice"]:</strong> @Model.Product.TotalCost.Value.ToString("C")</p>
+                            <p><strong>@Localizer["Shared.Product.MinimumStockLevel"]:</strong> @Model.Product.MinimumStockLevel</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <a asp-action="Edit" asp-route-id="@Model.Product.Id" class="btn btn-primary">
+                        @Localizer["common.Edit"]
+                    </a>
+                    <a asp-action="Index" class="btn btn-secondary">
+                        @Localizer["common.BackToList"]
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h2>@Localizer["Shared.Inventory.BatchInformation"]</h2>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>@Localizer["Shared.Inventory.BatchNumber"]</th>
+                    <th>@Localizer["Shared.Inventory.Warehouse"]</th>
+                    <th>@Localizer["Shared.Inventory.QuantityOnHand"]</th>
+                    <th>@Localizer["Shared.Inventory.ManufactureDate"]</th>
+                    <th>@Localizer["Shared.Inventory.ExpiryDate"]</th>
+                    <th>@Localizer["common.Actions"]</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var batch in Model.Batches)
+                {
+                    <tr>
+                        <td>@batch.BatchNumber</td>
+                        <td>@batch.WarehouseName</td>
+                        <td>@batch.QuantityOnHand</td>
+                        <td>@(batch.ManufactureDate?.ToString("yyyy-MM-dd") ?? "-")</td>
+                        <td>@(batch.ExpiryDate?.ToString("yyyy-MM-dd") ?? "-")</td>
+                        <td>
+                            <a asp-action="IssueGoods" asp-route-batchId="@batch.Id" class="btn btn-sm btn-danger">
+                                @Localizer["Shared.Inventory.Issue"]
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <a asp-action="ReceiveGoods" asp-route-itemId="@Model.Product.Id" class="btn btn-success">
+                @Localizer["Shared.Inventory.Action.ReceiveGoods"]
+            </a>
+            <a asp-action="IssueGoods" asp-route-itemId="@Model.Product.Id" class="btn btn-danger">
+                @Localizer["Shared.Inventory.Action.IssueGoods"]
+            </a>
+        </div>
+    </div>
+</div>

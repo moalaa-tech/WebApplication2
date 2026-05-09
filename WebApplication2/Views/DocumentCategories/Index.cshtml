@@ -1,0 +1,48 @@
+﻿@using CRM.WebApp.ViewModels.DocumentManagement
+@model IEnumerable<DocumentCategoryViewModel>
+
+@{
+    ViewData["Title"] = Localizer["DocumentCategories.Index.Title", "Document Categories"];
+}
+
+<h2>@Localizer["DocumentCategories.Index.Title", "Document Categories"]</h2>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">@Localizer["Common.Create", "Create New"]</a>
+</p>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>@Localizer["DocumentCategories.Field.Name", "Name"]</th>
+            <th>@Localizer["DocumentCategories.Field.Description", "Description"]</th>
+            <th>@Localizer["DocumentCategories.Field.ParentCategory", "Parent Category"]</th>
+            <th>@Localizer["DocumentCategories.Field.Documents", "Documents"]</th>
+            <th>@Localizer["DocumentCategories.Field.Order", "Order"]</th>
+            <th>@Localizer["DocumentCategories.Field.Status", "Status"]</th>
+            <th>@Localizer["Common.Actions", "Actions"]</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Name</td>
+                <td>@item.Description</td>
+                <td>@item.ParentName</td>
+                <td>@item.DocumentCount</td>
+                <td>@item.Order</td>
+                <td>
+                    <span class="badge @(item.IsActive ? "bg-success" : "bg-secondary")">
+                        @(item.IsActive ? Localizer["Common.Active", "Active"] : Localizer["Common.Inactive", "Inactive"])
+                    </span>
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">@Localizer["Common.Edit", "Edit"]</a>
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info">@Localizer["Common.Details", "Details"]</a>
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">@Localizer["Common.Delete", "Delete"]</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

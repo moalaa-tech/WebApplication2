@@ -1,0 +1,80 @@
+﻿@using CRM.WebApp.DTOs.LoggingDto
+@model LogDto;
+
+@{
+    ViewData["Title"] = "Log Details";
+}
+
+<h1>Log Details</h1>
+
+<div>
+    <dl class="row">
+        <dt class="col-sm-2">Timestamp</dt>
+        <dd class="col-sm-10">@Model.Timestamp.ToString("g")</dd>
+
+        <dt class="col-sm-2">Level</dt>
+        <dd class="col-sm-10">
+            <span class="badge @GetBadgeClass(Model.Level)">@Model.Level</span>
+        </dd>
+
+        <dt class="col-sm-2">Logger</dt>
+        <dd class="col-sm-10">@Model.Logger</dd>
+
+        <dt class="col-sm-2">User</dt>
+        <dd class="col-sm-10">@Model.UserName</dd>
+
+        <dt class="col-sm-2">URL</dt>
+        <dd class="col-sm-10">@Model.Url</dd>
+
+        <dt class="col-sm-2">HTTP Method</dt>
+        <dd class="col-sm-10">@Model.HttpMethod</dd>
+
+        <dt class="col-sm-2">Client IP</dt>
+        <dd class="col-sm-10">@Model.ClientIP</dd>
+
+        <dt class="col-sm-2">Status Code</dt>
+        <dd class="col-sm-10">@Model.StatusCode</dd>
+
+        <dt class="col-sm-2">Duration</dt>
+        <dd class="col-sm-10">@(Model.Duration.HasValue ? $"{Model.Duration} ms" : "N/A")</dd>
+
+        <dt class="col-sm-2">Message</dt>
+        <dd class="col-sm-10"><pre>@Model.Message</pre></dd>
+
+        @if (!string.IsNullOrEmpty(Model.RequestBody))
+        {
+            <dt class="col-sm-2">Request Body</dt>
+            <dd class="col-sm-10"><pre>@Model.RequestBody</pre></dd>
+        }
+
+        @if (!string.IsNullOrEmpty(Model.ResponseBody))
+        {
+            <dt class="col-sm-2">Response Body</dt>
+            <dd class="col-sm-10"><pre>@Model.ResponseBody</pre></dd>
+        }
+
+        @if (!string.IsNullOrEmpty(Model.Exception))
+        {
+            <dt class="col-sm-2">Exception</dt>
+            <dd class="col-sm-10"><pre class="text-danger">@Model.Exception</pre></dd>
+        }
+    </dl>
+</div>
+
+<div>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</div>
+
+@functions {
+    string GetBadgeClass(string level)
+    {
+        return level switch
+        {
+            "Information" => "badge-info",
+            "Warning" => "badge-warning",
+            "Error" => "badge-danger",
+            "Critical" => "badge-danger",
+            _ => "badge-secondary"
+        };
+    }
+}

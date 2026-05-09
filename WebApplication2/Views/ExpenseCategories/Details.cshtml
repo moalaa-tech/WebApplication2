@@ -1,0 +1,24 @@
+﻿@using CRM.WebApp.DTOs.Accounting
+@model ExpenseCategoryDto
+
+@{
+    ViewData["Title"] = Localizer["Shared.ExpenseCategory.Details.Title"];
+}
+
+<h1>@Localizer["Shared.ExpenseCategory.Details.Title"]</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">@Localizer["common.Create"]</a>
+</p>
+
+
+<table class="table table-bordered">
+    <tr><th>@Localizer["Shared.ExpenseCategory.Create.Field.Name"]</th><td>@Model.Name</td></tr>
+    <tr><th>@Localizer["Shared.ExpenseCategory.Create.Field.NameAR"]</th><td>@Model.NameAR</td></tr>
+</table>
+
+
+
+<div>
+    <a asp-action="Index">@Localizer["common.BackToList"]</a>
+</div>

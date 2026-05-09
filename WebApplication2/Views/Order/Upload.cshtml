@@ -1,0 +1,76 @@
+﻿
+
+@{
+    ViewData["Title"] = Localizer["Shared.Order.Upload.Title", "Upload"];
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@* asp-controller="Order" asp-action="Upload"*@
+
+
+<div class="container p-3 my-3 border">
+
+    <h1>@Localizer["Shared.Order.Upload.Title", "Upload"]</h1>
+
+    <div class="row">
+        <div class="col-sm-6">
+            <hr />
+            <form id="uploadForm"  enctype="multipart/form-data" method="post">
+                <input id="fileInput" type="file" name="file" accept=".xlsx" />
+                <button type="submit">@Localizer["Shared.Order.Upload.Title", "Upload"]</button>
+            </form>
+
+
+            <div class="progress mt-3" style="height: 25px;">
+                <div id="uploadProgress"
+                     class="progress-bar progress-bar-striped progress-bar-animated"
+                     role="progressbar"
+                     style="width: 0%">
+                    0%
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+
+<script>
+    document.getElementById("uploadForm").addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        var fileInput = document.getElementById("fileInput").files[0];
+        if (!fileInput) {
+            alert("Please select a file!");
+            return;
+        }
+
+        var formData = new FormData();
+        formData.append("file", fileInput);
+
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "/Order/Upload", true);
+
+        // Progress Event
+        xhr.upload.addEventListener("progress", function (e) {
+            if (e.lengthComputable) {
+                var percent = Math.round((e.loaded / e.total) * 100);
+
+                var bar = document.getElementById("uploadProgress");
+                bar.style.width = percent + "%";
+                bar.textContent = percent + "%";
+            }
+        });
+
+        xhr.onload = function () {
+            if (xhr.status === 200) {
+                alert("Upload Completed!");
+            } else {
+                alert("Error uploading file");
+            }
+        };
+
+        xhr.send(formData);
+    });
+</script>

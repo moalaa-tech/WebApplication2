@@ -1,0 +1,37 @@
+@model IEnumerable<CRM.WebApp.DTOs.Banking.ReconciliationDto>
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer Localizer
+
+<h2>@Localizer["Shared.Reconciliations.Index.Title"]</h2>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">@Localizer["Shared.Common.Create"]</a>
+</p>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>@Localizer["Shared.Reconciliations.Field.BankAccount"]</th>
+            <th>@Localizer["Shared.Reconciliations.Field.StatementDate"]</th>
+            <th>@Localizer["Shared.Reconciliations.Field.StatementBalance"]</th>
+            <th>@Localizer["Shared.Reconciliations.Field.AdjustedBookBalance"]</th>
+            <th>@Localizer["Shared.Reconciliations.Field.IsReconciled"]</th>
+            <th>@Localizer["Shared.Common.Actions"]</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.BankAccountId)</td>
+                <td>@Html.DisplayFor(modelItem => item.StatementDate)</td>
+                <td>@Html.DisplayFor(modelItem => item.StatementBalance)</td>
+                <td>@Html.DisplayFor(modelItem => item.AdjustedBookBalance)</td>
+                <td>@Html.DisplayFor(modelItem => item.IsReconciled)</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info">@Localizer["Shared.Common.Details"]</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

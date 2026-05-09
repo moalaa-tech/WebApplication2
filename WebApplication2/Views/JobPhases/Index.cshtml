@@ -1,0 +1,60 @@
+﻿@using CRM.WebApp.DTOs.Project
+@model IEnumerable<JobPhaseDto>
+
+<h2>@Localizer["JobPhases.Index.Title", "Job Phases for Project"]</h2>
+<h4>@ViewBag.ProjectName</h4>
+
+<p>
+    <a asp-action="Create" asp-route-projectId="@ViewBag.ProjectId" class="btn btn-primary">@Localizer["JobPhases.Index.CreateNewPhase", "Create New Phase"]</a>
+    <a asp-controller="Projects" asp-action="Details" asp-route-id="@ViewBag.ProjectId" class="btn btn-secondary">@Localizer["JobPhases.Index.BackToProject", "Back to Project"]</a>
+</p>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>@Localizer["JobPhases.Field.Code", "Code"]</th>
+            <th>@Localizer["JobPhases.Field.Name", "Name"]</th>
+            <th>@Localizer["JobPhases.Field.EstimatedHours", "Estimated Hours"]</th>
+            <th>@Localizer["JobPhases.Field.EstimatedCost", "Estimated Cost"]</th>
+            <th>@Localizer["JobPhases.Field.ActualHours", "Actual Hours"]</th>
+            <th>@Localizer["JobPhases.Field.ActualCost", "Actual Cost"]</th>
+            <th>@Localizer["JobPhases.Field.Status", "Status"]</th>
+            <th>@Localizer["Common.Actions", "Actions"]</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.PhaseCode</td>
+                <td>@item.Name</td>
+                <td>@item.EstimatedHours.ToString("N2")</td>
+                <td>@item.EstimatedCost.ToString("C")</td>
+                <td>@item.ActualHours.ToString("N2")</td>
+                <td>@item.ActualCost.ToString("C")</td>
+                <td><span class="badge badge-@GetStatusBadgeClass(item.Status)">@item.Status</span></td>
+                <td>
+                    <div class="btn-group" role="group">
+                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info">@Localizer["Common.Details", "Details"]</a>
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">@Localizer["Common.Edit", "Edit"]</a>
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">@Localizer["Common.Delete", "Delete"]</a>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@functions {
+    string GetStatusBadgeClass(string status)
+    {
+        return status switch
+        {
+            "Planning" => "secondary",
+            "Active" => "success",
+            "OnHold" => "warning",
+            "Completed" => "primary",
+            _ => "light"
+        };
+    }
+}

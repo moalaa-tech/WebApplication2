@@ -1,0 +1,54 @@
+﻿@model CRM.WebApp.DTOs.OrderDetails.OrderDetailsDto
+
+<form id="addProductForm">
+
+    <input type="hidden" asp-for="OrderId" />
+
+    <div class="form-group mb-2">
+        <label asp-for="ProductId" class="form-label"></label>
+        <select asp-for="ProductId" class="form-select" asp-items="@ViewBag.Products"></select>
+    </div>
+
+    <div class="form-group mb-2">
+        <label asp-for="ItemsCount" class="form-label"></label>
+        <input asp-for="ItemsCount" class="form-control" />
+    </div>
+
+    <div class="form-group mb-2">
+        <label asp-for="UTMCampaign" class="form-label"></label>
+        <input asp-for="UTMCampaign" class="form-control" />
+    </div>
+
+    <div class="form-group mb-2">
+        <label asp-for="UTMSource" class="form-label"></label>
+        <input asp-for="UTMSource" class="form-control" />
+    </div>
+
+    <button type="button" class="btn btn-primary" onclick="submitAddProduct()">
+        @Localizer["common.Save"]
+    </button>
+</form>
+
+
+<script>
+    function submitAddProduct() {
+
+        let form = document.getElementById("addProductForm");
+        let formData = new FormData(form);
+
+        fetch('@Url.Action("AddProduct", "Orders")', {
+            method: "POST",
+            body: formData
+        })
+        .then(x => x.json())
+        .then(result => {
+
+            if (result.success) {
+                location.reload(); // إعادة تحميل الصفحة لرؤية المنتج داخل الجدول
+            }
+            else {
+                alert(result.message);
+            }
+        });
+    }
+</script>

@@ -1,0 +1,25 @@
+﻿@using CRM.WebApp.DTOs.Setting
+@model SettingDto
+
+@{
+    ViewData["Title"] = Localizer["Shared.Setting.Details.Title", "Setting Details"];
+}
+
+<h1>@Localizer["Shared.Setting.Details.Title", "Setting Details"]</h1>
+
+<div>
+    <h4>@Localizer["Shared.Setting.Details.Header", "Setting"]</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Localizer["Shared.Setting.Field.Name", "Name"]
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.Id">@Localizer["Common.Edit", "Edit"]</a> |
+    <a asp-action="Index">@Localizer["Common.Back", "Back to List"]</a>
+</div>

@@ -1,0 +1,19 @@
+@using CRM.WebApp.ViewModels.SupplyChainManagement.DemandPlan
+@model DemandPlanDetailsViewModel
+
+<h2>@Localizer["DemandPlans.Delete.Title", "Delete Demand Plan"]</h2>
+
+<h3>@Localizer["Common.AreYouSure", "Are you sure?"]</h3>
+<dl class="row">
+    <dt class="col-sm-2">@Localizer["DemandPlans.Field.PlanName", "Plan Name"]</dt>
+    <dd class="col-sm-10">@Model.PlanName</dd>
+    <dt class="col-sm-2">@Localizer["DemandPlans.Field.StartDate", "Start Date"]</dt>
+    <dd class="col-sm-10">@Model.StartDate.ToShortDateString()</dd>
+    <dt class="col-sm-2">@Localizer["DemandPlans.Field.EndDate", "End Date"]</dt>
+    <dd class="col-sm-10">@Model.EndDate.ToShortDateString()</dd>
+</dl>
+<form asp-action="Delete">
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="btn btn-danger">@Localizer["Common.Delete", "Delete"]</button>
+    <a asp-action="Index" class="btn btn-secondary">@Localizer["Common.Back", "Back to List"]</a>
+</form>

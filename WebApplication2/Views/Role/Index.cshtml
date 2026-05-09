@@ -1,0 +1,43 @@
+@model IEnumerable<CRM.Domain.IdentityEntity.ApplicationRole>
+
+@{ 
+    ViewData["Title"] = @Localizer["Shared.Roles", "Roles"];
+}
+
+<h1>@Localizer["Shared.Roles", "Roles"]</h1>
+
+<p>
+    <a asp-action="Create">@Localizer["common.Create", "Roles"]</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Localizer["Shared.Role.Field.Name"]
+            </th>
+            <th>
+                @Localizer["Shared.Role.Field.NameAR"]
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NameAR)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">@Localizer["common.Edit", "Edit"]</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">@Localizer["common.Details", "Details"]</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">@Localizer["common.Delete", "Delete"]</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

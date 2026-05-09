@@ -1,0 +1,35 @@
+﻿@model IEnumerable<CRM.WebApp.DTOs.HumanResources.StateDto>
+@{
+    ViewData["Title"] = "States";
+}
+
+<h1>States</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">New State</a>
+</p>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Name (AR)</th>
+            <th>Country</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var state in Model)
+        {
+            <tr>
+                <td>@state.Name</td>
+                <td>@state.NameAr</td>
+                <td>@state.CountryName</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@state.Id" class="btn btn-sm btn-warning">Edit</a>
+                    <a asp-action="Delete" asp-route-id="@state.Id" class="btn btn-sm btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

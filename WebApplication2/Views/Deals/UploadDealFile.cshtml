@@ -1,0 +1,9 @@
+﻿@model CRM.WebApp.DTOs.Deal.DealDto;
+
+<h1>Upload File</h1>
+
+<form asp-action="UploadFile" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="dealId" value="@Model.Id" />
+    <input type="file" name="file" />
+    <button type="submit">Upload</button>
+</form>

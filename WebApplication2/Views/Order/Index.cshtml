@@ -1,0 +1,236 @@
+@using CRM.Domain.Enums
+@using CRM.WebApp.Paging
+@using CRM.WebApp.ViewModels.InventoryManagement.Order
+@model OrderViewModel
+@{
+   // ViewData["Title"] = Localizer["Shared.Order.Index.Title", "Orders"];
+    //var States = ViewBag.States as (List<SelectListItem>);
+}
+
+<h1>@Localizer["Shared.Order.Index.Title", "Orders"]</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">@Localizer["Shared.Order.Index.NewOrder", "New Order"]</a>
+    <a asp-action="Upload" class="btn btn-primary">@Localizer["Shared.Order.Index.Upload", "Upload"]</a>
+</p>
+
+
+<form method="get" asp-action="Index" class="row g-3 mb-4">
+
+    <!-- Invoice Number -->
+    <div class="col-md-2">
+        <label class="form-label">@Localizer["Shared.Order.Filter.InvoiceNumber"]</label>
+        <input asp-for="InvoiceNumber" type="number" value="@Model.InvoiceNumber" class="form-control" />
+    </div>
+
+    <!-- Invoice Status -->
+    <div class="col-md-2">
+        <label class="form-label">@Localizer["Shared.Order.Filter.Status"]</label>
+        <select asp-for="Status" name="Status" class="form-select">
+            <option value="">@Localizer["common.All"]</option>
+            @foreach (var status in Enum.GetValues(typeof(InvoiceStatus)))
+            {
+                <option value="@status" selected="@(Model.Status.HasValue && Model.Status.Value == (InvoiceStatus)status)">
+                    @Localizer[$"common.{status}"]
+                </option>
+            }
+        </select>
+    </div>
+
+    <!-- Employee -->
+    <div class="col-md-2">
+        <label class="form-label">@Localizer["Shared.Order.Filter.Employee"]</label>
+        <select asp-for="EmployeeId" asp-items="@ViewBag.Users" class="form-control"></select>
+    </div>
+
+    <!-- Date From -->
+    <div class="col-md-2">
+        <label class="form-label">@Localizer["Shared.Order.Filter.DateFrom"]</label>
+        <input type="date" asp-for="DateFrom" class="form-control" value="@Model.DateFrom?.ToString("yyyy-MM-dd")" />
+    </div>
+
+    <!-- Date To -->
+    <div class="col-md-2">
+        <label class="form-label">@Localizer["Shared.Order.Filter.DateTo"]</label>
+        <input type="date" asp-for="DateTo" class="form-control" value="@Model?.DateTo?.ToString("yyyy-MM-dd")" />
+    </div>
+
+    <!-- Product -->
+    <div class="col-md-2">
+        <label class="form-label">@Localizer["Shared.Order.Filter.Product"]</label>
+        <select asp-for="ProductId" asp-items="@ViewBag.Products" class="form-control"></select>
+
+    </div>
+
+
+    <!-- State -->
+    <div class="col-md-2">
+        <label class="form-label">@Localizer["Shared.Order.Filter.State"]</label>
+        <select asp-for="StateId" asp-items="@ViewBag.States" class="form-select">
+            @*<option value="">@Localizer["common.All"]</option> *@        
+        </select>
+    </div>
+
+
+    <div class="col-12 text-end">
+        <button type="submit" class="btn btn-primary mt-2">@Localizer["Common.Search", "Search"]</button>
+    </div>
+</form>
+
+
+@Model.Result.TotalCount
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>
+                @Localizer["Shared.Order.Field.OrderNumber", "Order Number"]
+            </th>
+            <th>
+                @Localizer["Shared.Order.Field.Status", "Order Status"]
+            </th>
+
+            <th>
+                @Localizer["Shared.Order.Field.DateCreated", "Date Created"]
+            </th>
+            <th>
+                @Localizer["Shared.Order.Field.TotalAmount", "Total Amount"]
+            </th>
+
+            <th>
+                @Localizer["Shared.Order.Field.CustomerName", "Customer Name"]
+            </th>
+
+            <th>@Localizer["Common.Actions", "Actions"]</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Result)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Id)
+                </td>
+
+                <td>
+                    <span class="badge bg-@GetStatusColor(item.Status)">
+                        @Localizer[$"common.{item.Status}"]
+                    </span>
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.DateCreated)
+                </td>
+
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.TotalAmount)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Customer.Name)
+                </td>
+
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">@Localizer["Common.Edit", "Edit"]</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">@Localizer["Common.Details", "Details"]</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">@Localizer["Common.Delete", "Delete"]</a> |
+                    <a asp-action="ExportPdf" asp-route-id="@item.Id">@Localizer["Shared.Order.Index.Export", "Export"]</a>
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+
+@Localizer["Common.Page"] @Model.PageIndex @Localizer["Common.Of"] @Model.Result.TotalPages
+
+
+<nav aria-label="Page navigation example">
+    <ul class="pagination">
+
+        @{
+            int startPage = Math.Max(1, Model.PageIndex - 2);
+            int endPage = Math.Min(Model.Result.TotalPages, Model.PageIndex + 2);
+
+            if (Model.Result.TotalPages > 5)
+            {
+                if (endPage - startPage < 4)
+                {
+                    startPage = Math.Max(1, endPage - 4);
+                }
+                if (endPage - startPage < 4)
+                {
+                    endPage = Math.Min(Model.Result.TotalPages, startPage + 4);
+                }
+            }
+        }
+
+
+        @for (var i = startPage; i <= endPage; i++)
+        {
+            <li class="page-item @(i == Model.PageIndex ? "active" : "")">
+                <a class="page-link"
+                   asp-action="Index"
+                   asp-route-pageIndex="@i">
+                    @i
+                </a>
+            </li>
+        }
+
+
+        <li class="page-item @(Model.Result.HasNextPage ? "" : "disabled")">
+            <a class="page-link"
+               asp-action="Index"
+               asp-route-pageIndex="@(Model.PageIndex + 1)"
+               aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+            </a>
+        </li>
+
+    </ul>
+</nav>
+<div class="text-center mt-3">
+    <span class="text-muted">
+        Showing Page @Model.PageIndex of @Model.Result.TotalPages
+    </span>
+</div>
+
+@functions {
+    string GetStatusColor(InvoiceStatus status)
+    {
+        return status switch
+        {
+            InvoiceStatus.Open => "secondary",
+            InvoiceStatus.PartiallyPaid => "warning",
+            InvoiceStatus.Overdue => "success",
+            // InvoiceStatus.Rejected => "danger",
+            InvoiceStatus.Paid => "primary",
+            InvoiceStatus.Cancelled => "dark",
+            _ => "light"
+        };
+    }
+}
+
+
+@section Scripts {
+
+    <script>
+
+        function exportPdf(){
+
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", "https://api.example.com/data", true);
+            xhr.onreadystatechange = function () {
+              if (xhr.readyState === 4 && xhr.status === 200) {
+                var response = JSON.parse(xhr.responseText);
+                console.log(response);
+              }
+            };
+            xhr.send();
+        }
+
+
+    </script>
+}

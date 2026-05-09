@@ -1,0 +1,104 @@
+﻿<div class="container mt-4" dir="rtl">
+    <div class="row g-3">
+
+        <!-- إدارة الفواتير -->
+        <div class="col-md-4">
+            <a asp-controller="Invoice" asp-action="Index" class="text-decoration-none text-dark">
+                <div class="card shadow-sm h-100 text-center clickable-card">
+                    <div class="card-body">
+                        <h5 class="card-title">إدارة الفواتير</h5>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- إنشاء فاتورة -->
+        <div class="col-md-4">
+            <a asp-controller="Invoice" asp-action="Create" class="text-decoration-none text-dark">
+                <div class="card shadow-sm h-100 text-center clickable-card">
+                    <div class="card-body">
+                        <h5 class="card-title">إنشاء فاتورة</h5>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- إدارة عروض الأسعار -->
+        <div class="col-md-4">
+            <a asp-controller="Quotation" asp-action="Index" class="text-decoration-none text-dark">
+                <div class="card shadow-sm h-100 text-center clickable-card">
+                    <div class="card-body">
+                        <h5 class="card-title">إدارة عروض الأسعار</h5>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- إنشاء عرض سعر -->
+        <div class="col-md-4">
+            <a asp-controller="Quotation" asp-action="Create" class="text-decoration-none text-dark">
+                <div class="card shadow-sm h-100 text-center clickable-card">
+                    <div class="card-body">
+                        <h5 class="card-title">إنشاء عرض سعر</h5>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- إشعارات دائنة -->
+        <div class="col-md-4">
+            <a asp-controller="CreditNote" asp-action="Index" class="text-decoration-none text-dark">
+                <div class="card shadow-sm h-100 text-center clickable-card">
+                    <div class="card-body">
+                        <h5 class="card-title">إشعارات دائنة</h5>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- الفواتير المرتجعة -->
+        <div class="col-md-4">
+            <a asp-controller="Invoice" asp-action="Returned" class="text-decoration-none text-dark">
+                <div class="card shadow-sm h-100 text-center clickable-card">
+                    <div class="card-body">
+                        <h5 class="card-title">الفواتير المرتجعة</h5>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- الفواتير الدورية -->
+        <div class="col-md-4">
+            <a asp-controller="RecurringInvoice" asp-action="Index" class="text-decoration-none text-dark">
+                <div class="card shadow-sm h-100 text-center clickable-card">
+                    <div class="card-body">
+                        <h5 class="card-title">الفواتير الدورية</h5>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- مدفوعات العملاء -->
+        <div class="col-md-4">
+            <a asp-controller="CustomerPayment" asp-action="Index" class="text-decoration-none text-dark">
+                <div class="card shadow-sm h-100 text-center clickable-card">
+                    <div class="card-body">
+                        <h5 class="card-title">مدفوعات العملاء</h5>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- إعدادات المبيعات -->
+        <div class="col-md-4">
+            <a asp-controller="SalesSettings" asp-action="Index" class="text-decoration-none text-dark">
+                <div class="card shadow-sm h-100 text-center clickable-card">
+                    <div class="card-body">
+                        <h5 class="card-title">إعدادات المبيعات</h5>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+    </div>
+</div>

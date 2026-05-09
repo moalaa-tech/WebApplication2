@@ -1,0 +1,34 @@
+@model CRM.WebApp.ViewModels.AccountsPayable.InvoiceViewModel
+@{
+    ViewData["Title"] = Localizer["AccountsPayable.Create.Title", "Create Invoice"];
+}
+<h1>@Localizer["AccountsPayable.Create.Title", "Create Invoice"]</h1>
+<form asp-action="Create" method="post">
+    <div class="form-group">
+        <label asp-for="InvoiceNumber">@Localizer["AccountsPayable.Field.InvoiceNumber", "Invoice #"]</label>
+        <input asp-for="InvoiceNumber" class="form-control" />
+        <span asp-validation-for="InvoiceNumber" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="VendorId">@Localizer["AccountsPayable.Field.Vendor", "Vendor"]</label>
+        <input asp-for="VendorId" class="form-control" />
+        <span asp-validation-for="VendorId" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="InvoiceDate">@Localizer["AccountsPayable.Field.InvoiceDate", "Date"]</label>
+        <input asp-for="InvoiceDate" class="form-control" type="date" />
+        <span asp-validation-for="InvoiceDate" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="DueDate">@Localizer["AccountsPayable.Field.DueDate", "Due"]</label>
+        <input asp-for="DueDate" class="form-control" type="date" />
+        <span asp-validation-for="DueDate" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Amount">@Localizer["AccountsPayable.Field.Amount", "Amount"]</label>
+        <input asp-for="Amount" class="form-control" />
+        <span asp-validation-for="Amount" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">@Localizer["Common.Save", "Save"]</button>
+    <a asp-action="Index" class="btn btn-secondary">@Localizer["Common.Cancel", "Cancel"]</a>
+</form>

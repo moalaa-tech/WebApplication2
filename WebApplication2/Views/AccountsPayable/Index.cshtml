@@ -1,0 +1,37 @@
+@model IEnumerable<CRM.WebApp.ViewModels.AccountsPayable.InvoiceViewModel>
+@{
+    ViewData["Title"] = Localizer["AccountsPayable.Index.Title", "Invoices"];
+}
+<h1>@Localizer["AccountsPayable.Index.Title", "Invoices"]</h1>
+<a asp-action="Create" class="btn btn-primary mb-2">@Localizer["Common.Create", "Create New"]</a>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>@Localizer["AccountsPayable.Column.InvoiceNumber", "Invoice #"]</th>
+            <th>@Localizer["AccountsPayable.Column.Vendor", "Vendor"]</th>
+            <th>@Localizer["AccountsPayable.Column.Date", "Date"]</th>
+            <th>@Localizer["AccountsPayable.Column.Due", "Due"]</th>
+            <th>@Localizer["AccountsPayable.Column.Amount", "Amount"]</th>
+            <th>@Localizer["AccountsPayable.Column.Status", "Status"]</th>
+            <th>@Localizer["Common.Actions", "Actions"]</th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.InvoiceNumber</td>
+            <td>@item.VendorName</td>
+            <td>@item.InvoiceDate.ToShortDateString()</td>
+            <td>@item.DueDate.ToShortDateString()</td>
+            <td>@item.Amount.ToString("C")</td>
+            <td>@item.Status</td>
+            <td>
+                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm">@Localizer["Common.Details", "Details"]</a>
+                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm">@Localizer["Common.Edit", "Edit"]</a>
+                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">@Localizer["Common.Delete", "Delete"]</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

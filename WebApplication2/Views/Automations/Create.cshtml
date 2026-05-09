@@ -1,0 +1,186 @@
+﻿@using CRM.Domain.Enums
+@using CRM.Domain.Enums.MarketingAutomation
+@using CRM.WebApp.ViewModels.Automation;
+@model AutomationViewModel;
+
+@{
+    ViewData["Title"] = "Create Automation";
+}
+
+<h1>Create Automation</h1>
+
+<form asp-action="Create">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">Automation Details</div>
+                <div class="card-body">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <div class="form-group">
+                        <label asp-for="Automation.Name" class="control-label"></label>
+                        <input asp-for="Automation.Name" class="form-control" />
+                        <span asp-validation-for="Automation.Name" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Automation.Description" class="control-label"></label>
+                        <textarea asp-for="Automation.Description" class="form-control"></textarea>
+                        <span asp-validation-for="Automation.Description" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Automation.Trigger" class="control-label"></label>
+                        <select asp-for="Automation.Trigger" asp-items="Html.GetEnumSelectList<AutomationTrigger>()" class="form-control">
+                            <option value="">-- Select Trigger --</option>
+                        </select>
+                        <span asp-validation-for="Automation.Trigger" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group form-check">
+                        <label class="form-check-label">
+                            <input class="form-check-input" asp-for="Automation.IsActive" /> @Html.DisplayNameFor(model => model.Automation.IsActive)
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">Automation Steps</div>
+                <div class="card-body">
+                    <div id="steps-container">
+                        @for (int i = 0; i < Model.Steps.Count; i++)
+                        {
+                            <div class="step-group mb-3 p-2 border">
+                                <div class="form-group">
+                                    <label>Action</label>
+                                    <select asp-for="Steps[i].Action" asp-items="Html.GetEnumSelectList<AutomationAction>()" class="form-control step-action">
+                                        <option value="">-- Select Action --</option>
+                                    </select>
+                                </div>
+
+                                <div class="email-template-group" style="display: none;">
+                                    <div class="form-group">
+                                        <label>Email Template</label>
+                                        <select asp-for="Steps[i].EmailTemplateId" class="form-control">
+                                            <option value="">-- Select Template --</option>
+                                            @foreach (var template in Model.EmailTemplates)
+                                            {
+                                                <option value="@template.Id">@template.Name</option>
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="wait-days-group" style="display: none;">
+                                    <div class="form-group">
+                                        <label>Wait Days</label>
+                                        <input asp-for="Steps[i].WaitDays" class="form-control" type="number" min="1" />
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Order</label>
+                                    <input asp-for="Steps[i].Order" class="form-control" type="number" min="1" />
+                                </div>
+
+                                <button type="button" class="btn btn-danger btn-sm remove-step">Remove</button>
+                            </div>
+                        }
+                    </div>
+
+                    <button type="button" id="add-step" class="btn btn-secondary">Add Step</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group mt-3">
+        <input type="submit" value="Create" class="btn btn-primary" />
+        <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+    </div>
+</form>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // Add new step
+            $('#add-step').click(function() {
+                var index = $('#steps-container .step-group').length;
+                var html = `
+                    <div class="step-group mb-3 p-2 border">
+                        <div class="form-group">
+                            <label>Action</label>
+                            <select name="Steps[${index}].Action" class="form-control step-action">
+                                <option value="">-- Select Action --</option>
+                                @foreach (var action in Model.AvailableActions)
+                                {
+                                        <option value="@action">@action</option>
+                                }
+                            </select>
+                        </div>
+
+                        <div class="email-template-group" style="display: none;">
+                            <div class="form-group">
+                                <label>Email Template</label>
+                                <select name="Steps[${index}].EmailTemplateId" class="form-control">
+                                    <option value="">-- Select Template --</option>
+                                    @foreach (var template in Model.EmailTemplates)
+                                    {
+                                            <option value="@template.Id">@template.Name</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="wait-days-group" style="display: none;">
+                            <div class="form-group">
+                                <label>Wait Days</label>
+                                <input name="Steps[${index}].WaitDays" class="form-control" type="number" min="1" />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Order</label>
+                            <input name="Steps[${index}].Order" class="form-control" type="number" min="1" value="${index + 1}" />
+                        </div>
+
+                        <button type="button" class="btn btn-danger btn-sm remove-step">Remove</button>
+                    </div>
+                `;
+                $('#steps-container').append(html);
+            });
+
+            // Remove step
+            $(document).on('click', '.remove-step', function() {
+                $(this).closest('.step-group').remove();
+                // Reindex remaining steps
+                $('#steps-container .step-group').each(function(index) {
+                    $(this).find('input[name$="Order"]').val(index + 1);
+                });
+            });
+
+            // Show/hide fields based on action
+            $(document).on('change', '.step-action', function() {
+                var action = $(this).val();
+                var group = $(this).closest('.step-group');
+
+                group.find('.email-template-group').hide();
+                group.find('.wait-days-group').hide();
+
+                if (action === 'SendEmail') {
+                    group.find('.email-template-group').show();
+                } else if (action === 'Wait') {
+                    group.find('.wait-days-group').show();
+                }
+            });
+
+            // Initialize existing steps
+            $('.step-action').each(function() {
+                $(this).trigger('change');
+            });
+        });
+    </script>
+}

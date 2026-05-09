@@ -1,0 +1,41 @@
+@using CRM.WebApp.DTOs.HumanResources.Employee
+@model IEnumerable<EmployeeDto>
+
+
+@{
+    ViewData["Title"] = Localizer["Shared.Employee.Index.Title", "Employees"];
+}
+
+<h1>@Localizer["Shared.Employee.Index.Title", "Employees"]</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">@Localizer["common.Create"]</a>
+</p>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>@Localizer["Shared.Employee.Field.FirstName", "First Name"]</th>
+            <th>@Localizer["Shared.Employee.Field.LastName", "Last Name"]</th>
+            <th>@Localizer["Shared.Employee.Field.Description", "Description"]</th>
+            <th>@Localizer["Shared.Employee.Field.Department", "Department"]</th>
+            <th>@Localizer["common.Actions", "Actions"]</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.FirstName</td>
+                <td>@item.LastName</td>
+                <td>@item.Description</td>
+                <td>@item.Department.Name</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">@Localizer["Common.Edit", "Edit"]</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">@Localizer["Common.Details", "Details"]</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">@Localizer["Common.Delete", "Delete"]</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

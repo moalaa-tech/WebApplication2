@@ -1,0 +1,100 @@
+﻿@using CRM.WebApp.ViewModels.CustomerService
+@model SupportAgentDetailViewModel
+
+<div class="card">
+    <div class="card-header">
+        <h3>@Model.FullName</h3>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <dl class="row">
+                    <dt class="col-sm-4">Email:</dt>
+                    <dd class="col-sm-8">@Model.Email</dd>
+
+                    <dt class="col-sm-4">Phone:</dt>
+                    <dd class="col-sm-8">@Model.PhoneNumber</dd>
+
+                    <dt class="col-sm-4">Department:</dt>
+                    <dd class="col-sm-8">@Model.Department</dd>
+
+                    <dt class="col-sm-4">Job Title:</dt>
+                    <dd class="col-sm-8">@Model.JobTitle</dd>
+
+                    <dt class="col-sm-4">Specialization:</dt>
+                    <dd class="col-sm-8">@Model.Specialization</dd>
+                </dl>
+            </div>
+            <div class="col-md-6">
+                <dl class="row">
+                    <dt class="col-sm-4">Status:</dt>
+                    <dd class="col-sm-8">
+                        <span class="badge @(Model.IsActive ? "bg-success" : "bg-danger")">
+                            @(Model.IsActive ? "Active" : "Inactive")
+                        </span>
+                    </dd>
+
+                    <dt class="col-sm-4">Hire Date:</dt>
+                    <dd class="col-sm-8">@Model.HireDate.ToShortDateString()</dd>
+
+                    <dt class="col-sm-4">Working Hours:</dt>
+                    <dd class="col-sm-8">@Model.WorkingHours</dd>
+
+                    <dt class="col-sm-4">Tickets Resolved:</dt>
+                    <dd class="col-sm-8">@Model.TotalTicketsResolved</dd>
+
+                    <dt class="col-sm-4">Average Rating:</dt>
+                    <dd class="col-sm-8">@Model.AverageRating.ToString("0.0")</dd>
+                </dl>
+            </div>
+        </div>
+
+        <div class="mt-4">
+            <h5>Skills</h5>
+            <div class="d-flex flex-wrap gap-2">
+                @foreach (var skill in Model.Skills)
+                {
+                    <span class="badge bg-primary">@skill</span>
+                }
+            </div>
+        </div>
+
+        <div class="mt-4">
+            <h5>Recent Tickets</h5>
+            <table class="table table-sm">
+                <thead>
+                    <tr>
+                        <th>Ticket #</th>
+                        <th>Subject</th>
+                        <th>Status</th>
+                        <th>Priority</th>
+                        <th>Created</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var ticket in Model.RecentTickets)
+                    {
+                        <tr>
+                            <td>@ticket.TicketNumber</td>
+                            <td>@ticket.Subject</td>
+                            <td>@ticket.Status</td>
+                            <td>@ticket.Priority</td>
+                            <td>@ticket.CreatedDate.ToShortDateString()</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="card-footer">
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
+        <form asp-action="ToggleStatus" method="post" class="d-inline">
+            <input type="hidden" name="id" value="@Model.Id" />
+            <input type="hidden" name="isActive" value="@(!Model.IsActive)" />
+            <button type="submit" class="btn @(Model.IsActive ? "btn-warning" : "btn-success")">
+                @(Model.IsActive ? "Deactivate" : "Activate")
+            </button>
+        </form>
+        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+    </div>
+</div>

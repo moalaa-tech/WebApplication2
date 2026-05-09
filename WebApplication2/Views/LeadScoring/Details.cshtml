@@ -1,0 +1,79 @@
+@model CRM.WebApp.ViewModels.MarketingAutomation.LeadScore.LeadScoreDetailsViewModel
+
+<div class="card shadow-sm mt-4">
+    <div class="card-header bg-primary text-white">
+        <h3 class="mb-0">@Localizer["LeadScore.Details.Title"]</h3>
+    </div>
+
+    <div class="card-body">
+        <dl class="row mb-0">
+            <dt class="col-sm-4 fw-bold">@Localizer["LeadScore.Field.Name"]</dt>
+            <dd class="col-sm-8">@Model.LeadScore.Name</dd>
+
+            <dt class="col-sm-4 fw-bold">@Localizer["LeadScore.Field.Description"]</dt>
+            <dd class="col-sm-8">@Model.LeadScore.Description</dd>
+
+            <dt class="col-sm-4 fw-bold">@Localizer["LeadScore.Field.Score"]</dt>
+            <dd class="col-sm-8">@Model.LeadScore.Score</dd>
+
+            <dt class="col-sm-4 fw-bold">@Localizer["LeadScore.Field.ScoreType"]</dt>
+            <dd class="col-sm-8">@Model.LeadScore.ScoreType</dd>
+
+            <dt class="col-sm-4 fw-bold">@Localizer["LeadScore.Field.IsActive"]</dt>
+            <dd class="col-sm-8">
+                @if (Model.LeadScore.IsActive)
+                {
+                    <span class="badge bg-success">@Localizer["Active"]</span>
+                }
+                else
+                {
+                    <span class="badge bg-danger">@Localizer["Inactive"]</span>
+                }
+            </dd>
+
+            <dt class="col-sm-4 fw-bold">@Localizer["LeadScore.Field.Criteria"]</dt>
+            <dd class="col-sm-8">@Model.LeadScore.Criteria</dd>
+
+            <dt class="col-sm-4 fw-bold">@Localizer["LeadScore.Field.CreatedDate"]</dt>
+            <dd class="col-sm-8">@Model.LeadScore.CreatedDate.ToShortDateString()</dd>
+
+            <dt class="col-sm-4 fw-bold">@Localizer["LeadScore.Field.LastModified"]</dt>
+            <dd class="col-sm-8">@Model.LeadScore.LastModifiedDate?.ToShortDateString()</dd>
+
+            <dt class="col-sm-4 fw-bold">@Localizer["LeadScore.Field.ModifiedBy"]</dt>
+            <dd class="col-sm-8">@Model.LeadScore.ModifiedBy</dd>
+        </dl>
+
+        @if (Model.LeadScore.Rules != null && Model.LeadScore.Rules.Any())
+        {
+            <hr />
+            <h5 class="mt-4 mb-3">@Localizer["LeadScore.Section.Rules"]</h5>
+            <table class="table table-striped table-bordered align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>@Localizer["LeadScore.Rules.RuleName"]</th>
+                        <th>@Localizer["LeadScore.Rules.Points"]</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var rule in Model.LeadScore.Rules)
+                    {
+                        <tr>
+                            <td>@rule.RuleName</td>
+                            <td>@rule.Points</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+
+        <div class="mt-4">
+            <a asp-action="Index" class="btn btn-secondary">
+                @Localizer["Form.BackToList"]
+            </a>
+            <a asp-action="Edit" asp-route-id="@Model.LeadScore.Id" class="btn btn-primary">
+                @Localizer["Form.Edit"]
+            </a>
+        </div>
+    </div>
+</div>

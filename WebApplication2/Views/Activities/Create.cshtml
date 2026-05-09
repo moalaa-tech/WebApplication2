@@ -1,0 +1,77 @@
+﻿@using CRM.WebApp.ViewModels.SalesManagement
+@model ActivityViewModel
+
+@{
+    ViewData["Title"] = Model.Id == 0 ? @Localizer["Activity.CreateTitle", "Create Activity"] : @Localizer["Activity.EditTitle", "Edit Activity"];
+    var entityName = ViewData["EntityName"] as string;
+    var entityType = ViewData["EntityType"] as string;
+}
+
+<h1>@ViewData["Title"]</h1>
+
+@if (!string.IsNullOrEmpty(entityName))
+{
+    <div class="alert alert-info">
+        @Localizer["Activity.AssociatedWith", "This activity will be associated with {0}: {1}", entityType, entityName]
+    </div>
+}
+
+<hr />
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="@(Model.Id == 0 ? "Create" : "Edit")">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="LeadId" />
+            <input type="hidden" asp-for="OpportunityId" />
+            <input type="hidden" asp-for="DealId" />
+
+            <div class="mb-3">
+                <label asp-for="Type" class="form-label">@Localizer["Activity.Type", "Type"]</label>
+                <select asp-for="Type" asp-items="Model.Types" class="form-control"></select>
+                <span asp-validation-for="Type" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Subject" class="form-label">@Localizer["Activity.Subject", "Subject"]</label>
+                <input asp-for="Subject" class="form-control" />
+                <span asp-validation-for="Subject" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="DueDate" class="form-label">@Localizer["Activity.DueDate", "Due Date"]</label>
+                <input asp-for="DueDate" class="form-control" />
+                <span asp-validation-for="DueDate" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="OwnerUserId" class="form-label">@Localizer["Activity.Owner", "Owner"]</label>
+                <select asp-for="OwnerUserId" asp-items="Model.Users" class="form-control"></select>
+                <span asp-validation-for="OwnerUserId" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Status" class="form-label">@Localizer["Common.Status", "Status"]</label>
+                <select asp-for="Status" asp-items="Model.Statuses" class="form-control"></select>
+                <span asp-validation-for="Status" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Description" class="form-label">@Localizer["Activity.Description", "Description"]</label>
+                <textarea asp-for="Description" class="form-control" rows="5"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <input type="submit" value="@(Model.Id == 0 ? @Localizer["Common.Create", "Create"] : @Localizer["Common.Save", "Save"])" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-secondary">@Localizer["Common.Cancel", "Cancel"]</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

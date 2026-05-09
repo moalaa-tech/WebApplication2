@@ -1,0 +1,68 @@
+﻿@model CRM.WebApp.ViewModels.MarketingAutomation.LeadScore.LeadScoreIndexViewModel
+
+@{
+    ViewData["Title"] = "Lead Scoring Models";
+}
+
+<h1>Lead Scoring Models</h1>
+
+@if (Model.ScoreTypeCounts != null)
+{
+    <div class="row mb-4">
+        @foreach (var scoreType in Model.ScoreTypeCounts)
+        {
+            <div class="col-md-2 mb-3">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <h6 class="card-title">@scoreType.Key</h6>
+                        <p class="card-text">@scoreType.Value</p>
+                        <a asp-action="ByType" asp-route-scoreType="@scoreType.Key" class="btn btn-sm btn-outline-primary">View</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Create New</a>
+</p>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Score</th>
+            <th>Active</th>
+            <th>Rules</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.LeadScores)
+        {
+            <tr>
+                <td>@item.Name</td>
+                <td>@item.ScoreType</td>
+                <td>@item.Score</td>
+                <td>
+                    @if (item.IsActive)
+                    {
+                        <span class="badge badge-success">Yes</span>
+                    }
+                    else
+                    {
+                        <span class="badge badge-secondary">No</span>
+                    }
+                </td>
+                <td>@(item.Rules?.Count ?? 0)</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info">Details</a>
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Edit</a>
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

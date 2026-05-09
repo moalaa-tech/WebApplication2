@@ -1,0 +1,17 @@
+﻿@using CRM.WebApp.ViewModels.EmailTemplate;
+@model EmailTemplateViewModel;
+@{
+    ViewData["Title"] = Localizer["EmailTemplate.Details.Title", "Email Template Details"];
+}
+<h2>@Localizer["EmailTemplate.Details.Title", "Email Template Details"]</h2>
+
+<dl class="row">
+    <dt class="col-sm-2">@Localizer["EmailTemplate.Field.Name", "Name"]</dt>
+    <dd class="col-sm-10">@Model.Name</dd>
+    <dt class="col-sm-2">@Localizer["EmailTemplate.Field.Subject", "Subject"]</dt>
+    <dd class="col-sm-10">@Model.Subject</dd>
+    <dt class="col-sm-2">@Localizer["EmailTemplate.Field.Content", "Content"]</dt>
+    <dd class="col-sm-10">@Model.Content</dd>
+</dl>
+<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">@Localizer["Common.Edit", "Edit"]</a>
+<a asp-action="Index" class="btn btn-secondary">@Localizer["Common.Back", "Back to List"]</a>

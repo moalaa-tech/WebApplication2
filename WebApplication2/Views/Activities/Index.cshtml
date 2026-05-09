@@ -1,0 +1,132 @@
+﻿@using CRM.Domain.Enums
+@using CRM.WebApp.ViewModels.SalesManagement
+@model ActivityListViewModel;
+
+@{
+    ViewData["Title"] = @Localizer["Activity.Title", "Activities"];
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1>@Localizer["Activity.Title", "Activities"]</h1>
+    <a asp-action="Create" class="btn btn-primary">@Localizer["Activity.CreateNew", "Create New"]</a>
+</div>
+
+<div class="card mb-3">
+    <div class="card-body">
+        <form method="get" class="row g-3">
+            <div class="col-md-3">
+                <input asp-for="Filter.SearchTerm" class="form-control" placeholder="@Localizer["Activity.SearchPlaceholder", "Search activities..."]">
+            </div>
+            <div class="col-md-2">
+                <select asp-for="Filter.Type" asp-items="Html.GetEnumSelectList<ActivityType>()" class="form-control">
+                    <option value="">@Localizer["Activity.AllTypes", "All Types"]</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <select asp-for="Filter.Status" asp-items="Html.GetEnumSelectList<ActivityStatus>()" class="form-control">
+                    <option value="">@Localizer["Activity.AllStatuses", "All Statuses"]</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <select asp-for="Filter.OwnerUserId" asp-items="Model.Users" class="form-control">
+                    <option value="">@Localizer["Activity.AllUsers", "All Users"]</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <div class="input-group">
+                    <input asp-for="Filter.FromDate" type="date" class="form-control" placeholder="@Localizer["Activity.FromDate", "From date"]">
+                    <input asp-for="Filter.ToDate" type="date" class="form-control" placeholder="@Localizer["Activity.ToDate", "To date"]">
+                    <button type="submit" class="btn btn-primary">@Localizer["Activity.Filter", "Filter"]</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>@Localizer["Activity.Subject", "Subject"]</th>
+                <th>@Localizer["Activity.Type", "Type"]</th>
+                <th>@Localizer["Activity.DueDate", "Due Date"]</th>
+                <th>@Localizer["Common.Status", "Status"]</th>
+                <th>@Localizer["Activity.Owner", "Owner"]</th>
+                <th>@Localizer["Activity.RelatedTo", "Related To"]</th>
+                <th>@Localizer["Common.Actions", "Actions"]</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Activities)
+            {
+                <tr class="@(item.IsOverdue ? "table-danger" : "")">
+                    <td>@item.Subject</td>
+                    <td>@item.TypeName</td>
+                    <td>@item.DueDate.ToString("g")</td>
+                    <td>
+                        <span class="badge bg-@GetStatusBadgeColor(item.Status)">
+                            @item.StatusName
+                        </span>
+                    </td>
+                    <td>@item.OwnerUserName</td>
+                    <td>
+                        @if (item.LeadId.HasValue)
+                        {
+                            <a asp-controller="Leads" asp-action="Details" asp-route-id="@item.LeadId">@Localizer["Activity.Lead", "Lead"]: @item.LeadName</a>
+                        }
+                        else if (item.OpportunityId.HasValue)
+                        {
+                            <a asp-controller="Opportunities" asp-action="Details" asp-route-id="@item.OpportunityId">@Localizer["Activity.Opportunity", "Opportunity"]: @item.OpportunityName</a>
+                        }
+                        else if (item.DealId.HasValue)
+                        {
+                            <a asp-controller="Deals" asp-action="Details" asp-route-id="@item.DealId">@Localizer["Activity.Deal", "Deal"]: @item.DealName</a>
+                        }
+                    </td>
+                    <td>
+                        <div class="btn-group" role="group">
+                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info">@Localizer["Common.Details", "Details"]</a>
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">@Localizer["Common.Edit", "Edit"]</a>
+                            @if (item.Status != ActivityStatus.Completed)
+                            {
+                                <a asp-action="Complete" asp-route-id="@item.Id" class="btn btn-sm btn-success">@Localizer["Activity.Complete", "Complete"]</a>
+                            }
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<nav>
+    <ul class="pagination">
+        @for (int i = 1; i <= Model.PagingInfo.TotalPages; i++)
+        {
+            <li class="page-item @(i == Model.PagingInfo.CurrentPage ? "active" : "")">
+                <a class="page-link" asp-action="Index"
+                   asp-route-page="@i"
+                   asp-route-searchTerm="@Model.Filter.SearchTerm"
+                   asp-route-type="@Model.Filter.Type"
+                   asp-route-status="@Model.Filter.Status"
+                   asp-route-fromDate="@Model.Filter.FromDate?.ToString("yyyy-MM-dd")"
+                   asp-route-toDate="@Model.Filter.ToDate?.ToString("yyyy-MM-dd")"
+                   asp-route-ownerUserId="@Model.Filter.OwnerUserId">@i</a>
+            </li>
+        }
+    </ul>
+</nav>
+
+@functions {
+    string GetStatusBadgeColor(ActivityStatus status)
+    {
+        return status switch
+        {
+            ActivityStatus.Completed => "success",
+            ActivityStatus.InProgress => "primary",
+            ActivityStatus.Cancelled => "secondary",
+            ActivityStatus.Deferred => "warning",
+            _ => "danger", // NotStarted or overdue
+        };
+    }
+}

@@ -1,0 +1,29 @@
+﻿@using CRM.WebApp.ViewModels.AutomationStep
+@model AutomationStepViewModel
+@{
+    ViewData["Title"] = "Automation Step Details";
+}
+<h2>Automation Step Details</h2>
+
+<dl class="row">
+    <dt class="col-sm-2">Order</dt>
+    <dd class="col-sm-10">@Model.Order</dd>
+
+    <dt class="col-sm-2">Action</dt>
+    <dd class="col-sm-10">@Model.Action</dd>
+
+    <dt class="col-sm-2">Email Template</dt>
+    <dd class="col-sm-10">@Model.EmailTemplateId</dd>
+
+    <dt class="col-sm-2">Wait Days</dt>
+    <dd class="col-sm-10">@Model.WaitDays</dd>
+
+    <dt class="col-sm-2">Status</dt>
+    <dd class="col-sm-10">@Model.StatusValue</dd>
+
+    <dt class="col-sm-2">Campaign</dt>
+    <dd class="col-sm-10">@Model.CampaignId</dd>
+</dl>
+
+<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
+<a asp-action="Index" class="btn btn-secondary">Back</a>

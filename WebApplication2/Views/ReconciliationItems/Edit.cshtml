@@ -1,0 +1,32 @@
+@using CRM.Domain.Enums
+@model CRM.WebApp.ViewModels.Banking.EditReconciliationItemViewModel
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer Localizer
+
+<h2>@Localizer["Shared.ReconciliationItems.Edit.Title"]</h2>
+
+<form asp-action="Edit">
+    <input type="hidden" asp-for="Id" />
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="mb-3">
+        <label asp-for="AdjustedAmount" class="form-label"></label>
+        <input asp-for="AdjustedAmount" class="form-control" type="number" step="0.01" />
+        <span asp-validation-for="AdjustedAmount" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Status" class="form-label"></label>
+        <select asp-for="Status" class="form-select" asp-items="Html.GetEnumSelectList<ReconciliationStatus>()"></select>
+        <span asp-validation-for="Status" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Notes" class="form-label"></label>
+        <textarea asp-for="Notes" class="form-control"></textarea>
+        <span asp-validation-for="Notes" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">@Localizer["Shared.Common.Save"]</button>
+    <a asp-controller="Reconciliations" asp-action="Index" class="btn btn-secondary">@Localizer["Shared.Common.BackToList"]</a>
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

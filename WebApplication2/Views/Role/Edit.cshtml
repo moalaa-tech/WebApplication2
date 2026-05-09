@@ -1,0 +1,43 @@
+﻿@using CRM.Domain.IdentityEntity
+@model ApplicationRole
+
+@{
+    ViewData["Title"] = @Localizer["Shared.Role.Edit.Title"];
+}
+
+<h1>@Localizer["Shared.Role.Edit.Title"]</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+
+            <input type="hidden" asp-for="Id" />
+
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="Name" class="control-label">@Localizer["Shared.Role.Field.Name", "Create Role"]</label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="NameAR" class="control-label">@Localizer["Shared.Role.Field.Name", "Create Role"]</label>
+                <input asp-for="NameAR" class="form-control" />
+                <span asp-validation-for="NameAR" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mt-3">
+                <input type="submit" value="@Localizer["common.Submit"]" class="btn btn-primary" />
+                <a asp-action="Index">@Localizer["common.BackToList"]</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

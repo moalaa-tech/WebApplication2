@@ -1,0 +1,29 @@
+﻿@using CRM.WebApp.DTOs.Accounting
+@model ExpenseDto
+<h2>Expense Details</h2>
+
+@{
+    ViewData["Title"] = Localizer["Shared.Employee.Index.Title", "Employees"];
+}
+
+<h1>@Localizer["Shared.Employee.Index.Title", "Employees"]</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">@Localizer["common.Create"]</a>
+</p>
+
+
+
+<table class="table table-bordered">
+    <tr><th>Title</th><td>@Model.Title</td></tr>
+    <tr><th>Amount</th><td>@Model.Amount</td></tr>
+    <tr><th>Date</th><td>@Model.Date</td></tr>
+    <tr><th>Category</th><td>@Model.CategoryName</td></tr>
+    <tr><th>Notes</th><td>@Model.Notes</td></tr>
+</table>
+
+
+
+<div>
+    <a asp-action="Index" class="btn btn-secondary">@Localizer["common.BackToList"]</a>
+</div>

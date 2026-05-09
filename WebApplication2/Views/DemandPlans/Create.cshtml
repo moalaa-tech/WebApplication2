@@ -1,0 +1,32 @@
+﻿@using CRM.WebApp.ViewModels.SupplyChainManagement.DemandPlan
+@model DemandPlanCreateViewModel
+
+<h2>@Localizer["DemandPlans.Create.Title", "Create Demand Plan"]</h2>
+
+<form asp-action="Create">
+    <div class="form-group">
+        <label asp-for="PlanName">@Localizer["DemandPlans.Field.PlanName", "Plan Name"]</label>
+        <input asp-for="PlanName" class="form-control" />
+        <span asp-validation-for="PlanName" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="StartDate">@Localizer["DemandPlans.Field.StartDate", "Start Date"]</label>
+        <input asp-for="StartDate" class="form-control" type="date" />
+        <span asp-validation-for="StartDate" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="EndDate">@Localizer["DemandPlans.Field.EndDate", "End Date"]</label>
+        <input asp-for="EndDate" class="form-control" type="date" />
+        <span asp-validation-for="EndDate" class="text-danger"></span>
+    </div>
+
+    @* <div class="form-group">
+        <label asp-for="Notes">@Localizer["DemandPlans.Field.Notes", "Notes"]</label>
+        <textarea asp-for="Notes" class="form-control"></textarea>
+        <span asp-validation-for="Notes" class="text-danger"></span>
+    </div> *@
+
+    <button type="submit" class="btn btn-primary">@Localizer["Common.Create", "Create"]</button>
+</form>

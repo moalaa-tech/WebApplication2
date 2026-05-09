@@ -1,0 +1,9 @@
+﻿namespace CRM.WebApp.DTOs.Accounting
+{
+    public class ExpenseCategoryUpdateDto
+    {
+        public int Id { get; set; }
+        public string Name { get; set; } = null!;
+        public string NameAR { get; set; } = null!;
+    }
+}

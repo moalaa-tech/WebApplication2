@@ -1,0 +1,22 @@
+@model CRM.WebApp.ViewModels.MarketingAutomation.SocialMediaPostViewModel
+
+<h2>Schedule Social Media Post</h2>
+
+<div class="alert alert-info">
+    <p>Are you sure you want to schedule this post?</p>
+</div>
+
+<dl class="row">
+    <dt class="col-sm-4">Content</dt>
+    <dd class="col-sm-8">@Model.Content</dd>
+    <dt class="col-sm-4">Scheduled Time</dt>
+    <dd class="col-sm-8">@Model.ScheduledTime</dd>
+    <dt class="col-sm-4">Platform</dt>
+    <dd class="col-sm-8">@Model.Platform</dd>
+</dl>
+
+<form asp-action="Schedule" asp-route-id="@Model.Id" method="post">
+    @Html.AntiForgeryToken()
+    <button type="submit" class="btn btn-success">Schedule</button>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</form>

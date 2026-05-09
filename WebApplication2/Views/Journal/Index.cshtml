@@ -1,0 +1,36 @@
+@model IEnumerable<CRM.WebApp.ViewModels.Accounting.JournalEntryViewModel>
+
+<h2>Journal Entries</h2>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Create New</a>
+</p>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.EntryDate)</th>
+            <th>@Html.DisplayNameFor(model => model.Description)</th>
+            <th>@Html.DisplayNameFor(model => model.Debit)</th>
+            <th>@Html.DisplayNameFor(model => model.Credit)</th>
+            <th>@Html.DisplayNameFor(model => model.Reference)</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.EntryDate)</td>
+                <td>@Html.DisplayFor(modelItem => item.Description)</td>
+                <td>@Html.DisplayFor(modelItem => item.Debit)</td>
+                <td>@Html.DisplayFor(modelItem => item.Credit)</td>
+                <td>@Html.DisplayFor(modelItem => item.Reference)</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-primary">Edit</a>
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

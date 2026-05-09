@@ -1,0 +1,23 @@
+@model CRM.WebApp.ViewModels.AccountsPayable.InvoiceViewModel
+@{
+    ViewData["Title"] = Localizer["AccountsPayable.Details.Title", "Invoice Details"];
+}
+<h1>@Localizer["AccountsPayable.Details.Title", "Invoice Details"]</h1>
+<div>
+    <dl class="row">
+        <dt class="col-sm-2">@Localizer["AccountsPayable.Field.InvoiceNumber", "Invoice #"]</dt>
+        <dd class="col-sm-10">@Model.InvoiceNumber</dd>
+        <dt class="col-sm-2">@Localizer["AccountsPayable.Field.Vendor", "Vendor"]</dt>
+        <dd class="col-sm-10">@Model.VendorName</dd>
+        <dt class="col-sm-2">@Localizer["AccountsPayable.Field.InvoiceDate", "Date"]</dt>
+        <dd class="col-sm-10">@Model.InvoiceDate.ToShortDateString()</dd>
+        <dt class="col-sm-2">@Localizer["AccountsPayable.Field.DueDate", "Due"]</dt>
+        <dd class="col-sm-10">@Model.DueDate.ToShortDateString()</dd>
+        <dt class="col-sm-2">@Localizer["AccountsPayable.Field.Amount", "Amount"]</dt>
+        <dd class="col-sm-10">@Model.Amount.ToString("C")</dd>
+        <dt class="col-sm-2">@Localizer["AccountsPayable.Field.Status", "Status"]</dt>
+        <dd class="col-sm-10">@Model.Status</dd>
+    </dl>
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">@Localizer["Common.Edit", "Edit"]</a>
+    <a asp-action="Index" class="btn btn-secondary">@Localizer["Common.Back", "Back"]</a>
+</div>

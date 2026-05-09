@@ -1,0 +1,75 @@
+﻿@using CRM.WebApp.ViewModels.CustomerService.ServiceLevelAgreement
+@model ServiceLevelAgreementViewModel
+
+@{
+    ViewData["Title"] = "SLA Details";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Service Level Agreement Details</h3>
+                    <p class="card-subtitle text-muted">ID: @Model.Id</p>
+                </div>
+                <div class="card-body">
+                    <dl class="row">
+                        <dt class="col-sm-3">Name:</dt>
+                        <dd class="col-sm-9">@Model.Name</dd>
+
+                        <dt class="col-sm-3">Service Type:</dt>
+                        <dd class="col-sm-9">@Model.ServiceType</dd>
+
+                        <dt class="col-sm-3">Description:</dt>
+                        <dd class="col-sm-9">@(string.IsNullOrEmpty(Model.Description) ? "N/A" : Model.Description)</dd>
+
+                        <dt class="col-sm-3">Response Time:</dt>
+                        <dd class="col-sm-9">@Model.ResponseTime hours</dd>
+
+                        <dt class="col-sm-3">Resolution Time:</dt>
+                        <dd class="col-sm-9">@Model.ResolutionTime hours</dd>
+
+                        <dt class="col-sm-3">Created Date:</dt>
+                        <dd class="col-sm-9">@Model.CreatedDate.ToString("yyyy-MM-dd HH:mm")</dd>
+
+                        <dt class="col-sm-3">Last Modified:</dt>
+                        <dd class="col-sm-9">@(Model.LastModified?.ToString("yyyy-MM-dd HH:mm") ?? "Never")</dd>
+
+                        <dt class="col-sm-3">Escalation Process:</dt>
+                        <dd class="col-sm-9">@(string.IsNullOrEmpty(Model.EscalationProcess) ? "N/A" : Model.EscalationProcess)</dd>
+
+                        <dt class="col-sm-3">Terms & Conditions:</dt>
+                        <dd class="col-sm-9">@(string.IsNullOrEmpty(Model.TermsAndConditions) ? "N/A" : Model.TermsAndConditions)</dd>
+                    </dl>
+
+                    <h5 class="mt-4 mb-3">Metrics</h5>
+                    <dl class="row">
+                        <dt class="col-sm-3">Compliance Rate:</dt>
+                        <dd class="col-sm-9">@Model.Metrics.ComplianceRate.ToString("0.00")%</dd>
+
+                        <dt class="col-sm-3">Total Cases:</dt>
+                        <dd class="col-sm-9">@Model.Metrics.TotalCases</dd>
+
+                        <dt class="col-sm-3">Total Breaches:</dt>
+                        <dd class="col-sm-9">@Model.Metrics.TotalBreaches</dd>
+
+                        <dt class="col-sm-3">Avg Response Time:</dt>
+                        <dd class="col-sm-9">@Model.Metrics.AverageResponseTime.ToString("0.00") hours</dd>
+
+                        <dt class="col-sm-3">Avg Resolution Time:</dt>
+                        <dd class="col-sm-9">@Model.Metrics.AverageResolutionTime.ToString("0.00") hours</dd>
+                    </dl>
+                </div>
+                <div class="card-footer">
+                    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">
+                        <i class="fas fa-edit"></i> Edit
+                    </a>
+                    <a asp-action="Index" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Back to List
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

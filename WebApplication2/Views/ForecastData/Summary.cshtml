@@ -1,0 +1,52 @@
+@model dynamic
+
+@{
+    ViewData["Title"] = "Forecast Summary";
+}
+
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header">
+            <h2>Forecast Summary</h2>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="card bg-primary text-white">
+                        <div class="card-body">
+                            <h5 class="card-title">Total</h5>
+                            <p class="card-text display-6">@Model.Total.ToString("N2")</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-success text-white">
+                        <div class="card-body">
+                            <h5 class="card-title">Average</h5>
+                            <p class="card-text display-6">@Model.Average.ToString("N2")</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-info text-white">
+                        <div class="card-body">
+                            <h5 class="card-title">Maximum</h5>
+                            <p class="card-text display-6">@Model.Max.ToString("N2")</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-warning text-white">
+                        <div class="card-body">
+                            <h5 class="card-title">Minimum</h5>
+                            <p class="card-text display-6">@Model.Min.ToString("N2")</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,43 @@
+﻿@using CRM.WebApp.DTOs.Accounting
+@using CRM.WebApp.ViewModels.Accounting
+@model CreateEditExpenseViewModel
+
+@{
+    ViewData["Title"] = Localizer["Shared.Expenses.Index.Title"];
+}
+
+<h1>@Localizer["Shared.Expenses.Index.Title"]</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">@Localizer["common.Create"]</a>
+</p>
+
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="Id" />
+    <div class="mb-3">
+        <label>@Localizer["Shared.Expenses.Create.Field.Title"]</label>
+        <input asp-for="Title" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label>@Localizer["Shared.Expenses.Create.Field.TitleAR"]</label>
+        <input asp-for="TitleAR" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label>@Localizer["Shared.Expenses.Create.Field.Amount"]</label>
+        <input asp-for="Amount" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label>@Localizer["Shared.Expenses.Create.Field.Date"]</label>
+        <input asp-for="Date" type="date" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label>@Localizer["Shared.Expenses.Create.Field.Notes"]</label>
+        <textarea asp-for="Notes" class="form-control"></textarea>
+    </div>
+    <div class="mb-3">
+        <label>@Localizer["Shared.Expenses.Index.Field.AllCategories"]</label>
+        <select asp-for="CategoryId" asp-items="@Model.Categories" class="form-control"></select>
+    </div>
+    <button type="submit" class="btn btn-primary">@Localizer["common.Edit"]</button>
+</form>

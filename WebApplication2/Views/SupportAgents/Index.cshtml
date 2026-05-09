@@ -1,0 +1,43 @@
+﻿@using CRM.WebApp.ViewModels.CustomerService
+@model IEnumerable<SupportAgentListViewModel>
+
+<h2>Support Agents</h2>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Create New</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Department</th>
+            <th>Job Title</th>
+            <th>Open Tickets</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.FullName</td>
+                <td>@item.Email</td>
+                <td>@item.Department</td>
+                <td>@item.JobTitle</td>
+                <td>@item.OpenTickets</td>
+                <td>
+                    <span class="badge @(item.IsActive ? "bg-success" : "bg-danger")">
+                        @(item.IsActive ? "Active" : "Inactive")
+                    </span>
+                </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,58 @@
+﻿@model CRM.WebApp.ViewModels.MarketingAutomation.CampaignAnalytics.CampaignAnalyticsDetailsViewModel
+
+@{
+    ViewData["Title"] = Localizer["AnalyticsROITracking.Details.Title", "Campaign Analytics Details"];
+}
+
+<h1>@Localizer["AnalyticsROITracking.Details.Title", "Campaign Analytics Details"]</h1>
+
+<div>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-3">@Localizer["AnalyticsROITracking.Field.CampaignName", "Campaign Name"]</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.CampaignAnalytics.CampaignName)</dd>
+
+        <dt class="col-sm-3">@Localizer["AnalyticsROITracking.Field.Channel", "Channel"]</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.CampaignAnalytics.Channel)</dd>
+
+        <dt class="col-sm-3">@Localizer["AnalyticsROITracking.Field.CampaignPeriod", "Campaign Period"]</dt>
+        <dd class="col-sm-9">@Model.CampaignAnalytics.StartDate.ToString("MM/dd/yyyy") - @Model.CampaignAnalytics.EndDate.ToString("MM/dd/yyyy")</dd>
+
+        <dt class="col-sm-3">@Localizer["AnalyticsROITracking.Field.TotalBudget", "Total Budget"]</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.CampaignAnalytics.TotalBudget)</dd>
+
+        <dt class="col-sm-3">@Localizer["AnalyticsROITracking.Field.TotalSpent", "Total Spent"]</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.CampaignAnalytics.TotalSpent)</dd>
+
+        <dt class="col-sm-3">@Localizer["AnalyticsROITracking.Field.RevenueGenerated", "Revenue Generated"]</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.CampaignAnalytics.RevenueGenerated)</dd>
+
+        <dt class="col-sm-3">@Localizer["AnalyticsROITracking.Field.ROI", "ROI"]</dt>
+        <dd class="col-sm-9 @(Model.CampaignAnalytics.ROIPercentage >= 0 ? "text-success" : "text-danger")">@Html.DisplayFor(model => model.CampaignAnalytics.ROIPercentage)%</dd>
+
+        <dt class="col-sm-3">@Localizer["AnalyticsROITracking.Field.Impressions", "Impressions"]</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.CampaignAnalytics.Impressions)</dd>
+
+        <dt class="col-sm-3">@Localizer["AnalyticsROITracking.Field.Clicks", "Clicks"]</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.CampaignAnalytics.Clicks)</dd>
+
+        <dt class="col-sm-3">@Localizer["AnalyticsROITracking.Field.Conversions", "Conversions"]</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.CampaignAnalytics.Conversions)</dd>
+
+        <dt class="col-sm-3">@Localizer["AnalyticsROITracking.Field.ConversionRate", "Conversion Rate"]</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.CampaignAnalytics.ConversionRate)%</dd>
+
+        <dt class="col-sm-3">@Localizer["AnalyticsROITracking.Field.CostPerClick", "Cost Per Click"]</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.CampaignAnalytics.CostPerClick)</dd>
+
+        <dt class="col-sm-3">@Localizer["AnalyticsROITracking.Field.CostPerConversion", "Cost Per Conversion"]</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.CampaignAnalytics.CostPerConversion)</dd>
+
+        <dt class="col-sm-3">@Localizer["AnalyticsROITracking.Field.Notes", "Notes"]</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.CampaignAnalytics.Notes)</dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.CampaignAnalytics.Id" class="btn btn-warning">@Localizer["Common.Edit", "Edit"]</a>
+    <a asp-action="Index" class="btn btn-secondary">@Localizer["Common.Back", "Back to List"]</a>
+</div>

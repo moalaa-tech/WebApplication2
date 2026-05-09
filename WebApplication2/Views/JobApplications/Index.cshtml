@@ -1,0 +1,61 @@
+﻿@using CRM.Domain.Enums.HumanResources
+@using CRM.WebApp.DTOs.HumanResources.JobApplication
+<!-- Views/JobApplications/Index.cshtml -->
+@model IEnumerable<JobApplicationDto>
+
+<h2>Job Applications</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Applicant</th>
+            <th>Job Title</th>
+            <th>Application Date</th>
+            <th>Status</th>
+            <th>Interview Date</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var application in Model)
+        {
+            <tr>
+                <td>@application.FullName</td>
+                <td>@application.JobTitle</td>
+                <td>@application.ApplicationDate.ToShortDateString()</td>
+                <td>
+                    <span class="badge @GetStatusBadgeClass(application.Status)">
+                        @application.StatusName
+                    </span>
+                </td>
+                <td>@(application.InterviewDate?.ToShortDateString() ?? "N/A")</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@application.Id" class="btn btn-info btn-sm">Details</a>
+                    <a asp-action="DownloadResume" asp-route-id="@application.Id" class="btn btn-secondary btn-sm">Resume</a>
+                    @if (!string.IsNullOrWhiteSpace(application.CoverLetterPath))
+                    {
+                        <a asp-action="DownloadCoverLetter" asp-route-id="@application.Id" class="btn btn-outline-secondary btn-sm">Cover Letter</a>
+                    }
+                    @if (application.Status == ApplicationStatus.Received || application.Status == ApplicationStatus.UnderReview)
+                    {
+                        <a asp-action="ScheduleInterview" asp-route-id="@application.Id" class="btn btn-primary btn-sm">Schedule Interview</a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@functions {
+    string GetStatusBadgeClass(ApplicationStatus status)
+    {
+        return status switch
+        {
+            ApplicationStatus.Hired => "bg-success",
+            ApplicationStatus.Rejected => "bg-danger",
+            ApplicationStatus.Interview => "bg-info",
+            ApplicationStatus.UnderReview => "bg-warning",
+            _ => "bg-secondary"
+        };
+    }
+}

@@ -1,0 +1,56 @@
+@model CRM.WebApp.DTOs.Banking.ReconciliationDto
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer Localizer
+@{
+    var items = ViewBag.Items as IEnumerable<CRM.WebApp.DTOs.Banking.ReconciliationItemDto>;
+}
+
+<h2>@Localizer["Shared.Reconciliations.Details.Title"]</h2>
+
+<div class="mb-3">
+    <dl class="row">
+        <dt class="col-sm-4">@Localizer["Shared.Reconciliations.Field.BankAccount"]</dt>
+        <dd class="col-sm-8">@Model.BankAccountId</dd>
+        <dt class="col-sm-4">@Localizer["Shared.Reconciliations.Field.StatementDate"]</dt>
+        <dd class="col-sm-8">@Model.StatementDate.ToShortDateString()</dd>
+        <dt class="col-sm-4">@Localizer["Shared.Reconciliations.Field.StatementBalance"]</dt>
+        <dd class="col-sm-8">@Model.StatementBalance</dd>
+        <dt class="col-sm-4">@Localizer["Shared.Reconciliations.Field.AdjustedBookBalance"]</dt>
+        <dd class="col-sm-8">@Model.AdjustedBookBalance</dd>
+        <dt class="col-sm-4">@Localizer["Shared.Reconciliations.Field.IsReconciled"]</dt>
+        <dd class="col-sm-8">@Model.IsReconciled</dd>
+    </dl>
+</div>
+
+<h4>@Localizer["Shared.ReconciliationItems.Title"]</h4>
+@if (items != null && items.Any())
+{
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>@Localizer["Shared.ReconciliationItems.Field.BankTransactionId"]</th>
+                <th>@Localizer["Shared.ReconciliationItems.Field.Status"]</th>
+                <th>@Localizer["Shared.ReconciliationItems.Field.AdjustedAmount"]</th>
+                <th>@Localizer["Shared.ReconciliationItems.Field.Notes"]</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in items)
+            {
+                <tr>
+                    <td>@item.BankTransactionId</td>
+                    <td>@item.Status</td>
+                    <td>@item.AdjustedAmount</td>
+                    <td>@item.Notes</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>@Localizer["Shared.ReconciliationItems.NoItemsFound"]</p>
+}
+}
+
+<a asp-action="Index" class="btn btn-secondary">Back to List</a>

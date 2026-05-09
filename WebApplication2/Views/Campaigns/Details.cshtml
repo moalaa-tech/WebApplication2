@@ -1,0 +1,213 @@
+﻿@using CRM.Domain.Enums.MarketingAutomation
+@using CRM.WebApp.ViewModels.MarketingAutomation
+@model CampaignDetailsViewModel
+
+@{
+    ViewData["Title"] = "Campaign Details";
+}
+
+<div class="card">
+    <div class="card-header bg-primary text-white">
+        <h3 class="card-title">@Model.Name</h3>
+        <div class="card-tools">
+            <span class="badge @GetStatusBadgeClass(Model.Status)">@Model.Status</span>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <dl class="row">
+                    <dt class="col-sm-4">Description:</dt>
+                    <dd class="col-sm-8">@Model.Description</dd>
+
+                    <dt class="col-sm-4">Start Date:</dt>
+                    <dd class="col-sm-8">@Model.StartDate.ToShortDateString()</dd>
+
+                    <dt class="col-sm-4">End Date:</dt>
+                    <dd class="col-sm-8">@(Model.EndDate?.ToShortDateString() ?? "N/A")</dd>
+
+                    <dt class="col-sm-4">Budget:</dt>
+                    <dd class="col-sm-8">@Model.Budget.ToString("C")</dd>
+
+                    <dt class="col-sm-4">Email Template:</dt>
+                    <dd class="col-sm-8">@Model.EmailTemplateName</dd>
+                </dl>
+            </div>
+            <div class="col-md-6">
+                <div class="info-box bg-info">
+                    <span class="info-box-icon"><i class="fas fa-users"></i></span>
+                    <div class="info-box-content">
+                        <span class="info-box-text">Contacts</span>
+                        <span class="info-box-number">@Model.ContactCount</span>
+                    </div>
+                </div>
+
+                <div class="info-box bg-success">
+                    <span class="info-box-icon"><i class="fas fa-exchange-alt"></i></span>
+                    <div class="info-box-content">
+                        <span class="info-box-text">Interactions</span>
+                        <span class="info-box-number">@Model.InteractionCount</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Status Actions</h3>
+                    </div>
+                    <div class="card-body">
+                        @if (Model.Status == CampaignStatus.Planned)
+                        {
+                            <form asp-action="ChangeStatus" method="post">
+                                <input type="hidden" name="id" value="@Model.Id" />
+                                <input type="hidden" name="status" value="@CampaignStatus.Active" />
+                                <button type="submit" class="btn btn-success">Activate Campaign</button>
+                            </form>
+                        }
+                        else if (Model.Status == CampaignStatus.Active)
+                        {
+                            <div class="btn-group">
+                                <form asp-action="ChangeStatus" method="post" class="mr-2">
+                                    <input type="hidden" name="id" value="@Model.Id" />
+                                    <input type="hidden" name="status" value="@CampaignStatus.Paused" />
+                                    <button type="submit" class="btn btn-warning">Pause Campaign</button>
+                                </form>
+                                <form asp-action="ChangeStatus" method="post">
+                                    <input type="hidden" name="id" value="@Model.Id" />
+                                    <input type="hidden" name="status" value="@CampaignStatus.Completed" />
+                                    <button type="submit" class="btn btn-primary">Mark as Completed</button>
+                                </form>
+                            </div>
+                        }
+                        else if (Model.Status == CampaignStatus.Paused)
+                        {
+                            <div class="btn-group">
+                                <form asp-action="ChangeStatus" method="post" class="mr-2">
+                                    <input type="hidden" name="id" value="@Model.Id" />
+                                    <input type="hidden" name="status" value="@CampaignStatus.Active" />
+                                    <button type="submit" class="btn btn-success">Resume Campaign</button>
+                                </form>
+                                <form asp-action="ChangeStatus" method="post">
+                                    <input type="hidden" name="id" value="@Model.Id" />
+                                    <input type="hidden" name="status" value="@CampaignStatus.Cancelled" />
+                                    <button type="submit" class="btn btn-danger">Cancel Campaign</button>
+                                </form>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-footer">
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
+        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Contacts</h3>
+            </div>
+            <div class="card-body p-0">
+                @if (Model.Contacts.Any())
+                {
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var contact in Model.Contacts)
+                            {
+                                <tr>
+                                    <td>@contact.FullName</td>
+                                    <td>@contact.Email</td>
+                                    <td>@contact.Phone</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <div class="alert alert-info">No contacts assigned to this campaign</div>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Interactions</h3>
+            </div>
+            <div class="card-body p-0">
+                @if (Model.Interactions.Any())
+                {
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Type</th>
+                                <th>Contact</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var interaction in Model.Interactions)
+                            {
+                                <tr>
+                                    <td>@interaction.Date.ToShortDateString()</td>
+                                    <td>@interaction.Type</td>
+                                    <td>@interaction.ContactName</td>
+                                    <td>
+                                        <span class="badge @GetInteractionStatusBadgeClass(interaction.Status)">
+                                            @interaction.Status
+                                        </span>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <div class="alert alert-info">No interactions recorded for this campaign</div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@functions {
+    string GetStatusBadgeClass(CampaignStatus status)
+    {
+        return status switch
+        {
+            CampaignStatus.Active => "bg-success",
+            CampaignStatus.Completed => "bg-primary",
+            CampaignStatus.Paused => "bg-warning",
+            CampaignStatus.Cancelled => "bg-danger",
+            _ => "bg-secondary"
+        };
+    }
+
+    string GetInteractionStatusBadgeClass(InteractionStatus status)
+    {
+        return status switch
+        {
+            InteractionStatus.Successful => "bg-success",
+            InteractionStatus.Failed => "bg-danger",
+            InteractionStatus.Pending => "bg-warning",
+            _ => "bg-secondary"
+        };
+    }
+}

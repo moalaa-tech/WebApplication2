@@ -1,0 +1,34 @@
+﻿@model CRM.WebApp.ViewModels.MarketingAutomation.CampaignAnalytics.CampaignAnalyticsDetailsViewModel
+
+@{
+    ViewData["Title"] = Localizer["AnalyticsROITracking.Delete.Title", "Delete Campaign Analytics"];
+}
+
+<h1>@Localizer["AnalyticsROITracking.Delete.Title", "Delete Campaign Analytics"]</h1>
+
+<h3>@Localizer["AnalyticsROITracking.Delete.Confirm", "Are you sure you want to delete this analytics record?"]</h3>
+<div>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-3">@Localizer["AnalyticsROITracking.Field.CampaignName", "Campaign Name"]</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.CampaignAnalytics.CampaignName)</dd>
+
+        <dt class="col-sm-3">@Localizer["AnalyticsROITracking.Field.Channel", "Channel"]</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.CampaignAnalytics.Channel)</dd>
+
+        <dt class="col-sm-3">@Localizer["AnalyticsROITracking.Field.CampaignPeriod", "Campaign Period"]</dt>
+        <dd class="col-sm-9">@Model.CampaignAnalytics.StartDate.ToString("MM/dd/yyyy") - @Model.CampaignAnalytics.EndDate.ToString("MM/dd/yyyy")</dd>
+
+        <dt class="col-sm-3">@Localizer["AnalyticsROITracking.Field.TotalSpent", "Total Spent"]</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.CampaignAnalytics.TotalSpent)</dd>
+
+        <dt class="col-sm-3">@Localizer["AnalyticsROITracking.Field.ROI", "ROI"]</dt>
+        <dd class="col-sm-9 @(Model.CampaignAnalytics.ROIPercentage >= 0 ? "text-success" : "text-danger")">@Html.DisplayFor(model => model.CampaignAnalytics.ROIPercentage)%</dd>
+    </dl>
+
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="CampaignAnalytics.Id" />
+        <input type="submit" value="@Localizer["Common.Delete", "Delete"]" class="btn btn-danger" />
+        <a asp-action="Index" class="btn btn-secondary">@Localizer["Common.Cancel", "Cancel"]</a>
+    </form>
+</div>

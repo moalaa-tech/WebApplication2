@@ -1,0 +1,171 @@
+﻿@using CRM.WebApp.ViewModels.DocumentManagement;
+@model DocumentViewModel;
+
+@{
+    ViewData["Title"] = "Document Details";
+}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="card-title">
+                        <i class="fas fa-file-alt me-2"></i>
+                        Document Details
+                    </h3>
+                    <p class="card-subtitle mb-0">ID: @Model.Id</p>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h4 class="text-primary">@Model.Title</h4>
+                            <p class="text-muted">@Model.Description</p>
+
+                            <div class="row mt-4">
+                                <div class="col-md-6">
+                                    <h6>Document Information</h6>
+                                    <dl class="row">
+                                        <dt class="col-sm-4">File Name:</dt>
+                                        <dd class="col-sm-8">@Model.FileName</dd>
+
+                                        <dt class="col-sm-4">Type:</dt>
+                                        <dd class="col-sm-8">@Model.DocumentType</dd>
+
+                                        <dt class="col-sm-4">Size:</dt>
+                                        <dd class="col-sm-8">@Model.FileSizeFormatted</dd>
+
+                                        <dt class="col-sm-4">Extension:</dt>
+                                        <dd class="col-sm-8">@Model.FileExtension</dd>
+                                    </dl>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <h6>Metadata</h6>
+                                    <dl class="row">
+                                        <dt class="col-sm-4">Uploaded:</dt>
+                                        <dd class="col-sm-8">@Model.UploadDate.ToString("yyyy-MM-dd HH:mm")</dd>
+
+                                        <dt class="col-sm-4">Modified:</dt>
+                                        <dd class="col-sm-8">@(Model.ModifiedDate?.ToString("yyyy-MM-dd HH:mm") ?? "Never")</dd>
+
+                                        <dt class="col-sm-4">Expiry:</dt>
+                                        <dd class="col-sm-8">@(Model.ExpiryDate?.ToString("yyyy-MM-dd") ?? "Never")</dd>
+
+                                        <dt class="col-sm-4">Downloads:</dt>
+                                        <dd class="col-sm-8">@Model.DownloadCount</dd>
+                                    </dl>
+                                </div>
+                            </div>
+
+                            <div class="row mt-3">
+                                <div class="col-12">
+                                    <h6>Status & Access</h6>
+                                    <div class="d-flex gap-3">
+                                        <span class="badge bg-@(Model.Status == "Active" ? "success" : "warning")">
+                                            Status: @Model.Status
+                                        </span>
+                                        <span class="badge bg-@(Model.IsPublic ? "success" : "secondary")">
+                                            @(Model.IsPublic ? "Public" : "Private")
+                                        </span>
+                                        <span class="badge bg-info">
+                                            Version: @Model.Version
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            @if (!string.IsNullOrEmpty(Model.Tags))
+                            {
+                                <div class="row mt-3">
+                                    <div class="col-12">
+                                        <h6>Tags</h6>
+                                        <div class="d-flex flex-wrap gap-1">
+                                            @foreach (var tag in Model.Tags.Split(',').Select(t => t.Trim()).Where(t => !string.IsNullOrEmpty(t)))
+                                            {
+                                                <span class="badge bg-secondary">@tag</span>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h6 class="card-title mb-0">Quick Actions</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="d-grid gap-2">
+                                        <a asp-action="Download" asp-route-id="@Model.Id"
+                                           class="btn btn-primary btn-lg">
+                                            <i class="fas fa-download me-2"></i>Download
+                                        </a>
+
+                                        <a asp-action="Edit" asp-route-id="@Model.Id"
+                                           class="btn btn-warning">
+                                            <i class="fas fa-edit me-2"></i>Edit
+                                        </a>
+
+                                        <a asp-action="Delete" asp-route-id="@Model.Id"
+                                           class="btn btn-danger">
+                                            <i class="fas fa-trash me-2"></i>Delete
+                                        </a>
+
+                                        <a asp-action="Index" class="btn btn-secondary">
+                                            <i class="fas fa-arrow-left me-2"></i>Back to List
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card mt-3">
+                                <div class="card-header">
+                                    <h6 class="card-title mb-0">File Information</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="text-center">
+                                        <i class="fas fa-file @(GetFileIcon(Model.FileExtension)) fa-3x text-muted mb-3"></i>
+                                        <p class="mb-1"><strong>@Model.FileName</strong></p>
+                                        <p class="text-muted small">@Model.FileSizeFormatted • @Model.FileExtension.ToUpper()</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@functions {
+    private string GetFileIcon(string extension)
+    {
+        return extension.ToLower() switch
+        {
+            "pdf" => "fa-file-pdf",
+            "doc" or "docx" => "fa-file-word",
+            "xls" or "xlsx" => "fa-file-excel",
+            "jpg" or "jpeg" or "png" or "gif" => "fa-file-image",
+            "txt" => "fa-file-alt",
+            _ => "fa-file"
+        };
+    }
+}
+
+@section Styles {
+    <style>
+        .card-header {
+            border-bottom: 2px solid rgba(0,0,0,.125);
+        }
+        dt {
+            font-weight: 600;
+            color: #6c757d;
+        }
+        .badge {
+            font-size: 0.85em;
+        }
+    </style>
+}

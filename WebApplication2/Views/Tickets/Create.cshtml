@@ -1,0 +1,41 @@
+@using CRM.Domain.Enums.CustomerService
+@using CRM.WebApp.DTOs.CustomerService.Ticket
+@model TicketDto
+
+<h2>Create Ticket</h2>
+
+<form asp-action="Create">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="mb-3">
+        <label asp-for="Subject" class="form-label"></label>
+        <input asp-for="Subject" class="form-control" />
+        <span asp-validation-for="Subject" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Description" class="form-label"></label>
+        <textarea asp-for="Description" class="form-control" rows="5"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Priority" class="form-label"></label>
+        <select asp-for="Priority" class="form-select" asp-items="Html.GetEnumSelectList<TicketPriority>()"></select>
+        <span asp-validation-for="Priority" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="CustomerId" class="form-label"></label>
+        <select asp-for="CustomerId" class="form-select">
+            <option value="">-- Select Customer --</option>
+            @foreach (var customer in ViewBag.Customers)
+            {
+                <option value="@customer.Id">@customer.Name</option>
+            }
+        </select>
+        <span asp-validation-for="CustomerId" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Create</button>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
