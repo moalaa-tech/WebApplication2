@@ -1,0 +1,147 @@
+@{
+    ViewData["Title"] = "Locations";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title">Filter Locations</h5>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <label class="form-label">Country</label>
+                    <select id="countryDropdown" class="form-select">
+                        <option value="">Select Country</option>
+                        @if (ViewBag.Countries != null)
+                        {
+                            @foreach (var country in ViewBag.Countries)
+                            {
+                                <option value="@country.Id">@country.NameAr</option>
+                            }
+                        }
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">State / Area</label>
+                    <select id="stateDropdown" class="form-select" disabled>
+                        <option value="">Select State</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">City</label>
+                    <select id="cityDropdown" class="form-select" disabled>
+                        <option value="">Select City</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title">All States / Areas</h5>
+            </div>
+            <div class="card-body">
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Name (Ar)</th>
+                            <th>Name (En)</th>
+                            <th>Country</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (ViewBag.States != null)
+                        {
+                            @foreach (var state in ViewBag.States)
+                            {
+                                <tr>
+                                    <td>@state.Id</td>
+                                    <td>@state.NameAr</td>
+                                    <td>@state.Name</td>
+                                    <td>@state.Country?.NameAr</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-info" onclick="viewDetails(@state.Id)">Details</button>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const countryDropdown = document.getElementById('countryDropdown');
+        const stateDropdown = document.getElementById('stateDropdown');
+        const cityDropdown = document.getElementById('cityDropdown');
+
+        countryDropdown.addEventListener('change', function () {
+            const countryId = this.value;
+            if (countryId) {
+                fetch('/Location/GetStatesByCountry?countryId=' + countryId)
+                    .then(response => response.json())
+                    .then(data => {
+                        stateDropdown.innerHTML = '<option value="">Select State</option>';
+                        stateDropdown.disabled = false;
+                        data.forEach(state => {
+                            const option = document.createElement('option');
+                            option.value = state.id;
+                            option.textContent = state.nameAr;
+                            stateDropdown.appendChild(option);
+                        });
+                    })
+                    .catch(error => console.error('Error:', error));
+            } else {
+                stateDropdown.innerHTML = '<option value="">Select State</option>';
+                stateDropdown.disabled = true;
+                cityDropdown.innerHTML = '<option value="">Select City</option>';
+                cityDropdown.disabled = true;
+            }
+        });
+
+        stateDropdown.addEventListener('change', function () {
+            const stateId = this.value;
+            if (stateId) {
+                fetch('/Location/GetCitiesByState?stateId=' + stateId)
+                    .then(response => response.json())
+                    .then(data => {
+                        cityDropdown.innerHTML = '<option value="">Select City</option>';
+                        cityDropdown.disabled = false;
+                        if (data && data.length > 0) {
+                            data.forEach(city => {
+                                const option = document.createElement('option');
+                                option.value = city.id;
+                                option.textContent = city.name;
+                                cityDropdown.appendChild(option);
+                            });
+                        } else {
+                            const option = document.createElement('option');
+                            option.value = '';
+                            option.textContent = 'No cities available';
+                            cityDropdown.appendChild(option);
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
+            } else {
+                cityDropdown.innerHTML = '<option value="">Select City</option>';
+                cityDropdown.disabled = true;
+            }
+        });
+
+        function viewDetails(stateId) {
+            alert('Viewing details for State ID: ' + stateId);
+        }
+    </script>
+}

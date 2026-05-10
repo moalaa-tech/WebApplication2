@@ -41,7 +41,7 @@ namespace CRM.WebApp.Controllers.InventoryManagment
 
             foreach (var item in dtos)
             {
-                item.CurrentStock = await InventoryService.GetCurrentStockAsync(item.Id);
+                item.CurrentStock = await InventoryService.GetCurrentStockAsync(item.Id.Value);
             }
 
             return View(dtos);

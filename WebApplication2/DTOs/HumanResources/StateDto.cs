@@ -7,5 +7,6 @@
         public string NameAr { get; set; } = null!;
         public int CountryId { get; set; }
         public string? CountryName { get; set; }
+        public CountryDto? Country { get; set; }
     }
 }

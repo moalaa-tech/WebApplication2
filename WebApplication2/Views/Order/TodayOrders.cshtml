@@ -3,19 +3,19 @@
 @using CRM.WebApp.ViewModels.InventoryManagement.Order
 @model OrderViewModel
 @{
-   // ViewData["Title"] = Localizer["Shared.Order.Index.Title", "Orders"];
-    //var States = ViewBag.States as (List<SelectListItem>);
+    ViewData["Title"] = "Today's Orders";
 }
 
-<h1>@Localizer["Shared.Order.Index.Title", "Orders"]</h1>
+<h1>@Localizer["Shared.Order.TodayOrders.Title", "Today's Orders"]</h1>
 
 <p>
     <a asp-action="Create" class="btn btn-primary">@Localizer["Shared.Order.Index.NewOrder", "New Order"]</a>
     <a asp-action="Upload" class="btn btn-primary">@Localizer["Shared.Order.Index.Upload", "Upload"]</a>
+    <a asp-action="Index" class="btn btn-secondary">@Localizer["Shared.Order.Index.AllOrders", "All Orders"]</a>
 </p>
 
 
-<form method="get" asp-action="Index" class="row g-3 mb-4">
+<form method="get" asp-action="TodayOrders" asp-antiforgery="true" class="row g-3 mb-4">
 
     <!-- Invoice Number -->
     <div class="col-md-2">
@@ -43,34 +43,18 @@
         <select asp-for="EmployeeId" asp-items="@ViewBag.Users" class="form-control"></select>
     </div>
 
-    <!-- Date From -->
-    <div class="col-md-2">
-        <label class="form-label">@Localizer["Shared.Order.Filter.DateFrom"]</label>
-        <input type="date" asp-for="DateFrom" class="form-control" value="@Model.DateFrom?.ToString("yyyy-MM-dd")" />
-    </div>
-
-    <!-- Date To -->
-    <div class="col-md-2">
-        <label class="form-label">@Localizer["Shared.Order.Filter.DateTo"]</label>
-        <input type="date" asp-for="DateTo" class="form-control" value="@Model?.DateTo?.ToString("yyyy-MM-dd")" />
-    </div>
-
     <!-- Product -->
     <div class="col-md-2">
         <label class="form-label">@Localizer["Shared.Order.Filter.Product"]</label>
         <select asp-for="ProductId" asp-items="@ViewBag.Products" class="form-control"></select>
-
     </div>
-
 
     <!-- State -->
     <div class="col-md-2">
         <label class="form-label">@Localizer["Shared.Order.Filter.State"]</label>
         <select asp-for="StateId" asp-items="@ViewBag.States" class="form-select">
-            @*<option value="">@Localizer["common.All"]</option> *@        
         </select>
     </div>
-
 
     <div class="col-12 text-end">
         <button type="submit" class="btn btn-primary mt-2">@Localizer["Common.Search", "Search"]</button>
@@ -134,9 +118,9 @@
                 <td>
                     <select class="form-select form-select-sm" name="Area_@item.Id" id="Area_@item.Id" onchange="updateArea(@item.Id, this.value)">
                         <option value="">@Localizer["Common.SelectArea", "Select Area"]</option>
-                        @if (ViewBag.States != null)
+                        @if (ViewBag.Cities != null)
                         {
-                            @foreach (var area in ViewBag.States as List<SelectListItem>)
+                            @foreach (var area in ViewBag.Cities as List<SelectListItem>)
                             {
                                 <option value="@area.Value" selected="@area.Selected">@area.Text</option>
                             }
@@ -186,7 +170,7 @@
         {
             <li class="page-item @(i == Model.PageIndex ? "active" : "")">
                 <a class="page-link"
-                   asp-action="Index"
+                   asp-action="TodayOrders"
                    asp-route-pageIndex="@i">
                     @i
                 </a>
@@ -196,7 +180,7 @@
 
         <li class="page-item @(Model.Result.HasNextPage ? "" : "disabled")">
             <a class="page-link"
-               asp-action="Index"
+               asp-action="TodayOrders"
                asp-route-pageIndex="@(Model.PageIndex + 1)"
                aria-label="Next">
                 <span aria-hidden="true">&raquo;</span>
@@ -219,7 +203,6 @@
             InvoiceStatus.Open => "secondary",
             InvoiceStatus.PartiallyPaid => "warning",
             InvoiceStatus.Overdue => "success",
-            // InvoiceStatus.Rejected => "danger",
             InvoiceStatus.Paid => "primary",
             InvoiceStatus.Cancelled => "dark",
             _ => "light"
@@ -246,11 +229,12 @@
         }
 
         function updateArea(orderId, areaId) {
+            debugger;
             fetch('/Order/UpdateArea', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                    'RequestVerificationToken': document.querySelector('input[name="AntiforgeryFieldname"]').value
                 },
                 body: JSON.stringify({ orderId: orderId, areaId: areaId })
             })

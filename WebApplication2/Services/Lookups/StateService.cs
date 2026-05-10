@@ -10,12 +10,13 @@ namespace CRM.WebApp.Services.Lookups
     public class StateService : IStateService
     {
         private readonly IRepository<State> StateRepository;
-
+        private readonly IRepository<City> CityRepository;
         private readonly IMapper Mapper;
 
-        public StateService(IRepository<State> _StateRepository, IMapper mapper)
+        public StateService(IRepository<State> _StateRepository, IRepository<City> cityRepository, IMapper mapper)
         {
             StateRepository = _StateRepository;
+            CityRepository = cityRepository;
             Mapper = mapper;
         }
 
@@ -57,6 +58,24 @@ namespace CRM.WebApp.Services.Lookups
 
             StateRepository.Delete(entity);
             await StateRepository.SaveChangesAsync();
+        }
+
+        public async Task<List<StateDto>> GetStatesByCountryIdAsync(int countryId)
+        {
+            var entities = await StateRepository.GetAll()
+                .Where(s => s.CountryId == countryId)
+                .Include(s => s.Country)
+                .ToListAsync();
+            return Mapper.Map<List<StateDto>>(entities);
+        }
+
+        public async Task<List<CityDto>> GetCitiesByStateIdAsync(int stateId)
+        {
+            var entities = await CityRepository.GetAll()
+                .Where(c => c.StateId == stateId)
+                .Include(c => c.State)
+                .ToListAsync();
+            return Mapper.Map<List<CityDto>>(entities);
         }
     }
 

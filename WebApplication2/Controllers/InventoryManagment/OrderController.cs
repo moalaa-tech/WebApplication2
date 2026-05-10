@@ -72,6 +72,70 @@ namespace CRM.WebApp.Controllers.InventoryManagment
 
 
         [HttpGet]
+        //[ValidateAntiForgeryToken]
+        public async Task<IActionResult> TodayOrders(OrderViewModel model)
+        {
+            var today = DateTime.Today;
+            model.DateFrom = today;
+            model.DateTo = today;
+
+            var States = await StateService.GetAllAsync();
+            var Cities = await StateService.GetCitiesByStateIdAsync(2);
+
+            var Contries = await CountryService.GetAllAsync();
+            var Products = await ProductService.GetAllProductsAsync();
+            var Users = await AuthenticationService.GetAllUserAsync();
+            var Customers = await AuthenticationService.GetAllUserAsync();
+
+            ViewBag.States = States.Select(s => new SelectListItem
+            {
+                Value = s.Id.ToString(),
+                Text = s.NameAr,
+                Selected = model.StateId == s.Id
+            }).ToList();
+
+
+            ViewBag.Cities = Cities.Select(s => new SelectListItem
+            {
+                Value = s.Id.ToString(),
+                Text = s.NameAr,
+                Selected = model.StateId == s.Id
+            }).ToList();
+
+            ViewBag.Countries = Contries.Select(c => new SelectListItem
+            {
+                Value = c.Id.ToString(),
+                Text = c.NameAr,
+                Selected = model.CountryId == c.Id
+            }).ToList();
+
+            ViewBag.Products = Products.Select(c => new SelectListItem
+            {
+                Value = c.Id.ToString(),
+                Text = c.NameAr,
+                Selected = model.ProductId == c.Id
+            }).ToList();
+
+            ViewBag.Customer = Customers.Select(c => new SelectListItem
+            {
+                Value = c.Id.ToString(),
+                Text = c.FirstName,
+                Selected = model.CustomerId == c.Id
+            }).ToList();
+
+            ViewBag.Users = Users.Select(c => new SelectListItem
+            {
+                Value = c.Id.ToString(),
+                Text = c.FirstName ?? c.Email,
+                Selected = model.EmployeeId == c.Id
+            }).ToList();
+
+            PaginatedList<OrderDto> orders = await _OrderService.GetAllOrdersAsync(model);
+            model.Result = orders;
+            return View(model);
+        }
+
+        [HttpGet]
         public async Task<IActionResult> Index(OrderViewModel model)
         {
             var States = await StateService.GetAllAsync();
@@ -519,5 +583,32 @@ namespace CRM.WebApp.Controllers.InventoryManagment
             return RedirectToAction(nameof(Details), new { id });
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdateArea([FromBody] UpdateAreaDto model)
+        {
+            if (model == null || model.OrderId <= 0)
+            {
+                return Json(new { success = false, message = "Invalid data" });
+            }
+
+            var order = await DbContext.Orders.FindAsync(model.OrderId);
+            if (order == null)
+            {
+                return Json(new { success = false, message = "Order not found" });
+            }
+
+            order.StatesId = model.AreaId;
+            await DbContext.SaveChangesAsync();
+
+            return Json(new { success = true, message = "Area updated successfully" });
+        }
+
+    }
+
+    public class UpdateAreaDto
+    {
+        public int OrderId { get; set; }
+        public int AreaId { get; set; }
     }
 }

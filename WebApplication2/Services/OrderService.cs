@@ -34,7 +34,12 @@ namespace CRM.WebApp.Services
                 include: q => q
                     .Include(o => o.Customer)
                     .Include(o => o.OrderDetails).ThenInclude(i => i.Product)
-            ).OrderByDescending(a=>a.Id).AsQueryable();
+            ).OrderByDescending(a => a.Id).AsQueryable();
+
+            if (model.DateFrom.HasValue)
+            {
+                orders = orders.Where(a => a.DateCreated.Value.Date == DateTime.Now.Date);
+            }
 
             if (model.InvoiceNumber.HasValue)
                 orders = orders.Where(x => x.Id == model.InvoiceNumber.Value);
@@ -89,8 +94,11 @@ namespace CRM.WebApp.Services
             });
 
             var TotalCount = await data.CountAsync();
+
+            //data = data.Skip((model.PageIndex - 1) * model.pageSize).Take(model.pageSize);
+
             var dtoR = _mapper.Map<IEnumerable<OrderDto>>(data);
-            var result = PaginatedList<OrderDto>.Create(dtoR, model.PageIndex, model.pageSize);
+            var result = PaginatedList<OrderDto>.Create(data, model.PageIndex, model.pageSize);
             result.TotalCount = TotalCount;
             return result;
         }

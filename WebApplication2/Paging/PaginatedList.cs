@@ -28,6 +28,13 @@ namespace CRM.WebApp.Paging
         }
 
 
+        public static PaginatedList<T> Create(IQueryable<T> source, int pageIndex, int pageSize)
+        {
+            var count = source.Count();
+            var items = source.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList();
+            return new PaginatedList<T>(items, count, pageIndex, pageSize);
+        }
+
         // ✅ For use with AutoMapper projection (DTO)
         public static async Task<PaginatedList<TDestination>> CreateAsync<TSource, TDestination>(
             IQueryable<TSource> source, int pageIndex, int pageSize, IConfigurationProvider configuration)

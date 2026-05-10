@@ -15,11 +15,18 @@ namespace CRM.WebApp.MappingProfiles.HR
 
             // State
             CreateMap<State, StateDto>()
-                .ForMember(dest => dest.CountryName, opt => opt.MapFrom(src => src.Country != null ? src.Country.Name : null));
+                .ForMember(dest => dest.CountryName, opt => opt.MapFrom(src => src.Country != null ? src.Country.Name : null))
+                .ForMember(dest => dest.Country, opt => opt.MapFrom(src => src.Country));
             CreateMap<StateDto, State>().ReverseMap();
             CreateMap<State, StateViewModel>()
                 .ForMember(dest => dest.CountryName, opt => opt.MapFrom(src => src.Country != null ? src.Country.Name : null));
             CreateMap<StateViewModel, State>();
+
+            // City
+            CreateMap<City, CityDto>()
+                .ForMember(dest => dest.StateName, opt => opt.MapFrom(src => src.State != null ? src.State.Name : null))
+                .ForMember(dest => dest.State, opt => opt.MapFrom(src => src.State));
+            CreateMap<CityDto, City>().ReverseMap();
         }
     }
 }
