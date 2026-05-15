@@ -80,6 +80,7 @@ namespace CRM.WebApp.DbContext
         public DbSet<State> States { get; set; }
         public DbSet<City> Cities { get; set; }
         public DbSet<Country> Countries { get; set; }
+        public DbSet<UsedAssignedLocation> UsedAssignedLocations { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<ProductType> ProductTypes { get; set; }
         public DbSet<Batch> Batches { get; set; }

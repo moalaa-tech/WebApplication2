@@ -1,0 +1,31 @@
+@using CRM.WebApp.ViewModels.InventoryManagement.Order
+@model UsedAssignedLocationViewModel
+
+@{
+    ViewData["Title"] = "Delete Assigned Location";
+}
+
+<h1>@Localizer["Common.Delete", "Delete"]</h1>
+
+<h4>@Localizer["Common.AreYouSure", "Are you sure?"]</h4>
+
+<dl class="row">
+    <dt class="col-sm-2">@Localizer["Shared.Order.Filter.Employee", "Employee"]</dt>
+    <dd class="col-sm-10">@Model.EmployeeName</dd>
+
+    <dt class="col-sm-2">@Localizer["Shared.Lookup.Countries", "Country"]</dt>
+    <dd class="col-sm-10">@Model.CountryName</dd>
+
+    <dt class="col-sm-2">@Localizer["Shared.Lookup.States", "State"]</dt>
+    <dd class="col-sm-10">@Model.StateName</dd>
+
+    <dt class="col-sm-2">@Localizer["Shared.Order.Field.Area", "City"]</dt>
+    <dd class="col-sm-10">@Model.CityName</dd>
+</dl>
+
+<form asp-action="DeleteUsedAssignedLocation" method="post">
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="btn btn-danger">@Localizer["Common.Delete", "Delete"]</button>
+    <a asp-action="UsedAssignedLocations" class="btn btn-secondary">@Localizer["Common.Back", "Back"]</a>
+</form>

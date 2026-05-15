@@ -2,6 +2,7 @@
 using CRM.Domain.Entities;
 using CRM.WebApp.DTOs.HumanResources;
 using CRM.WebApp.Repositories;
+using CRM.WebApp.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
 
@@ -12,18 +13,26 @@ namespace CRM.WebApp.Services.Lookups
         private readonly IRepository<State> StateRepository;
         private readonly IRepository<City> CityRepository;
         private readonly IMapper Mapper;
+        private readonly ICacheService CacheService;
 
-        public StateService(IRepository<State> _StateRepository, IRepository<City> cityRepository, IMapper mapper)
+        public StateService(IRepository<State> _StateRepository, IRepository<City> cityRepository, IMapper mapper, ICacheService cacheService)
         {
             StateRepository = _StateRepository;
             CityRepository = cityRepository;
             Mapper = mapper;
+            CacheService = cacheService;
         }
 
         public async Task<List<StateDto>> GetAllAsync()
         {
-            var entities = await StateRepository.GetAll().Include(s => s.Country).ToListAsync();
-            return Mapper.Map<List<StateDto>>(entities);
+            return await CacheService.GetOrCreateAsync(
+                CacheExtensions.STATES_KEY,
+                async () =>
+                {
+                    var entities = await StateRepository.GetAll().Include(s => s.Country).ToListAsync();
+                    return Mapper.Map<List<StateDto>>(entities);
+                },
+                TimeSpan.FromHours(2)) ?? new List<StateDto>();
         }
 
         public async Task<StateDto?> GetByIdAsync(int id)
@@ -38,6 +47,7 @@ namespace CRM.WebApp.Services.Lookups
             var entity = Mapper.Map<State>(dto);
             await StateRepository.AddAsync(entity);
             await StateRepository.SaveChangesAsync();
+            CacheService.InvalidateByPrefix(CacheExtensions.STATES_KEY);
             return Mapper.Map<StateDto>(entity);
         }
 
@@ -48,6 +58,7 @@ namespace CRM.WebApp.Services.Lookups
 
             Mapper.Map(dto, entity);
             await StateRepository.SaveChangesAsync();
+            CacheService.InvalidateByPrefix(CacheExtensions.STATES_KEY);
             return Mapper.Map<StateDto>(entity);
         }
 
@@ -58,24 +69,37 @@ namespace CRM.WebApp.Services.Lookups
 
             StateRepository.Delete(entity);
             await StateRepository.SaveChangesAsync();
+            CacheService.InvalidateByPrefix(CacheExtensions.STATES_KEY);
         }
 
         public async Task<List<StateDto>> GetStatesByCountryIdAsync(int countryId)
         {
-            var entities = await StateRepository.GetAll()
-                .Where(s => s.CountryId == countryId)
-                .Include(s => s.Country)
-                .ToListAsync();
-            return Mapper.Map<List<StateDto>>(entities);
+            return await CacheService.GetOrCreateAsync(
+                CacheExtensions.GetStatesKey(countryId),
+                async () =>
+                {
+                    var entities = await StateRepository.GetAll()
+                        .Where(s => s.CountryId == countryId)
+                        .Include(s => s.Country)
+                        .ToListAsync();
+                    return Mapper.Map<List<StateDto>>(entities);
+                },
+                TimeSpan.FromHours(2)) ?? new List<StateDto>();
         }
 
         public async Task<List<CityDto>> GetCitiesByStateIdAsync(int stateId)
         {
-            var entities = await CityRepository.GetAll()
-                .Where(c => c.StateId == stateId)
-                .Include(c => c.State)
-                .ToListAsync();
-            return Mapper.Map<List<CityDto>>(entities);
+            return await CacheService.GetOrCreateAsync(
+                CacheExtensions.GetCitiesKey(stateId),
+                async () =>
+                {
+                    var entities = await CityRepository.GetAll()
+                        .Where(c => c.StateId == stateId)
+                        .Include(c => c.State)
+                        .ToListAsync();
+                    return Mapper.Map<List<CityDto>>(entities);
+                },
+                TimeSpan.FromHours(2)) ?? new List<CityDto>();
         }
     }
 

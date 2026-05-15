@@ -26,8 +26,9 @@
                 <td>@state.NameAr</td>
                 <td>@state.CountryName</td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@state.Id" class="btn btn-sm btn-warning">Edit</a>
-                    <a asp-action="Delete" asp-route-id="@state.Id" class="btn btn-sm btn-danger">Delete</a>
+                    <a asp-action="Edit" asp-route-id="@state.Id" class="btn btn-sm btn-warning">@Localizer["Common.Edit", "Edit"]</a>
+                    <a asp-action="GetCitiesByStateId" asp-route-id="@state.Id" class="btn btn-sm btn-warning">@Localizer["Common.Edit", "Edit"]</a>
+
                 </td>
             </tr>
         }

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using CRM.Domain.Entities;
 using CRM.Domain.Enums;
+using CRM.WebApp.Controllers.InventoryManagment;
 using CRM.WebApp.DTOs.Customer;
 using CRM.WebApp.DTOs.InventoryManagement.Product;
 using CRM.WebApp.DTOs.Order;
@@ -19,11 +20,21 @@ namespace CRM.WebApp.Services
         private readonly IMapper _mapper;
         private readonly IRepository<Order> _orderRepository;
         private readonly IRepository<OrderDetails> OrderDetailsRepo;
-        public OrderService(IMapper mapper, IRepository<Order> orderRepository, IRepository<OrderDetails> orderDetailsRepo)
+        private readonly IRepository<City> _cityRepository;
+        private readonly IRepository<UsedAssignedLocation> _usedAssignedLocationRepository;
+
+        public OrderService(
+            IMapper mapper,
+            IRepository<Order> orderRepository,
+            IRepository<OrderDetails> orderDetailsRepo,
+            IRepository<City> cityRepository,
+            IRepository<UsedAssignedLocation> usedAssignedLocationRepository)
         {
             _mapper = mapper;
             _orderRepository = orderRepository;
             OrderDetailsRepo = orderDetailsRepo;
+            _cityRepository = cityRepository;
+            _usedAssignedLocationRepository = usedAssignedLocationRepository;
         }
 
 
@@ -86,14 +97,14 @@ namespace CRM.WebApp.Services
                     NameAr = m.Customer.NameAr,
                     //Email = m.Customer.Email,
                     //Phone = m.Customer.Phone,
-                    //Address = m.Customer.Address,                                      
+                    Address = m.Customer.Address,                                      
                 },
                 DateCreated = m.DateCreated.Value,
                 TotalAmount = m.OrderDetails.Sum(od => od.Product.TotalCost),
-
+                StatesId = m.StatesId
             });
 
-            var TotalCount = await data.CountAsync();
+            int TotalCount = await data.CountAsync();
 
             //data = data.Skip((model.PageIndex - 1) * model.pageSize).Take(model.pageSize);
 
@@ -142,7 +153,7 @@ namespace CRM.WebApp.Services
                 //        ProductTypeName = s.Product.ProductType.NameAr
                 //    },
                 //})
-
+                StatesId = m.StatesId,
                 OrderDetails = m.EasyOrderRequest.cart_items.Select(s => new OrderDetailsDto
                 {
                     ItemsCount = s.quantity.GetValueOrDefault(0),
@@ -218,6 +229,30 @@ namespace CRM.WebApp.Services
 
             _orderRepository.Update(invoice);
             await _orderRepository.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<bool> SaveAssignedLocationAsync(UpdateAreaDto model)
+        {
+            var city = await _cityRepository.GetAllAsync(
+                c => c.Id == model.AreaId,
+                include: q => q.Include(c => c.State))
+                .FirstOrDefaultAsync();
+
+            if (city?.State == null) return false;
+
+            var assignedLocation = new UsedAssignedLocation
+            {
+                EmployeeId = model.EmployeeId.Value,
+                CountryId = city.State.CountryId,
+                StatesId = city.StateId,
+                CityId = city.Id
+            };
+
+
+            await _usedAssignedLocationRepository.AddAsync(assignedLocation);
+            await _usedAssignedLocationRepository.SaveChangesAsync();
+
             return true;
         }
 

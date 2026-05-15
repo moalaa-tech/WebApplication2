@@ -1,0 +1,39 @@
+@model IEnumerable<CRM.WebApp.DTOs.HumanResources.CityDto>
+@{
+    ViewData["Title"] = @Localizer["Shared.Cities.Title"];
+}
+
+<h1>@Localizer["Shared.Cities.Title"]</h1>
+
+<p>
+    <a asp-action="StatesIndex" class="btn btn-secondary">@Localizer["Common.Back"]</a>
+</p>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>@Localizer["Shared.Cities.Name"]</th>
+            <th>@Localizer["Shared.Cities.NameAR"]</th>
+            <th>@Localizer["Shared.Order.Field.Area"]</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            @foreach (var city in Model)
+            {
+                <tr>
+                    <td>@city.Name</td>
+                    <td>@city.NameAr</td>
+                    <td>@city.StateName</td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="3" class="text-center">@Localizer["Common.NoDataAvailable"]</td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,4 +1,5 @@
 ﻿using CRM.Domain.Enums;
+using CRM.WebApp.Controllers.InventoryManagment;
 using CRM.WebApp.DTOs.Order;
 using CRM.WebApp.Paging;
 using CRM.WebApp.ViewModels.InventoryManagement.Order;
@@ -16,6 +17,7 @@ namespace CRM.WebApp.Services.Interfaces
         Task<IEnumerable<OrderDto>> Search(string search = null);
 
         Task<bool> ChangeStatusAsync(int id, InvoiceStatus newStatus);
+        Task<bool> SaveAssignedLocationAsync(UpdateAreaDto model);
 
     }
 }

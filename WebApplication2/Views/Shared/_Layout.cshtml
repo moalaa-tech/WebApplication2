@@ -1,16 +1,28 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+@{
+    var currentCulture = System.Globalization.CultureInfo.CurrentUICulture;
+    var currentLang = currentCulture.TwoLetterISOLanguageName;
+    var isRtl = currentCulture.TextInfo.IsRightToLeft;
+    var textDirection = isRtl ? "rtl" : "ltr";
+}
+<html lang="@currentLang" dir="@textDirection">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - CRM</title>
-    <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <link id="bootstrapRtlCss" rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.rtl.min.css" />
+    @if (isRtl)
+    {
+        <link id="bootstrapCss" rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.rtl.min.css" />
+    }
+    else
+    {
+        <link id="bootstrapCss" rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    }
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/loader.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/toaster.css" asp-append-version="true" />
 </head>
-<body>
+<body class="@textDirection">
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
@@ -30,9 +42,27 @@
                             <a class="nav-link text-dark" asp-controller="Home" asp-action="RomaDashboard">@Localizer["Shared.Home.Roma", "Roma"]</a>
                         </li>
 
-                       @*  <li class="nav-item">
-                            <a asp-controller="Company" asp-action="Index" class="nav-link text-dark">@Localizer["Shared.Company", "Company"]</a>
+                        <li class="nav-item">
+                            <a asp-controller="Lookup" asp-action="CountriesIndex" class="nav-link text-dark">@Localizer["Shared.Lookup.Countries"]</a>
                         </li>
+
+                        <li class="nav-item">
+                            <a asp-controller="Lookup" asp-action="StatesIndex" class="nav-link text-dark">@Localizer["Shared.Lookup.States"]</a>
+                        </li>
+                        
+                        <li class="nav-item">
+                            <a asp-controller="Lookup" asp-action="StatesIndex" class="nav-link text-dark">@Localizer["Shared.Lookup.States"]</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a asp-controller="Order" asp-action="AssignArea" class="nav-link text-dark">@Localizer["Shared.Order.Field.AssignArea", "AssignArea"]</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a asp-controller="Order" asp-action="UsedAssignedLocations" class="nav-link text-dark">@Localizer["Shared.Order.UsedAssignedLocations.Title", "Used Assigned Locations"]</a>
+                        </li>
+
+                       @*  
 
                         <li class="nav-item">
                             <a asp-controller="Setting" asp-action="Index" class="nav-link text-dark">@Localizer["Shared.Settings", "Settings"]</a>
@@ -54,7 +84,7 @@
                             <a asp-controller="Employee" asp-action="OrganizationChart" class="nav-link">@Localizer["Shared.OrganizationChart"]</a>
                         </li> *@
 
-                        <li class="nav-item">
+                        @* <li class="nav-item">
                             <a asp-controller="Home" asp-action="InventoryDashboard" class="nav-link">@Localizer["Shared.InventoryManagement"]</a>
                         </li>
 
@@ -90,7 +120,7 @@
 
                         <li class="nav-item">
                             <a asp-controller="Home" asp-action="SettingsManagementDashboard" class="nav-link">@Localizer["Shared.SettingsManagementDashboard"]</a>
-                        </li>
+                        </li> *@
 
 
                     
@@ -109,9 +139,6 @@
                         <form asp-controller="Home" asp-action="SetLanguage" method="post" class="d-flex align-items-center" id="langForm">
                             <input type="hidden" name="returnUrl" value="@Context.Request.Path@Context.Request.QueryString" />
                             <select name="culture" id="cultureSelect" class="form-select form-select-sm" onchange="this.form.submit()">
-                                @{
-                                    var currentLang = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
-                                }
                                 @if(currentLang == "en"){
                                     <option value="en" selected>English</option>
                                 } else {

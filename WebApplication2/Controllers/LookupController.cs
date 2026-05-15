@@ -125,5 +125,12 @@ namespace ERP.WebApp.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetCitiesByStateId(int id)
+        {
+            var cities = await StateService.GetCitiesByStateIdAsync(id);
+            return View(cities);
+        }
+
     }
 }

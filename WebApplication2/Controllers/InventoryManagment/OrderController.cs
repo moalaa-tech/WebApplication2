@@ -17,6 +17,7 @@ using CRM.WebApp.Services.CustomerSupport_Service;
 using CRM.WebApp.Services.Interfaces;
 using CRM.WebApp.Services.InventoryManagment;
 using CRM.WebApp.Services.Lookups;
+using CRM.WebApp.Services.HumanResources;
 using CRM.WebApp.ViewModels.InventoryManagement.Order;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -41,6 +42,7 @@ namespace CRM.WebApp.Controllers.InventoryManagment
         private IStateService StateService;
         private ICountryService CountryService;
         private IAuthenticationService AuthenticationService;
+        private IEmployeeService EmployeeService;
 
         public OrderController(
 
@@ -54,7 +56,8 @@ namespace CRM.WebApp.Controllers.InventoryManagment
             IMapper mapper,
             IOrderService _orderService,
             ILogger<OrderController> logger,
-            IStringLocalizer<HomeController> localizer
+            IStringLocalizer<HomeController> localizer,
+            IEmployeeService _EmployeeService
         )
         {
             _OrderService = _orderService;
@@ -68,6 +71,7 @@ namespace CRM.WebApp.Controllers.InventoryManagment
             StateService = _StateService;
             CountryService = _CountryService;
             AuthenticationService = _AuthenticationService;
+            EmployeeService = _EmployeeService;
         }
 
 
@@ -82,10 +86,10 @@ namespace CRM.WebApp.Controllers.InventoryManagment
             var States = await StateService.GetAllAsync();
             var Cities = await StateService.GetCitiesByStateIdAsync(2);
 
-            var Contries = await CountryService.GetAllAsync();
-            var Products = await ProductService.GetAllProductsAsync();
-            var Users = await AuthenticationService.GetAllUserAsync();
-            var Customers = await AuthenticationService.GetAllUserAsync();
+            //var Contries = await CountryService.GetAllAsync();
+            //var Products = await ProductService.GetAllProductsAsync();
+            //var Users = await AuthenticationService.GetAllUserAsync();
+            //var Customers = await AuthenticationService.GetAllUserAsync();
 
             ViewBag.States = States.Select(s => new SelectListItem
             {
@@ -102,33 +106,33 @@ namespace CRM.WebApp.Controllers.InventoryManagment
                 Selected = model.StateId == s.Id
             }).ToList();
 
-            ViewBag.Countries = Contries.Select(c => new SelectListItem
-            {
-                Value = c.Id.ToString(),
-                Text = c.NameAr,
-                Selected = model.CountryId == c.Id
-            }).ToList();
+            //ViewBag.Countries = Contries.Select(c => new SelectListItem
+            //{
+            //    Value = c.Id.ToString(),
+            //    Text = c.NameAr,
+            //    Selected = model.CountryId == c.Id
+            //}).ToList();
 
-            ViewBag.Products = Products.Select(c => new SelectListItem
-            {
-                Value = c.Id.ToString(),
-                Text = c.NameAr,
-                Selected = model.ProductId == c.Id
-            }).ToList();
+            //ViewBag.Products = Products.Select(c => new SelectListItem
+            //{
+            //    Value = c.Id.ToString(),
+            //    Text = c.NameAr,
+            //    Selected = model.ProductId == c.Id
+            //}).ToList();
 
-            ViewBag.Customer = Customers.Select(c => new SelectListItem
-            {
-                Value = c.Id.ToString(),
-                Text = c.FirstName,
-                Selected = model.CustomerId == c.Id
-            }).ToList();
+            //ViewBag.Customer = Customers.Select(c => new SelectListItem
+            //{
+            //    Value = c.Id.ToString(),
+            //    Text = c.FirstName,
+            //    Selected = model.CustomerId == c.Id
+            //}).ToList();
 
-            ViewBag.Users = Users.Select(c => new SelectListItem
-            {
-                Value = c.Id.ToString(),
-                Text = c.FirstName ?? c.Email,
-                Selected = model.EmployeeId == c.Id
-            }).ToList();
+            //ViewBag.Users = Users.Select(c => new SelectListItem
+            //{
+            //    Value = c.Id.ToString(),
+            //    Text = c.FirstName ?? c.Email,
+            //    Selected = model.EmployeeId == c.Id
+            //}).ToList();
 
             PaginatedList<OrderDto> orders = await _OrderService.GetAllOrdersAsync(model);
             model.Result = orders;
@@ -584,7 +588,7 @@ namespace CRM.WebApp.Controllers.InventoryManagment
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public async Task<IActionResult> UpdateArea([FromBody] UpdateAreaDto model)
         {
             if (model == null || model.OrderId <= 0)
@@ -604,11 +608,362 @@ namespace CRM.WebApp.Controllers.InventoryManagment
             return Json(new { success = true, message = "Area updated successfully" });
         }
 
+        [HttpGet]
+        public async Task<IActionResult> AssignArea(int orderId = 0)
+        {
+            var order = orderId > 0
+                ? await DbContext.Orders.FindAsync(orderId)
+                : null;
+
+            if (orderId > 0 && order == null)
+            {
+                return NotFound();
+            }
+
+            var selectedCity = order?.StatesId > 0
+                ? await DbContext.Cities.AsNoTracking().FirstOrDefaultAsync(c => c.Id == order.StatesId)
+                : null;
+            var selectedStateId = selectedCity?.StateId ?? 0;
+
+            var states = await StateService.GetAllAsync();
+            var cities = selectedStateId > 0
+                ? await StateService.GetCitiesByStateIdAsync(selectedStateId)
+                : new List<CRM.WebApp.DTOs.HumanResources.CityDto>();
+            var employees = await EmployeeService.GetAllEmployeesAsync();
+
+            ViewBag.States = states.Select(s => new SelectListItem
+            {
+                Value = s.Id.ToString(),
+                Text = s.NameAr,
+                Selected = selectedStateId == s.Id
+            }).ToList();
+
+            ViewBag.Cities = cities.Select(c => new SelectListItem
+            {
+                Value = c.Id.ToString(),
+                Text = c.NameAr,
+                Selected = order?.StatesId == c.Id
+            }).ToList();
+
+            ViewBag.Employees = employees.Select(e => new SelectListItem
+            {
+                Value = e.Id.ToString(),
+                Text = e.Name ?? $"{e.FirstName} {e.LastName}".Trim()
+            }).ToList();
+
+            var model = new UpdateAreaDto
+            {
+                OrderId = orderId,
+                StateId = selectedStateId,
+                AreaId = order?.StatesId ?? 0,
+                EmployeeId = null
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AssignArea(UpdateAreaDto model)
+        {
+            if (!ModelState.IsValid)
+            {
+                TempData["ToasterType"] = "error";
+                TempData["ToasterMessage"] = "Invalid data";
+                return RedirectToAction(nameof(AssignArea), new { orderId = model.OrderId });
+            }
+
+            //var order = await DbContext.Orders.FindAsync(model.OrderId);
+            //if (order == null)
+            //{
+            //    TempData["ToasterType"] = "error";
+            //    TempData["ToasterMessage"] = "Order not found";
+            //    return RedirectToAction(nameof(Index));
+            //}
+
+            if (!model.EmployeeId.HasValue || model.EmployeeId.Value <= 0)
+            {
+                TempData["ToasterType"] = "error";
+                TempData["ToasterMessage"] = "Employee is required";
+                return RedirectToAction(nameof(AssignArea), new { orderId = model.OrderId });
+            }
+
+            var assigned = await _OrderService.SaveAssignedLocationAsync(model);
+            if (!assigned)
+            {
+                TempData["ToasterType"] = "error";
+                TempData["ToasterMessage"] = "Unable to assign area";
+                return RedirectToAction(nameof(AssignArea), new { orderId = model.OrderId });
+            }
+
+            TempData["ToasterType"] = "success";
+            TempData["ToasterMessage"] = "Area assigned successfully";
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetCitiesByStateId(int stateId)
+        {
+            if (stateId <= 0)
+            {
+                return Json(Array.Empty<object>());
+            }
+
+            var cities = await StateService.GetCitiesByStateIdAsync(stateId);
+            return Json(cities.Select(c => new
+            {
+                id = c.Id,
+                name = c.Name,
+                nameAr = c.NameAr
+            }));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> UsedAssignedLocations()
+        {
+            var locations = await DbContext.UsedAssignedLocations
+                .AsNoTracking()
+                .Include(x => x.Employee)
+                .Include(x => x.Country)
+                .Include(x => x.State)
+                .Include(x => x.City)
+                .OrderByDescending(x => x.Id)
+                .Select(x => new UsedAssignedLocationViewModel
+                {
+                    Id = x.Id,
+                    EmployeeId = x.EmployeeId,
+                    EmployeeName = x.Employee != null ? x.Employee.Name : string.Empty,
+                    CountryId = x.CountryId,
+                    CountryName = x.Country != null ? x.Country.NameAr ?? x.Country.Name : string.Empty,
+                    StatesId = x.StatesId,
+                    StateName = x.State != null ? x.State.NameAr : string.Empty,
+                    CityId = x.CityId,
+                    CityName = x.City != null ? x.City.NameAr : string.Empty
+                })
+                .ToListAsync();
+
+            return View(locations);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> UsedAssignedLocationDetails(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var model = await DbContext.UsedAssignedLocations
+                .AsNoTracking()
+                .Include(x => x.Employee)
+                .Include(x => x.Country)
+                .Include(x => x.State)
+                .Include(x => x.City)
+                .Where(x => x.Id == id.Value)
+                .Select(x => new UsedAssignedLocationViewModel
+                {
+                    Id = x.Id,
+                    EmployeeId = x.EmployeeId,
+                    EmployeeName = x.Employee != null ? x.Employee.Name : string.Empty,
+                    CountryId = x.CountryId,
+                    CountryName = x.Country != null ? x.Country.NameAr ?? x.Country.Name : string.Empty,
+                    StatesId = x.StatesId,
+                    StateName = x.State != null ? x.State.NameAr : string.Empty,
+                    CityId = x.CityId,
+                    CityName = x.City != null ? x.City.NameAr : string.Empty
+                })
+                .FirstOrDefaultAsync();
+
+            if (model == null)
+            {
+                return NotFound();
+            }
+
+            return View(model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> CreateUsedAssignedLocation()
+        {
+            await PopulateUsedAssignedLocationDropDownsAsync();
+            return View(new UsedAssignedLocationViewModel());
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateUsedAssignedLocation(UsedAssignedLocationViewModel model)
+        {
+            if (model.EmployeeId <= 0 || model.CountryId <= 0 || model.StatesId <= 0 || model.CityId <= 0)
+            {
+                ModelState.AddModelError(string.Empty, "Employee, country, state and city are required.");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                await PopulateUsedAssignedLocationDropDownsAsync(model);
+                return View(model);
+            }
+
+            var location = new UsedAssignedLocation
+            {
+                EmployeeId = model.EmployeeId,
+                CountryId = model.CountryId,
+                StatesId = model.StatesId,
+                CityId = model.CityId
+            };
+
+            DbContext.UsedAssignedLocations.Add(location);
+            await DbContext.SaveChangesAsync();
+
+            TempData["ToasterType"] = "success";
+            TempData["ToasterMessage"] = "Assigned location created successfully";
+            return RedirectToAction(nameof(UsedAssignedLocations));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> EditUsedAssignedLocation(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var location = await DbContext.UsedAssignedLocations.FindAsync(id.Value);
+            if (location == null)
+            {
+                return NotFound();
+            }
+
+            var model = new UsedAssignedLocationViewModel
+            {
+                Id = location.Id,
+                EmployeeId = location.EmployeeId,
+                CountryId = location.CountryId,
+                StatesId = location.StatesId,
+                CityId = location.CityId
+            };
+
+            await PopulateUsedAssignedLocationDropDownsAsync(model);
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditUsedAssignedLocation(int id, UsedAssignedLocationViewModel model)
+        {
+            if (id != model.Id)
+            {
+                return NotFound();
+            }
+
+            if (model.EmployeeId <= 0 || model.CountryId <= 0 || model.StatesId <= 0 || model.CityId <= 0)
+            {
+                ModelState.AddModelError(string.Empty, "Employee, country, state and city are required.");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                await PopulateUsedAssignedLocationDropDownsAsync(model);
+                return View(model);
+            }
+
+            var location = await DbContext.UsedAssignedLocations.FindAsync(id);
+            if (location == null)
+            {
+                return NotFound();
+            }
+
+            location.EmployeeId = model.EmployeeId;
+            location.CountryId = model.CountryId;
+            location.StatesId = model.StatesId;
+            location.CityId = model.CityId;
+
+            await DbContext.SaveChangesAsync();
+
+            TempData["ToasterType"] = "success";
+            TempData["ToasterMessage"] = "Assigned location updated successfully";
+            return RedirectToAction(nameof(UsedAssignedLocations));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> DeleteUsedAssignedLocation(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var model = await DbContext.UsedAssignedLocations
+                .AsNoTracking()
+                .Include(x => x.Employee)
+                .Include(x => x.Country)
+                .Include(x => x.State)
+                .Include(x => x.City)
+                .Where(x => x.Id == id.Value)
+                .Select(x => new UsedAssignedLocationViewModel
+                {
+                    Id = x.Id,
+                    EmployeeId = x.EmployeeId,
+                    EmployeeName = x.Employee != null ? x.Employee.Name : string.Empty,
+                    CountryId = x.CountryId,
+                    CountryName = x.Country != null ? x.Country.NameAr ?? x.Country.Name : string.Empty,
+                    StatesId = x.StatesId,
+                    StateName = x.State != null ? x.State.NameAr : string.Empty,
+                    CityId = x.CityId,
+                    CityName = x.City != null ? x.City.NameAr : string.Empty
+                })
+                .FirstOrDefaultAsync();
+
+            if (model == null)
+            {
+                return NotFound();
+            }
+
+            return View(model);
+        }
+
+        [HttpPost, ActionName("DeleteUsedAssignedLocation")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteUsedAssignedLocationConfirmed(int id)
+        {
+            var location = await DbContext.UsedAssignedLocations.FindAsync(id);
+            if (location == null)
+            {
+                return NotFound();
+            }
+
+            DbContext.UsedAssignedLocations.Remove(location);
+            await DbContext.SaveChangesAsync();
+
+            TempData["ToasterType"] = "success";
+            TempData["ToasterMessage"] = "Assigned location deleted successfully";
+            return RedirectToAction(nameof(UsedAssignedLocations));
+        }
+
+        private async Task PopulateUsedAssignedLocationDropDownsAsync(UsedAssignedLocationViewModel? model = null)
+        {
+            var employees = await EmployeeService.GetAllEmployeesAsync();
+            var countries = await CountryService.GetAllAsync();
+            var states = await StateService.GetAllAsync();
+            var cities = model?.StatesId > 0
+                ? await StateService.GetCitiesByStateIdAsync(model.StatesId)
+                : new List<CRM.WebApp.DTOs.HumanResources.CityDto>();
+
+            ViewBag.Employees = new SelectList(employees, "Id", "Name", model?.EmployeeId);
+            ViewBag.Countries = new SelectList(countries, "Id", "NameAr", model?.CountryId);
+            ViewBag.States = new SelectList(states, "Id", "NameAr", model?.StatesId);
+            ViewBag.Cities = new SelectList(cities, "Id", "NameAr", model?.CityId);
+        }
+
     }
 
     public class UpdateAreaDto
     {
         public int OrderId { get; set; }
+
+        public int CityId { get; set; }
+        public int StateId { get; set; }
         public int AreaId { get; set; }
+        public int? EmployeeId { get; set; }
     }
 }

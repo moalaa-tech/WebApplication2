@@ -2,6 +2,7 @@
 using CRM.Domain.Entities;
 using CRM.WebApp.DTOs.HumanResources;
 using CRM.WebApp.Repositories;
+using CRM.WebApp.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
 
@@ -12,17 +13,25 @@ namespace CRM.WebApp.Services.Lookups
         private readonly IRepository<Country> CountryRepository;
 
         private readonly IMapper Mapper;
+        private readonly ICacheService CacheService;
 
-        public CountryService(IRepository<Country> _CountryRepository, IMapper mapper)
+        public CountryService(IRepository<Country> _CountryRepository, IMapper mapper, ICacheService cacheService)
         {
             CountryRepository = _CountryRepository;
             Mapper = mapper;
+            CacheService = cacheService;
         }
 
         public async Task<List<CountryDto>> GetAllAsync()
         {
-            var entities = await CountryRepository.GetAll().ToListAsync();
-            return Mapper.Map<List<CountryDto>>(entities);
+            return await CacheService.GetOrCreateAsync(
+                CacheExtensions.COUNTRIES_KEY,
+                async () =>
+                {
+                    var entities = await CountryRepository.GetAll().ToListAsync();
+                    return Mapper.Map<List<CountryDto>>(entities);
+                },
+                TimeSpan.FromHours(2)) ?? new List<CountryDto>();
         }
 
         public async Task<CountryDto?> GetByIdAsync(int id)
@@ -36,6 +45,7 @@ namespace CRM.WebApp.Services.Lookups
             var entity = Mapper.Map<Country>(dto);
             await CountryRepository.AddAsync(entity);
             await CountryRepository.SaveChangesAsync();
+            CacheService.Remove(CacheExtensions.COUNTRIES_KEY);
             return Mapper.Map<CountryDto>(entity);
         }
 
@@ -46,6 +56,7 @@ namespace CRM.WebApp.Services.Lookups
 
             Mapper.Map(dto, entity);
             await CountryRepository.SaveChangesAsync();
+            CacheService.Remove(CacheExtensions.COUNTRIES_KEY);
             return Mapper.Map<CountryDto>(entity);
         }
 
@@ -56,6 +67,7 @@ namespace CRM.WebApp.Services.Lookups
 
             CountryRepository.Delete(entity);
             await CountryRepository.SaveChangesAsync();
+            CacheService.Remove(CacheExtensions.COUNTRIES_KEY);
         }
     }
 

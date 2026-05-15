@@ -1,0 +1,105 @@
+@model CRM.WebApp.Controllers.InventoryManagment.UpdateAreaDto
+
+<div class="modal-header">
+    <h5 class="modal-title">@Localizer["Shared.Order.Field.Area"]</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+<form id="assignAreaForm" asp-controller="Order" asp-action="AssignArea" method="post">
+    @Html.AntiForgeryToken()
+    <div class="modal-body">
+        @Html.HiddenFor(m => m.OrderId)
+
+        <div class="mb-3">
+            <label for="StateId" class="form-label">@Localizer["Shared.Lookup.States"]</label>
+            <select class="form-select" id="StateId" name="StateId" required>
+                <option value="">-- @Localizer["Shared.Lookup.States"] --</option>
+                @if (ViewBag.States != null)
+                {
+                    @foreach (var state in ViewBag.States)
+                    {
+                        <option value="@state.Value" selected="@(Model.StateId.ToString() == state.Value)">@state.Text</option>
+                    }
+                }
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="AreaId" class="form-label">@Localizer["Shared.Order.Field.Area"]</label>
+            <select class="form-select" id="AreaId" name="AreaId" required disabled="@(Model.StateId <= 0)">
+                <option value="">-- @Localizer["Shared.Order.Field.Area"] --</option>
+                @if (ViewBag.Cities != null)
+                {
+                    @foreach (var city in ViewBag.Cities)
+                    {
+                        <option value="@city.Value" selected="@(Model.AreaId.ToString() == city.Value)">@city.Text</option>
+                    }
+                }
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="EmployeeId" class="form-label">@Localizer["Shared.Order.Filter.Employee"]</label>
+            <select class="form-select" id="EmployeeId" name="EmployeeId" required>
+                <option value="">-- @Localizer["common.All"] --</option>
+                @if (ViewBag.Employees != null)
+                {
+                    @foreach (var employee in ViewBag.Employees)
+                    {
+                        <option value="@employee.Value" selected="@(Model.EmployeeId?.ToString() == employee.Value)">@employee.Text</option>
+                    }
+                }
+            </select>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">@Localizer["Common.Cancel"]</button>
+        <button type="submit" class="btn btn-primary">@Localizer["Common.Save"]</button>
+    </div>
+</form>
+
+<script>
+    (function () {
+        const stateDropdown = document.getElementById('StateId');
+        const cityDropdown = document.getElementById('AreaId');
+        const cityPlaceholder = '-- @Localizer["Shared.Order.Field.Area"] --';
+        const noCitiesText = '@Localizer["Common.NoDataAvailable", "No data available"]';
+
+        if (!stateDropdown || !cityDropdown) {
+            return;
+        }
+
+        stateDropdown.addEventListener('change', function () {
+            const stateId = this.value;
+            cityDropdown.innerHTML = `<option value="">${cityPlaceholder}</option>`;
+            cityDropdown.disabled = true;
+
+            if (!stateId) {
+                return;
+            }
+
+            fetch('@Url.Action("GetCitiesByStateId", "Order")?stateId=' + encodeURIComponent(stateId))
+                .then(response => response.json())
+                .then(cities => {
+                    if (cities && cities.length > 0) {
+                        cities.forEach(city => {
+                            const option = document.createElement('option');
+                            option.value = city.id;
+                            option.textContent = city.nameAr || city.name;
+                            cityDropdown.appendChild(option);
+                        });
+                    } else {
+                        const option = document.createElement('option');
+                        option.value = '';
+                        option.textContent = noCitiesText;
+                        cityDropdown.appendChild(option);
+                    }
+
+                    cityDropdown.disabled = false;
+                })
+                .catch(error => {
+                    console.error('Error loading cities:', error);
+                    cityDropdown.disabled = false;
+                });
+        });
+    })();
+</script>

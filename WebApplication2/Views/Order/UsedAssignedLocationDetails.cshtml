@@ -1,0 +1,27 @@
+@using CRM.WebApp.ViewModels.InventoryManagement.Order
+@model UsedAssignedLocationViewModel
+
+@{
+    ViewData["Title"] = "Assigned Location Details";
+}
+
+<h1>@Localizer["Common.Details", "Details"]</h1>
+
+<dl class="row">
+    <dt class="col-sm-2">@Localizer["Shared.Order.Filter.Employee", "Employee"]</dt>
+    <dd class="col-sm-10">@Model.EmployeeName</dd>
+
+    <dt class="col-sm-2">@Localizer["Shared.Lookup.Countries", "Country"]</dt>
+    <dd class="col-sm-10">@Model.CountryName</dd>
+
+    <dt class="col-sm-2">@Localizer["Shared.Lookup.States", "State"]</dt>
+    <dd class="col-sm-10">@Model.StateName</dd>
+
+    <dt class="col-sm-2">@Localizer["Shared.Order.Field.Area", "City"]</dt>
+    <dd class="col-sm-10">@Model.CityName</dd>
+</dl>
+
+<div>
+    <a asp-action="EditUsedAssignedLocation" asp-route-id="@Model.Id" class="btn btn-warning">@Localizer["Common.Edit", "Edit"]</a>
+    <a asp-action="UsedAssignedLocations" class="btn btn-secondary">@Localizer["Common.Back", "Back"]</a>
+</div>

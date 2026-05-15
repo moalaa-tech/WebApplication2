@@ -1,0 +1,82 @@
+@using CRM.WebApp.ViewModels.InventoryManagement.Order
+@model UsedAssignedLocationViewModel
+
+@{
+    ViewData["Title"] = "Create Assigned Location";
+}
+
+<h1>@Localizer["Common.Create", "Create"]</h1>
+
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="CreateUsedAssignedLocation" method="post">
+            @Html.AntiForgeryToken()
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="mb-3">
+                <label asp-for="EmployeeId" class="form-label">@Localizer["Shared.Order.Filter.Employee", "Employee"]</label>
+                <select asp-for="EmployeeId" class="form-select" asp-items="ViewBag.Employees">
+                    <option value="">-- @Localizer["Shared.Order.Filter.Employee", "Employee"] --</option>
+                </select>
+                <span asp-validation-for="EmployeeId" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="CountryId" class="form-label">@Localizer["Shared.Lookup.Countries", "Country"]</label>
+                <select asp-for="CountryId" class="form-select" asp-items="ViewBag.Countries">
+                    <option value="">-- @Localizer["Shared.Lookup.Countries", "Country"] --</option>
+                </select>
+                <span asp-validation-for="CountryId" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="StatesId" class="form-label">@Localizer["Shared.Lookup.States", "State"]</label>
+                <select asp-for="StatesId" class="form-select" asp-items="ViewBag.States">
+                    <option value="">-- @Localizer["Shared.Lookup.States", "State"] --</option>
+                </select>
+                <span asp-validation-for="StatesId" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="CityId" class="form-label">@Localizer["Shared.Order.Field.Area", "City"]</label>
+                <select asp-for="CityId" class="form-select" asp-items="ViewBag.Cities" disabled="@(Model.StatesId <= 0)">
+                    <option value="">-- @Localizer["Shared.Order.Field.Area", "City"] --</option>
+                </select>
+                <span asp-validation-for="CityId" class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="btn btn-primary">@Localizer["Common.Save", "Save"]</button>
+            <a asp-action="UsedAssignedLocations" class="btn btn-secondary">@Localizer["Common.Back", "Back"]</a>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+    <script>
+        const stateDropdown = document.getElementById('StatesId');
+        const cityDropdown = document.getElementById('CityId');
+
+        stateDropdown?.addEventListener('change', function () {
+            const stateId = this.value;
+            cityDropdown.innerHTML = '<option value="">-- @Localizer["Shared.Order.Field.Area", "City"] --</option>';
+            cityDropdown.disabled = true;
+
+            if (!stateId) {
+                return;
+            }
+
+            fetch('@Url.Action("GetCitiesByStateId", "Order")?stateId=' + encodeURIComponent(stateId))
+                .then(response => response.json())
+                .then(cities => {
+                    cities.forEach(city => {
+                        const option = document.createElement('option');
+                        option.value = city.id;
+                        option.textContent = city.nameAr || city.name;
+                        cityDropdown.appendChild(option);
+                    });
+                    cityDropdown.disabled = false;
+                });
+        });
+    </script>
+}

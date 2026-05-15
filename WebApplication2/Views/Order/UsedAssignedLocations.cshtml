@@ -1,0 +1,41 @@
+@using CRM.WebApp.ViewModels.InventoryManagement.Order
+@model IEnumerable<UsedAssignedLocationViewModel>
+
+@{
+    ViewData["Title"] = "Used Assigned Locations";
+}
+
+<h1>@Localizer["Shared.Order.UsedAssignedLocations.Title", "Used Assigned Locations"]</h1>
+
+<p>
+    <a asp-action="CreateUsedAssignedLocation" class="btn btn-primary">@Localizer["Common.Create", "Create"]</a>
+    <a asp-action="Index" class="btn btn-secondary">@Localizer["Common.Back", "Back"]</a>
+</p>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>@Localizer["Shared.Order.Filter.Employee", "Employee"]</th>
+            <th>@Localizer["Shared.Lookup.Countries", "Country"]</th>
+            <th>@Localizer["Shared.Lookup.States", "State"]</th>
+            <th>@Localizer["Shared.Order.Field.Area", "City"]</th>
+            <th>@Localizer["Common.Actions", "Actions"]</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.EmployeeName</td>
+                <td>@item.CountryName</td>
+                <td>@item.StateName</td>
+                <td>@item.CityName</td>
+                <td>
+                    <a asp-action="EditUsedAssignedLocation" asp-route-id="@item.Id" class="btn btn-sm btn-warning">@Localizer["Common.Edit", "Edit"]</a>
+                    <a asp-action="UsedAssignedLocationDetails" asp-route-id="@item.Id" class="btn btn-sm btn-info">@Localizer["Common.Details", "Details"]</a>
+                    <a asp-action="DeleteUsedAssignedLocation" asp-route-id="@item.Id" class="btn btn-sm btn-danger">@Localizer["Common.Delete", "Delete"]</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

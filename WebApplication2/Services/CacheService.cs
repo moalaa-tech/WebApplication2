@@ -148,6 +148,11 @@ namespace CRM.WebApp.Services
         /// Gets cities for a specific state with caching
         /// </summary>
         public static string GetCitiesKey(int stateId) => $"{CITIES_KEY}:state:{stateId}";
+
+        /// <summary>
+        /// Gets cache key for all cities.
+        /// </summary>
+        public static string GetAllCitiesKey() => CITIES_KEY;
         
         /// <summary>
         /// Gets cache key for active lookup data
