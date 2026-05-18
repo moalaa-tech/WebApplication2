@@ -38,5 +38,19 @@
   "PartiallyPaid": "دفع جزئى",
   "Paid": "مدفوع",
   "Overdue": "متاخر",
-  "Cancelled": "ملغى"
+  "Cancelled": "ملغى",
+  "SelectArea": "اختر المنطقة",
+  "Pending": "قيد الانتظار",
+  "Confirmed": "مؤكد",
+  "PendingPayment": "في انتظار الدفع",
+  "Canceled": "ملغى",
+  "PaymentFailed": "فشل الدفع",
+  "Processing": "قيد المعالجة",
+  "WaitingForPickup": "في انتظار الاستلام",
+  "InDelivery": "قيد التوصيل",
+  "Delivered": "تم التوصيل",
+  "ReturningFromDelivery": "راجع من التوصيل",
+  "RequestRefund": "طلب استرداد",
+  "RefundInProgress": "استرداد قيد التنفيذ",
+  "Refunded": "تم الاسترداد"
 }

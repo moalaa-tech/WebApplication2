@@ -38,5 +38,19 @@
   "PartiallyPaid": "Partially Paid",
   "Paid": "Paid",
   "Overdue": "Overdue",
-  "Cancelled": "Cancelled"
+  "Cancelled": "Cancelled",
+  "SelectArea": "Select Area",
+  "Pending": "Pending",
+  "Confirmed": "Confirmed",
+  "PendingPayment": "Pending Payment",
+  "Canceled": "Cancelled",
+  "PaymentFailed": "Payment Failed",
+  "Processing": "Processing",
+  "WaitingForPickup": "Waiting for Pickup",
+  "InDelivery": "In Delivery",
+  "Delivered": "Delivered",
+  "ReturningFromDelivery": "Returning from Delivery",
+  "RequestRefund": "Request Refund",
+  "RefundInProgress": "Refund In Progress",
+  "Refunded": "Refunded"
 }

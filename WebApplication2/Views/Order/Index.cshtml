@@ -216,12 +216,20 @@
     {
         return status switch
         {
-            InvoiceStatus.Open => "secondary",
-            InvoiceStatus.PartiallyPaid => "warning",
-            InvoiceStatus.Overdue => "success",
-            // InvoiceStatus.Rejected => "danger",
-            InvoiceStatus.Paid => "primary",
-            InvoiceStatus.Cancelled => "dark",
+            InvoiceStatus.Pending => "secondary",
+            InvoiceStatus.Confirmed => "info",
+            InvoiceStatus.PendingPayment => "warning",
+            InvoiceStatus.Paid => "success",
+            InvoiceStatus.PaymentFailed => "danger",
+            InvoiceStatus.Processing => "primary",
+            InvoiceStatus.WaitingForPickup => "light",
+            InvoiceStatus.InDelivery => "dark",
+            InvoiceStatus.Delivered => "success",
+            InvoiceStatus.Canceled => "secondary",
+            InvoiceStatus.ReturningFromDelivery => "warning",
+            InvoiceStatus.RequestRefund => "info",
+            InvoiceStatus.RefundInProgress => "light",
+            InvoiceStatus.Refunded => "success",
             _ => "light"
         };
     }

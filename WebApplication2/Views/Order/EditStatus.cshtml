@@ -1,0 +1,154 @@
+﻿@using CRM.Domain.Enums
+@model CRM.WebApp.DTOs.Order.UpdateOrderDto
+
+@{
+    ViewData["Title"] = @Localizer["Shared.Order.Edit.Title", "Edit Status"];
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-gradient text-white py-4">
+                    <h1 class="mb-0">
+                        <i class="fas fa-edit me-2"></i>
+                        @Localizer["Shared.Order.Edit.Title", "Edit Status"]
+                    </h1>
+                    <small class="text-light">@Localizer["Shared.Order.Edit.Header", "Order"]</small>
+                </div>
+
+                <div class="card-body p-5">
+                    <form asp-action="Edit" asp-antiforgery="true" method="post">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                        <!-- Order ID (Hidden) -->
+                        <input type="hidden" asp-for="Id" />
+
+                        <!-- Order ID Display -->
+                        <div class="mb-4">
+                            <label class="form-label fw-bold text-muted">
+                                @Localizer["Shared.Order.Field.OrderNumber", "Order Number"]
+                            </label>
+                            <div class="alert alert-light border-start border-4 border-primary mb-0">
+                                <span class="text-dark fw-bold fs-5">#@Model.Id</span>
+                            </div>
+                        </div>
+
+                        <!-- Status Dropdown -->
+                        <div class="mb-4">
+                            <label asp-for="Status" class="form-label fw-bold">
+                                @Localizer["Shared.Order.Field.Status"]
+                                <span class="text-danger">*</span>
+                            </label>
+                            <select asp-for="Status" class="form-select form-select-lg border-2">
+                                <option value="">-- @Localizer["common.SelectStatus", "Select Status"] --</option>
+                                @foreach (var status in Enum.GetValues(typeof(InvoiceStatus)))
+                                {
+                                    <option value="@status" selected="@(Model.Status == (InvoiceStatus)status)">
+                                        @Localizer[$"common.{status}"]
+                                    </option>
+                                }
+                            </select>
+                            <span asp-validation-for="Status" class="d-block text-danger small mt-2"></span>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-5">
+                            <a asp-action="Index" class="btn btn-outline-secondary btn-lg">
+                                <i class="fas fa-times me-2"></i>
+                                @Localizer["common.Cancel", "Cancel"]
+                            </a>
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-save me-2"></i>
+                                @Localizer["common.Submit", "Save Changes"]
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Order Info Footer -->
+                <div class="card-footer bg-light">
+                    <small class="text-muted">
+                        <i class="fas fa-info-circle me-2"></i>
+                        @Localizer["Shared.Order.Edit.Description", "Update the order status to track its progress"]
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <style>
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+
+        .card {
+            border-radius: 12px;
+            animation: slideUp 0.6s ease-out;
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+            border-radius: 12px 12px 0 0;
+        }
+
+        .form-select:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            font-weight: 600;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-outline-secondary {
+            font-weight: 600;
+        }
+
+        .btn-outline-secondary:hover {
+            transform: translateY(-2px);
+        }
+
+        .alert-light {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 1rem;
+        }
+
+        @@keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .form-select {
+            border-radius: 8px;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .form-label {
+            color: #2d3748;
+            letter-spacing: 0.3px;
+        }
+    </style>
+}

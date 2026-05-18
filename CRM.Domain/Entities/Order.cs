@@ -11,7 +11,7 @@ namespace CRM.Domain.Entities
         public string? Description { get; set; }
         public int? CustomerId { get; set; }
         public Customer? Customer { get; set; }
-        public InvoiceStatus Status { get; set; } = InvoiceStatus.Open;
+        public InvoiceStatus Status { get; set; } = InvoiceStatus.Pending;
         public int? AssignedToId { get; set; }
         public ApplicationUser? AssignedTo { get; set; }
         public int? StatesId { get; set; }

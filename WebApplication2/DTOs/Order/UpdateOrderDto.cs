@@ -13,6 +13,9 @@ namespace CRM.WebApp.DTOs.Order
         [StringLength(1000, ErrorMessage = "Description cannot exceed 1000 characters.")]
         public string? Description { get; set; }
 
+
+        public string? Note { get; set; }
+
         public int? CustomerId { get; set; }
 
         [Display(Name = "Product")]

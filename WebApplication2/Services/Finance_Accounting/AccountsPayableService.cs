@@ -90,9 +90,9 @@ namespace CRM.WebApp.Services.Finance_Accounting
                 if (invoice.PaidAmount >= invoice.Amount)
                     invoice.Status = InvoiceStatus.Paid;
                 else if (invoice.DueDate < DateTime.UtcNow)
-                    invoice.Status = InvoiceStatus.Overdue;
+                    invoice.Status = InvoiceStatus.InDelivery;
                 else
-                    invoice.Status = InvoiceStatus.Open;
+                    invoice.Status = InvoiceStatus.Pending;
             }
 
             await PaymentRepository.SaveChangesAsync();

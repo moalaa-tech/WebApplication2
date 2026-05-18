@@ -81,6 +81,7 @@ namespace CRM.WebApi.Controllers
             }
             EasyOrderRequest _EasyOrderRequest = Mapper.Map<EasyOrderRequest>(dto);
 
+
             foreach (var kvp in _EasyOrderRequest.cart_items)
             {
                 var product = DbContext.EasyOrderProducts.FirstOrDefault(a => a.id == kvp.product_id);
@@ -161,11 +162,9 @@ namespace CRM.WebApi.Controllers
                 #region insert customer details
 
 
-                Customer? _customer = DbContext.Customers.Where(a => dto.full_name.Contains(a.Name)
-                || dto.phone == a.Phone
-                || a.Phone.StartsWith(dto.phone)
-                || a.Phone.EndsWith(dto.phone))
-                    .FirstOrDefault();
+                Customer? _customer = DbContext.Customers.Where(a => a.Phone == dto.phone.Trim() && dto.full_name.Contains(a.Name)
+
+                || a.Phone.StartsWith(dto.phone) || a.Phone.EndsWith(dto.phone)).FirstOrDefault();
                 Customer customer = new();
 
                 if (_customer == null)

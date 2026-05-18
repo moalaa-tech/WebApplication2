@@ -11,6 +11,7 @@ using CRM.WebApp.Repositories;
 using CRM.WebApp.Services.Interfaces;
 using CRM.WebApp.ViewModels.InventoryManagement.Order;
 using Microsoft.EntityFrameworkCore;
+using static Azure.Core.HttpHeader;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace CRM.WebApp.Services
@@ -122,6 +123,7 @@ namespace CRM.WebApp.Services
                     .Include(o => o.Customer)
                     .Include(o => o.OrderDetails).ThenInclude(i => i.Product)
             );
+            var mm = orders.ToList();
 
             IQueryable<OrderDto> data = orders.Select(m => new OrderDto
             {
@@ -139,43 +141,46 @@ namespace CRM.WebApp.Services
                 },
                 DateCreated = m.DateCreated.Value,
                 TotalAmount = m.EasyOrderRequest.total_cost.GetValueOrDefault(0),
-                //OrderDetails = m.OrderDetails.Select(s => new OrderDetailsDto
-                //{
-                //    ItemsCount = s.Quantity,
-                //    Note = s.Note,
-                //    UTMCampaign = s.UTMCampaign,
-                //    UTMSource = s.UTMSource,
-                //    Product = new ProductDto
-                //    {
-                //        Name = s.Product.Name,
-                //        NameAr = s.Product.NameAr,
-                //        Id = s.Id,
-                //        ProductTypeName = s.Product.ProductType.NameAr
-                //    },
-                //})
-                StatesId = m.StatesId,
-                OrderDetails = m.EasyOrderRequest.cart_items.Select(s => new OrderDetailsDto
+                Note = m.EasyOrderRequest.note,
+                OrderDetails = m.OrderDetails.Select(s => new OrderDetailsDto
                 {
-                    ItemsCount = s.quantity.GetValueOrDefault(0),
-                    Note = m.EasyOrderRequest.note,
-                    UTMCampaign = !string.IsNullOrEmpty(m.EasyOrderRequest.utm_campaign) ? Convert.ToInt64(m.EasyOrderRequest.utm_campaign) : 0,
-                    UTMSource = m.EasyOrderRequest.utm_source,
+                    ItemsCount = s.Quantity,
+                    Note = s.Note,
+                    UTMCampaign = s.UTMCampaign,
+                    UTMSource = s.UTMSource,
                     Product = new ProductDto
                     {
-                        // Id = s.Id,
-                        Name = s.product.name ?? string.Empty,
-                        NameAr = s.product.name,
-                        ProductTypeName = s.product.slug,
-                        Description = s.product.description,
-                        TotalCost = s.product.Price.GetValueOrDefault(0),
-                        SalesPrice = s.product.sale_price.GetValueOrDefault(0),
+                        Id = s.Id,
+                        Name = s.Product.Name ?? string.Empty,
+                        NameAr = s.Product.NameAr,
+                        ProductTypeName = s.Product.ProductType.NameAr,
+                        Description = s.Product.Description,
+                        TotalCost = s.Product.TotalCost,
+                        SalesPrice = s.Product.TotalCost
                     },
-                })
+                }),
+                StatesId = m.StatesId,
+                //OrderDetails = m.EasyOrderRequest.cart_items.Select(s => new OrderDetailsDto
+                //{
+                //    ItemsCount = s.quantity.GetValueOrDefault(0),
+                //    Note = m.EasyOrderRequest.note,
+                //    UTMCampaign = !string.IsNullOrEmpty(m.EasyOrderRequest.utm_campaign) ? Convert.ToInt64(m.EasyOrderRequest.utm_campaign) : 0,
+                //    UTMSource = m.EasyOrderRequest.utm_source,
+                //    ProductId = s.product_id.Value,
+                //    Product = new ProductDto
+                //    {
+                //        // Id = s.Id,
+                //        Name = s.product.name ?? string.Empty,
+                //        NameAr = s.product.name,
+                //        ProductTypeName = s.product.slug,
+                //        Description = s.product.description,
+                //        TotalCost = s.product.Price.GetValueOrDefault(0),
+                //        SalesPrice = s.product.sale_price.GetValueOrDefault(0),
+                //    },
+                //})
             });
 
             OrderDto? _date = data.FirstOrDefault();
-
-            //return _mapper.Map<OrderDto>();
             return _date;
         }
 

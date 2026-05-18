@@ -69,13 +69,9 @@
             <th>
                 @Localizer["Shared.Order.Field.OrderNumber", "Order Number"]
             </th>
-      @*       <th>
+            <th>
                 @Localizer["Shared.Order.Field.Status", "Order Status"]
-            </th> *@
-
-     @*        <th>
-                @Localizer["Shared.Order.Field.DateCreated", "Date Created"]
-            </th> *@
+            </th>
             <th>
                 @Localizer["Shared.Order.Field.TotalAmount", "Total Amount"]
             </th>
@@ -100,11 +96,17 @@
                     @Html.DisplayFor(modelItem => item.Id)
                 </td>
 
-  @*               <td>
-                    <span class="badge bg-@GetStatusColor(item.Status)">
-                        @Localizer[$"common.{item.Status}"]
-                    </span>
-                </td> *@
+                <td>
+                    <select class="form-select form-select-sm" name="Status_@item.Id" id="Status_@item.Id" onchange="updateStatus(@item.Id, this.value)">
+                        @foreach (var status in Enum.GetValues(typeof(InvoiceStatus)))
+                        {
+                            <option value="@((int)status)" selected="@(item.Status == (InvoiceStatus)status)">
+                                @Localizer[$"common.{(InvoiceStatus)status}"]
+                            </option>
+                        }
+                    </select>
+                </td>
+
 
 
                 <td>
@@ -136,8 +138,8 @@
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.Id">@Localizer["Common.Edit", "Edit"]</a> |
                     <a asp-action="Details" asp-route-id="@item.Id">@Localizer["Common.Details", "Details"]</a> |
-                    <a asp-action="ExportPdf" asp-route-id="@item.Id">@Localizer["Shared.Order.Index.Export", "Export"]</a>
-
+@*                     <a asp-action="ExportPdf" asp-route-id="@item.Id">@Localizer["Shared.Order.Index.Export", "Export"]</a>
+ *@
                 </td>
             </tr>
         }
@@ -204,11 +206,20 @@
     {
         return status switch
         {
-            InvoiceStatus.Open => "secondary",
-            InvoiceStatus.PartiallyPaid => "warning",
-            InvoiceStatus.Overdue => "success",
-            InvoiceStatus.Paid => "primary",
-            InvoiceStatus.Cancelled => "dark",
+            InvoiceStatus.Pending => "secondary",
+            InvoiceStatus.Confirmed => "info",
+            InvoiceStatus.PendingPayment => "warning",
+            InvoiceStatus.Paid => "success",
+            InvoiceStatus.PaymentFailed => "danger",
+            InvoiceStatus.Processing => "primary",
+            InvoiceStatus.WaitingForPickup => "light",
+            InvoiceStatus.InDelivery => "dark",
+            InvoiceStatus.Delivered => "success",
+            InvoiceStatus.Canceled => "secondary",
+            InvoiceStatus.ReturningFromDelivery => "warning",
+            InvoiceStatus.RequestRefund => "info",
+            InvoiceStatus.RefundInProgress => "light",
+            InvoiceStatus.Refunded => "success",
             _ => "light"
         };
     }
@@ -249,6 +260,27 @@
                 }
             })
             .catch(error => console.error('Error updating area:', error));
+        }
+
+        function updateStatus(orderId, status) {
+            var token = document.querySelector('input[name="AntiforgeryFieldname"]');
+            if (!token) return;
+
+            fetch('/Order/UpdateStatus', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'RequestVerificationToken': token.value
+                },
+                body: JSON.stringify({ orderId: orderId, status: status })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    console.log('Status updated successfully');
+                }
+            })
+            .catch(error => console.error('Error updating status:', error));
         }
 
     </script>

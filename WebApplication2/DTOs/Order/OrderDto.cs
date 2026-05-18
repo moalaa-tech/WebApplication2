@@ -21,6 +21,7 @@ namespace CRM.WebApp.DTOs.Order
 
         public decimal TotalAmount { get; set; }
         public int? StatesId { get; set; }
+        public string? Note { get; set; }
         public IEnumerable<OrderDetailsDto>? OrderDetails { get; set; }
     }
 }

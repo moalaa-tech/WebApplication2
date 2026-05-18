@@ -313,7 +313,12 @@ namespace CRM.WebApp.Controllers.InventoryManagment
                 OrderNumber = orderDto.OrderNumber,
                 OrderDate = orderDto.DateCreated,
                 TotalAmount = orderDto.TotalAmount,
-                OrderDetails = orderDto.OrderDetails
+                OrderDetails = orderDto.OrderDetails,
+                Note = orderDto.Note,
+                Description = orderDto.Description,
+                Customer = orderDto.Customer,
+                CustomerId = orderDto.CustomerId,
+                
             };
 
             ViewBag.customer = new SelectList(await CustomerService.GetAllCustomersAsync(), "Id", "Name");
@@ -336,6 +341,8 @@ namespace CRM.WebApp.Controllers.InventoryManagment
 
             return View(updateOrderDto);
         }
+
+
 
 
 
@@ -378,6 +385,32 @@ namespace CRM.WebApp.Controllers.InventoryManagment
             }
            var mm = await _OrderService.UpdateOrderAsync(updateOrderDto);
             return RedirectToAction(nameof(Index));
+        }
+
+
+
+
+        [HttpGet]
+        public async Task<IActionResult> EditStatus(int? id)
+        {
+            if (!id.HasValue)
+            {
+                return NotFound();
+            }
+
+            OrderDto? orderDto = await _OrderService.GetOrderByIdAsync(id.Value);
+            if (orderDto == null)
+            {
+                return NotFound();
+            }
+
+            UpdateOrderDto updateOrderDto = new UpdateOrderDto
+            {
+                Id = orderDto.Id,
+                Status = orderDto.Status,
+            };
+
+            return View(updateOrderDto);
         }
 
 
@@ -499,7 +532,7 @@ namespace CRM.WebApp.Controllers.InventoryManagment
 
                             Order order = new();
                             order.CustomerId = customer.Id;
-                            order.Status = InvoiceStatus.Open;
+                            order.Status = InvoiceStatus.Pending;
                             DbContext.Orders.Add(order);
                             await DbContext.SaveChangesAsync();
 
@@ -588,7 +621,6 @@ namespace CRM.WebApp.Controllers.InventoryManagment
         }
 
         [HttpPost]
-        //[ValidateAntiForgeryToken]
         public async Task<IActionResult> UpdateArea([FromBody] UpdateAreaDto model)
         {
             if (model == null || model.OrderId <= 0)
@@ -606,6 +638,31 @@ namespace CRM.WebApp.Controllers.InventoryManagment
             await DbContext.SaveChangesAsync();
 
             return Json(new { success = true, message = "Area updated successfully" });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateStatus([FromBody] UpdateStatusDto model)
+        {
+            if (model == null || model.OrderId <= 0)
+            {
+                return Json(new { success = false, message = "Invalid data" });
+            }
+
+            if (!Enum.IsDefined(typeof(InvoiceStatus), model.Status))
+            {
+                return Json(new { success = false, message = "Invalid status" });
+            }
+
+            var order = await DbContext.Orders.FindAsync(model.OrderId);
+            if (order == null)
+            {
+                return Json(new { success = false, message = "Order not found" });
+            }
+
+            order.Status = model.Status;
+            await DbContext.SaveChangesAsync();
+
+            return Json(new { success = true, message = "Status updated successfully" });
         }
 
         [HttpGet]
@@ -963,7 +1020,13 @@ namespace CRM.WebApp.Controllers.InventoryManagment
 
         public int CityId { get; set; }
         public int StateId { get; set; }
-        public int AreaId { get; set; }
-        public int? EmployeeId { get; set; }
-    }
-}
+         public int AreaId { get; set; }
+         public int? EmployeeId { get; set; }
+     }
+
+     public class UpdateStatusDto
+     {
+         public int OrderId { get; set; }
+         public InvoiceStatus Status { get; set; }
+     }
+ }
