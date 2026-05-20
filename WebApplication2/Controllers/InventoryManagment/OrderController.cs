@@ -659,7 +659,7 @@ namespace CRM.WebApp.Controllers.InventoryManagment
                 return Json(new { success = false, message = "Order not found" });
             }
 
-            order.Status = model.Status;
+            order.Status = model.Status.Value;
             await DbContext.SaveChangesAsync();
 
             return Json(new { success = true, message = "Status updated successfully" });
@@ -1026,7 +1026,7 @@ namespace CRM.WebApp.Controllers.InventoryManagment
 
      public class UpdateStatusDto
      {
-         public int OrderId { get; set; }
-         public InvoiceStatus Status { get; set; }
+         public int? OrderId { get; set; }
+         public InvoiceStatus? Status { get; set; }
      }
  }
