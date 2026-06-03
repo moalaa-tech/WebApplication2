@@ -289,6 +289,61 @@ namespace CRM.WebApp.Services
             return true;
         }
 
+        public async Task<StatisticsData> CalculateStatisticsAsync(int? employeeId, DateTime? dateFrom, DateTime? dateTo)
+        {
+            var orders = _orderRepository.GetAllAsync(
+                include: q => q.Include(o => o.OrderDetails).ThenInclude(od => od.Product)
+            ).AsQueryable();
+
+            // Filter by employee (AssignedToId)
+            if (employeeId.HasValue)
+            {
+                orders = orders.Where(o => o.AssignedToId == employeeId.Value);
+            }
+
+            // Filter by date range
+            if (dateFrom.HasValue)
+            {
+                orders = orders.Where(o => o.DateCreated >= dateFrom.Value);
+            }
+
+            if (dateTo.HasValue)
+            {
+                var toDate = dateTo.Value.Date.AddDays(1).AddSeconds(-1);
+                orders = orders.Where(o => o.DateCreated <= toDate);
+            }
+
+            // Calculate orders per month
+            var ordersPerMonth = await orders
+                .Where(o => o.DateCreated.HasValue)
+                .GroupBy(o => new { o.DateCreated.Value.Year, o.DateCreated.Value.Month })
+                .Select(g => new { g.Key.Year, g.Key.Month, Count = g.Count() })
+                .OrderByDescending(g => g.Year)
+                .ThenByDescending(g => g.Month)
+                .ToListAsync();
+
+            var monthNames = new[] { "January", "February", "March", "April", "May", "June",
+                                     "July", "August", "September", "October", "November", "December" };
+
+            return new StatisticsData
+            {
+                TotalOrders = await orders.CountAsync(),
+                PendingOrders = await orders.Where(o => o.Status == InvoiceStatus.Pending).CountAsync(),
+                ConfirmedOrders = await orders.Where(o => o.Status == InvoiceStatus.Confirmed).CountAsync(),
+                PaidOrders = await orders.Where(o => o.Status == InvoiceStatus.Paid).CountAsync(),
+                DeliveredOrders = await orders.Where(o => o.Status == InvoiceStatus.Delivered).CountAsync(),
+                CanceledOrders = await orders.Where(o => o.Status == InvoiceStatus.Canceled).CountAsync(),
+                TotalAmount = await orders.SumAsync(o => o.OrderDetails.Sum(od => od.Product.TotalCost)),
+                OrdersPerMonth = ordersPerMonth.Select(x => new MonthlyOrders
+                {
+                    Year = x.Year,
+                    Month = x.Month,
+                    MonthName = monthNames[x.Month - 1],
+                    OrderCount = x.Count
+                }).ToList()
+            };
+        }
+
 
     }
 }

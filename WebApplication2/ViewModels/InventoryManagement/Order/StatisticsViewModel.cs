@@ -18,5 +18,15 @@ namespace CRM.WebApp.ViewModels.InventoryManagement.Order
         public int DeliveredOrders { get; set; }
         public int CanceledOrders { get; set; }
         public decimal TotalAmount { get; set; }
+
+        public List<MonthlyOrders> OrdersPerMonth { get; set; } = new List<MonthlyOrders>();
+    }
+
+    public class MonthlyOrders
+    {
+        public int Year { get; set; }
+        public int Month { get; set; }
+        public string MonthName { get; set; } = string.Empty;
+        public int OrderCount { get; set; }
     }
 }

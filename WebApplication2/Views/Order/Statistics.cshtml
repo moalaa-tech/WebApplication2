@@ -100,4 +100,38 @@
             </div>
         </div>
     </div>
+
+    if (Model.Statistics.OrdersPerMonth != null && Model.Statistics.OrdersPerMonth.Any())
+    {
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Orders Per Month</h5>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Year</th>
+                                    <th>Month</th>
+                                    <th>Order Count</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var monthData in Model.Statistics.OrdersPerMonth)
+                                {
+                                    <tr>
+                                        <td>@monthData.Year</td>
+                                        <td>@monthData.MonthName</td>
+                                        <td>@monthData.OrderCount</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
 }
