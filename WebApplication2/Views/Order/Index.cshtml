@@ -88,10 +88,6 @@
             <th>
                 @Localizer["Shared.Order.Field.Status", "Order Status"]
             </th>
-
-            <th>
-                @Localizer["Shared.Order.Field.DateCreated", "Date Created"]
-            </th>
             <th>
                 @Localizer["Shared.Order.Field.TotalAmount", "Total Amount"]
             </th>
@@ -100,6 +96,11 @@
                 @Localizer["Shared.Order.Field.CustomerName", "Customer Name"]
             </th>
 
+            <th>
+                @Localizer["Shared.Order.Field.Address"]
+            </th>
+
+            <th>@Localizer["Common.State", "State"]</th>
             <th>@Localizer["Common.Area", "Area"]</th>
             <th>@Localizer["Common.Actions", "Actions"]</th>
         </tr>
@@ -113,15 +114,15 @@
                 </td>
 
                 <td>
-                    <span class="badge bg-@GetStatusColor(item.Status)">
-                        @Localizer[$"common.{item.Status}"]
-                    </span>
+                    <select class="form-select form-select-sm" name="Status_@item.Id" id="Status_@item.Id" onchange="updateStatus(@item.Id, this.value)">
+                        @foreach (var status in Enum.GetValues(typeof(InvoiceStatus)))
+                        {
+                            <option value="@((int)status)" selected="@(item.Status == (InvoiceStatus)status)">
+                                @Localizer[$"common.{(InvoiceStatus)status}"]
+                            </option>
+                        }
+                    </select>
                 </td>
-
-                <td>
-                    @Html.DisplayFor(modelItem => item.DateCreated)
-                </td>
-
 
                 <td>
                     @Html.DisplayFor(modelItem => item.TotalAmount)
@@ -132,16 +133,27 @@
                 </td>
 
                 <td>
-                    <select class="form-select form-select-sm" name="Area_@item.Id" id="Area_@item.Id" onchange="updateArea(@item.Id, this.value)">
-                        <option value="">@Localizer["Common.SelectArea", "Select Area"]</option>
-                        @if (ViewBag.States != null)
+                    @Html.DisplayFor(modelItem => item.Customer.Address)
+                </td>
+
+                <td>
+                    <select class="form-select form-select-sm state-dropdown" name="State_@item.Id" id="State_@item.Id" onchange="loadCities(@item.Id, this.value)" data-order-id="@item.Id">
+                        <option value="">@Localizer["Common.SelectState", "Select State"]</option>
+                        @if (ViewBag.AllStates != null)
                         {
-                            @foreach (var area in ViewBag.States as List<SelectListItem>)
+                            @foreach (var state in ViewBag.AllStates as List<SelectListItem>)
                             {
-                                <option value="@area.Value" selected="@area.Selected">@area.Text</option>
+                                <option value="@state.Value">@state.Text</option>
                             }
                         }
                     </select>
+                </td>
+
+                <td>
+                    <select class="form-select form-select-sm city-dropdown" name="Area_@item.Id" id="Area_@item.Id" onchange="updateArea(@item.Id, this.value)" disabled>
+                        <option value="">@Localizer["Common.SelectArea", "Select Area"]</option>
+                    </select>
+                    <input type="hidden" name="SelectedStateId_@item.Id" id="SelectedStateId_@item.Id" value="" />
                 </td>
 
                 <td>
@@ -239,6 +251,8 @@
 @section Scripts {
 
     <script>
+        // Store city data for each order
+        const orderCityData = {};
 
         function exportPdf(){
 
@@ -253,12 +267,65 @@
             xhr.send();
         }
 
+        // Load cities for a specific state and populate the city dropdown
+        function loadCities(orderId, stateId) {
+            const cityDropdown = document.getElementById('Area_' + orderId);
+            const stateDropdown = document.getElementById('State_' + orderId);
+
+            // Clear existing options
+            cityDropdown.innerHTML = '<option value="">@Localizer["Common.SelectArea", "Select Area"]</option>';
+
+            if (!stateId) {
+                cityDropdown.disabled = true;
+                return;
+            }
+
+            // Fetch cities for the selected state
+            fetch('/Order/GetCitiesByStateId?stateId=' + stateId)
+                .then(response => response.json())
+                .then(cities => {
+                    // Store for this order
+                    orderCityData[orderId] = cities;
+
+                    // Populate city dropdown
+                    cities.forEach(city => {
+                        const option = document.createElement('option');
+                        option.value = city.id;
+                        option.textContent = city.nameAr || city.name;
+                        cityDropdown.appendChild(option);
+                    });
+
+                    cityDropdown.disabled = false;
+
+                    // Restore previously selected city if exists
+                    const selectedCityId = document.getElementById('SelectedCityId_' + orderId)?.value;
+                    if (selectedCityId) {
+                        cityDropdown.value = selectedCityId;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading cities:', error);
+                    cityDropdown.disabled = true;
+                });
+        }
+
         function updateArea(orderId, areaId) {
+            // Store the selected city ID for restoration after state changes
+            let hiddenInput = document.getElementById('SelectedCityId_' + orderId);
+            if (!hiddenInput) {
+                hiddenInput = document.createElement('input');
+                hiddenInput.type = 'hidden';
+                hiddenInput.id = 'SelectedCityId_' + orderId;
+                hiddenInput.name = 'SelectedCityId_' + orderId;
+                document.body.appendChild(hiddenInput);
+            }
+            hiddenInput.value = areaId;
+
             fetch('/Order/UpdateArea', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                    'RequestVerificationToken': document.querySelector('input[name="AntiforgeryFieldname"]').value
                 },
                 body: JSON.stringify({ orderId: orderId, areaId: areaId })
             })
@@ -271,5 +338,94 @@
             .catch(error => console.error('Error updating area:', error));
         }
 
+        function updateStatus(orderId, status) {
+            var token = document.querySelector('input[name="AntiforgeryFieldname"]');
+            if (!token) return;
+
+            fetch('/Order/UpdateStatus', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'RequestVerificationToken': token.value
+                },
+                body: JSON.stringify({ orderId: orderId, status: status })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    console.log('Status updated successfully');
+                }
+            })
+            .catch(error => console.error('Error updating status:', error));
+        }
+
+        // Initialize: Load state and city for orders that already have a StatesId (city) assigned
+        document.addEventListener('DOMContentLoaded', function() {
+            @foreach (var item in Model.Result)
+            {
+                <text>
+                (function() {
+                    const orderId = @item.Id;
+                    const statesId = @(item.StatesId ?? 0);
+                    const cityStateId = @(item.CityStateId ?? 0);
+
+                    const stateDropdown = document.getElementById('State_' + orderId);
+                    const cityDropdown = document.getElementById('Area_' + orderId);
+
+                    // Pre-select the state if CityStateId is available
+                    if (cityStateId > 0 && stateDropdown) {
+                        stateDropdown.value = cityStateId;
+                    }
+
+                    // If order has a city assigned, store it and load cities
+                    if (statesId > 0) {
+                        // Store the selected city ID
+                        let hiddenInput = document.getElementById('SelectedCityId_' + orderId);
+                        if (!hiddenInput) {
+                            hiddenInput = document.createElement('input');
+                            hiddenInput.type = 'hidden';
+                            hiddenInput.id = 'SelectedCityId_' + orderId;
+                            hiddenInput.name = 'SelectedCityId_' + orderId;
+                            hiddenInput.value = statesId;
+                            document.body.appendChild(hiddenInput);
+                        } else {
+                            hiddenInput.value = statesId;
+                        }
+
+                        // Load cities for the state and select the city
+                        if (cityStateId > 0) {
+                            loadCitiesAndSelect(orderId, cityStateId, statesId);
+                        }
+                    }
+                })();
+                </text>
+            }
+        });
+
+        // Load cities for a state and select a specific city
+        function loadCitiesAndSelect(orderId, stateId, cityIdToSelect) {
+            const cityDropdown = document.getElementById('Area_' + orderId);
+
+            fetch('/Order/GetCitiesByStateId?stateId=' + stateId)
+                .then(response => response.json())
+                .then(cities => {
+                    cityDropdown.innerHTML = '<option value="">@Localizer["Common.SelectArea", "Select Area"]</option>';
+                    cityDropdown.disabled = false;
+
+                    cities.forEach(city => {
+                        const option = document.createElement('option');
+                        option.value = city.id;
+                        option.textContent = city.nameAr || city.name;
+                        cityDropdown.appendChild(option);
+                    });
+
+                    // Select the city
+                    cityDropdown.value = cityIdToSelect;
+                })
+                .catch(error => {
+                    console.error('Error loading cities:', error);
+                    cityDropdown.disabled = true;
+                });
+        }
     </script>
 }

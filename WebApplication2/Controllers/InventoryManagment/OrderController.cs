@@ -91,6 +91,12 @@ namespace CRM.WebApp.Controllers.InventoryManagment
             //var Users = await AuthenticationService.GetAllUserAsync();
             //var Customers = await AuthenticationService.GetAllUserAsync();
 
+            ViewBag.AllStates = States.Select(s => new SelectListItem
+            {
+                Value = s.Id.ToString(),
+                Text = s.NameAr
+            }).ToList();
+
             ViewBag.States = States.Select(s => new SelectListItem
             {
                 Value = s.Id.ToString(),
@@ -147,6 +153,12 @@ namespace CRM.WebApp.Controllers.InventoryManagment
             var Products = await ProductService.GetAllProductsAsync();
             var Users = await AuthenticationService.GetAllUserAsync();
             var Customers = await AuthenticationService.GetAllUserAsync();
+
+            ViewBag.AllStates = States.Select(s => new SelectListItem
+            {
+                Value = s.Id.ToString(),
+                Text = s.NameAr
+            }).ToList();
 
             ViewBag.States = States.Select(s => new SelectListItem
             {
@@ -1010,6 +1022,64 @@ namespace CRM.WebApp.Controllers.InventoryManagment
             ViewBag.Countries = new SelectList(countries, "Id", "NameAr", model?.CountryId);
             ViewBag.States = new SelectList(states, "Id", "NameAr", model?.StatesId);
             ViewBag.Cities = new SelectList(cities, "Id", "NameAr", model?.CityId);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Statistics()
+        {
+            var employees = await EmployeeService.GetAllEmployeesAsync();
+
+            ViewBag.Employees = employees.Select(e => new SelectListItem
+            {
+                Value = e.Id.ToString(),
+                Text = e.Name ?? $"{e.FirstName} {e.LastName}".Trim()
+            }).ToList();
+
+            return View(new StatisticsViewModel());
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CalculateStatistics(StatisticsViewModel model)
+        {
+            var query = DbContext.Orders.AsQueryable();
+
+            // Filter by employee (AssignedToId)
+            if (model.EmployeeId.HasValue)
+            {
+                query = query.Where(o => o.AssignedToId == model.EmployeeId.Value);
+            }
+
+            // Filter by date range
+            if (model.DateFrom.HasValue)
+            {
+                query = query.Where(o => o.DateCreated >= model.DateFrom.Value);
+            }
+
+            if (model.DateTo.HasValue)
+            {
+                var toDate = model.DateTo.Value.Date.AddDays(1).AddSeconds(-1);
+                query = query.Where(o => o.DateCreated <= toDate);
+            }
+
+            model.Statistics = new StatisticsData
+            {
+                TotalOrders = await query.CountAsync(),
+                PendingOrders = await query.Where(o => o.Status == InvoiceStatus.Pending).CountAsync(),
+                ConfirmedOrders = await query.Where(o => o.Status == InvoiceStatus.Confirmed).CountAsync(),
+                PaidOrders = await query.Where(o => o.Status == InvoiceStatus.Paid).CountAsync(),
+                DeliveredOrders = await query.Where(o => o.Status == InvoiceStatus.Delivered).CountAsync(),
+                CanceledOrders = await query.Where(o => o.Status == InvoiceStatus.Canceled).CountAsync(),
+                TotalAmount = await query.SumAsync(o => o.OrderDetails.Sum(od => od.Product.TotalCost))
+            };
+
+            ViewBag.Employees = (await EmployeeService.GetAllEmployeesAsync()).Select(e => new SelectListItem
+            {
+                Value = e.Id.ToString(),
+                Text = e.Name ?? $"{e.FirstName} {e.LastName}".Trim(),
+                Selected = model.EmployeeId.HasValue && e.Id == model.EmployeeId.Value
+            }).ToList();
+
+            return View("Statistics", model);
         }
 
     }

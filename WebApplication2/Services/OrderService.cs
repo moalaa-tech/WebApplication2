@@ -98,11 +98,15 @@ namespace CRM.WebApp.Services
                     NameAr = m.Customer.NameAr,
                     //Email = m.Customer.Email,
                     //Phone = m.Customer.Phone,
-                    Address = m.Customer.Address,                                      
+                    Address = m.Customer.Address,
                 },
                 DateCreated = m.DateCreated.Value,
                 TotalAmount = m.OrderDetails.Sum(od => od.Product.TotalCost),
-                StatesId = m.StatesId
+                StatesId = m.StatesId,
+                CityStateId = _cityRepository.GetAll()
+                    .Where(c => c.Id == m.StatesId)
+                    .Select(c => (int?)c.StateId)
+                    .FirstOrDefault()
             });
 
             int TotalCount = await data.CountAsync();
