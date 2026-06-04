@@ -26,6 +26,7 @@ using Microsoft.Extensions.Localization;
 using OfficeOpenXml;
 using QuestPDF.Fluent;
 using System.Threading.Tasks;
+using System.Text.Json.Serialization;
 
 namespace CRM.WebApp.Controllers.InventoryManagment
 {
@@ -651,19 +652,19 @@ namespace CRM.WebApp.Controllers.InventoryManagment
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateStatus(UpdateStatusDto model)
+        public async Task<IActionResult> UpdateStatus([FromBody] UpdateStatusDto model)
         {
             if (model == null || model.OrderId <= 0)
             {
                 return Json(new { success = false, message = "Invalid data" });
             }
 
-            if (!Enum.IsDefined(typeof(InvoiceStatus), model.Status))
-            {
-                return Json(new { success = false, message = "Invalid status" });
-            }
+            //if (!Enum.IsDefined(typeof(InvoiceStatus), model.Status))
+            //{
+            //    return Json(new { success = false, message = "Invalid status" });
+            //}
 
-            var result = await _OrderService.ChangeStatusAsync(model.OrderId.Value, model.Status.Value);
+            var result = await _OrderService.ChangeStatusAsync(model.OrderId, InvoiceStatus.Confirmed);
 
             if (!result)
             {
@@ -979,7 +980,11 @@ namespace CRM.WebApp.Controllers.InventoryManagment
 
      public class UpdateStatusDto
      {
-         public int? OrderId { get; set; }
-         public InvoiceStatus? Status { get; set; }
+        [JsonPropertyName("orderId")]
+         public int OrderId { get; set; }
+
+
+        //[JsonPropertyName("status")]
+        //public InvoiceStatus Status { get; set; }
      }
  }

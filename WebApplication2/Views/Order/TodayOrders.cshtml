@@ -348,7 +348,7 @@
                     'Content-Type': 'application/json',
                     'RequestVerificationToken': token.value
                 },
-                body: { OrderId: orderId, Status: status }
+                body: JSON.stringify({ orderId: orderId, status: status })
             })
             .then(response => response.json())
             .then(data => {
