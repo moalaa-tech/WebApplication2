@@ -143,19 +143,21 @@
                 </td>
 
                 <td>
-                    <div class="dropdown">
-                        <button class="btn btn-light btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bi bi-three-dots-vertical"></i>
+                    <div class="dropdown position-static">
+                        <button class="btn btn-link btn-sm p-0" type="button" data-bs-toggle="dropdown" data-bs-boundary="viewport" aria-expanded="false">
+                            <i class="bi bi-three-dots-vertical fs-5"></i>
                         </button>
-                        <ul class="dropdown-menu">
+                        <ul class="dropdown-menu dropdown-menu-end shadow">
                             <li>
-                                <a class="dropdown-item" asp-action="Edit" asp-route-id="@item.Id">
-                                    <i class="bi bi-pencil me-2"></i>@Localizer["Common.Edit", "Edit"]
+                                <a class="dropdown-item d-flex align-items-center" asp-action="Edit" asp-route-id="@item.Id">
+                                    <i class="bi bi-pencil me-2"></i>
+                                    <span>@Localizer["Common.Edit", "Edit"]</span>
                                 </a>
                             </li>
                             <li>
-                                <a class="dropdown-item" asp-action="Details" asp-route-id="@item.Id">
-                                    <i class="bi bi-eye me-2"></i>@Localizer["Common.Details", "Details"]
+                                <a class="dropdown-item d-flex align-items-center" asp-action="Details" asp-route-id="@item.Id">
+                                    <i class="bi bi-eye me-2"></i>
+                                    <span>@Localizer["Common.Details", "Details"]</span>
                                 </a>
                             </li>
                         </ul>
@@ -346,7 +348,7 @@
                     'Content-Type': 'application/json',
                     'RequestVerificationToken': token.value
                 },
-                body: JSON.stringify({ orderId: orderId, status: status })
+                body: { OrderId: orderId, Status: status }
             })
             .then(response => response.json())
             .then(data => {

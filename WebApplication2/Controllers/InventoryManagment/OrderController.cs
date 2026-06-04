@@ -651,7 +651,7 @@ namespace CRM.WebApp.Controllers.InventoryManagment
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateStatus([FromBody] UpdateStatusDto model)
+        public async Task<IActionResult> UpdateStatus(UpdateStatusDto model)
         {
             if (model == null || model.OrderId <= 0)
             {

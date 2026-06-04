@@ -157,11 +157,37 @@
                 </td>
 
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">@Localizer["Common.Edit", "Edit"]</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">@Localizer["Common.Details", "Details"]</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">@Localizer["Common.Delete", "Delete"]</a> |
-                    <a asp-action="ExportPdf" asp-route-id="@item.Id">@Localizer["Shared.Order.Index.Export", "Export"]</a>
-
+                    <div class="dropdown position-static">
+                        <button class="btn btn-link btn-sm p-0" type="button" data-bs-toggle="dropdown" data-bs-boundary="viewport" aria-expanded="false">
+                            <i class="bi bi-three-dots-vertical fs-5"></i>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end shadow">
+                            <li>
+                                <a class="dropdown-item d-flex align-items-center" asp-action="Edit" asp-route-id="@item.Id">
+                                    <i class="bi bi-pencil me-2"></i>
+                                    <span>@Localizer["Common.Edit", "Edit"]</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item d-flex align-items-center" asp-action="Details" asp-route-id="@item.Id">
+                                    <i class="bi bi-eye me-2"></i>
+                                    <span>@Localizer["Common.Details", "Details"]</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item d-flex align-items-center" asp-action="Delete" asp-route-id="@item.Id">
+                                    <i class="bi bi-trash me-2"></i>
+                                    <span>@Localizer["Common.Delete", "Delete"]</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item d-flex align-items-center" asp-action="ExportPdf" asp-route-id="@item.Id">
+                                    <i class="bi bi-file-pdf me-2"></i>
+                                    <span>@Localizer["Shared.Order.Index.Export", "Export"]</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                 </td>
             </tr>
         }
