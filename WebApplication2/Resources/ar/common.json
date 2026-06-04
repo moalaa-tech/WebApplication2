@@ -52,5 +52,17 @@
   "ReturningFromDelivery": "راجع من التوصيل",
   "RequestRefund": "طلب استرداد",
   "RefundInProgress": "استرداد قيد التنفيذ",
-  "Refunded": "تم الاسترداد"
+  "Refunded": "تم الاسترداد",
+  "Months.January": "يناير",
+  "Months.February": "فبراير",
+  "Months.March": "مارس",
+  "Months.April": "أبريل",
+  "Months.May": "مايو",
+  "Months.June": "يونيو",
+  "Months.July": "يوليو",
+  "Months.August": "أغسطس",
+  "Months.September": "سبتمبر",
+  "Months.October": "أكتوبر",
+  "Months.November": "نوفمبر",
+  "Months.December": "ديسمبر"
 }

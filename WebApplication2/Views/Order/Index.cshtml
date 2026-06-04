@@ -367,7 +367,7 @@
                 (function() {
                     const orderId = @item.Id;
                     const statesId = @(item.StatesId ?? 0);
-                    const cityStateId = @(item.CityStateId ?? 0);
+                    const cityStateId = @(item.CityId ?? 0);
 
                     const stateDropdown = document.getElementById('State_' + orderId);
                     const cityDropdown = document.getElementById('Area_' + orderId);

@@ -640,14 +640,12 @@ namespace CRM.WebApp.Controllers.InventoryManagment
                 return Json(new { success = false, message = "Invalid data" });
             }
 
-            var order = await DbContext.Orders.FindAsync(model.OrderId);
-            if (order == null)
+            var result = await _OrderService.UpdateAreaAsync(model.OrderId, model.AreaId);
+
+            if (!result)
             {
                 return Json(new { success = false, message = "Order not found" });
             }
-
-            order.StatesId = model.AreaId;
-            await DbContext.SaveChangesAsync();
 
             return Json(new { success = true, message = "Area updated successfully" });
         }
@@ -665,14 +663,12 @@ namespace CRM.WebApp.Controllers.InventoryManagment
                 return Json(new { success = false, message = "Invalid status" });
             }
 
-            var order = await DbContext.Orders.FindAsync(model.OrderId);
-            if (order == null)
+            var result = await _OrderService.ChangeStatusAsync(model.OrderId.Value, model.Status.Value);
+
+            if (!result)
             {
                 return Json(new { success = false, message = "Order not found" });
             }
-
-            order.Status = model.Status.Value;
-            await DbContext.SaveChangesAsync();
 
             return Json(new { success = true, message = "Status updated successfully" });
         }
@@ -790,27 +786,7 @@ namespace CRM.WebApp.Controllers.InventoryManagment
         [HttpGet]
         public async Task<IActionResult> UsedAssignedLocations()
         {
-            var locations = await DbContext.UsedAssignedLocations
-                .AsNoTracking()
-                .Include(x => x.Employee)
-                .Include(x => x.Country)
-                .Include(x => x.State)
-                .Include(x => x.City)
-                .OrderByDescending(x => x.Id)
-                .Select(x => new UsedAssignedLocationViewModel
-                {
-                    Id = x.Id,
-                    EmployeeId = x.EmployeeId,
-                    EmployeeName = x.Employee != null ? x.Employee.Name : string.Empty,
-                    CountryId = x.CountryId,
-                    CountryName = x.Country != null ? x.Country.NameAr ?? x.Country.Name : string.Empty,
-                    StatesId = x.StatesId,
-                    StateName = x.State != null ? x.State.NameAr : string.Empty,
-                    CityId = x.CityId,
-                    CityName = x.City != null ? x.City.NameAr : string.Empty
-                })
-                .ToListAsync();
-
+            var locations = await _OrderService.GetAllUsedAssignedLocationsAsync();
             return View(locations);
         }
 
@@ -822,26 +798,7 @@ namespace CRM.WebApp.Controllers.InventoryManagment
                 return NotFound();
             }
 
-            var model = await DbContext.UsedAssignedLocations
-                .AsNoTracking()
-                .Include(x => x.Employee)
-                .Include(x => x.Country)
-                .Include(x => x.State)
-                .Include(x => x.City)
-                .Where(x => x.Id == id.Value)
-                .Select(x => new UsedAssignedLocationViewModel
-                {
-                    Id = x.Id,
-                    EmployeeId = x.EmployeeId,
-                    EmployeeName = x.Employee != null ? x.Employee.Name : string.Empty,
-                    CountryId = x.CountryId,
-                    CountryName = x.Country != null ? x.Country.NameAr ?? x.Country.Name : string.Empty,
-                    StatesId = x.StatesId,
-                    StateName = x.State != null ? x.State.NameAr : string.Empty,
-                    CityId = x.CityId,
-                    CityName = x.City != null ? x.City.NameAr : string.Empty
-                })
-                .FirstOrDefaultAsync();
+            var model = await _OrderService.GetUsedAssignedLocationByIdAsync(id.Value);
 
             if (model == null)
             {
@@ -873,16 +830,7 @@ namespace CRM.WebApp.Controllers.InventoryManagment
                 return View(model);
             }
 
-            var location = new UsedAssignedLocation
-            {
-                EmployeeId = model.EmployeeId,
-                CountryId = model.CountryId,
-                StatesId = model.StatesId,
-                CityId = model.CityId
-            };
-
-            DbContext.UsedAssignedLocations.Add(location);
-            await DbContext.SaveChangesAsync();
+            await _OrderService.CreateUsedAssignedLocationAsync(model);
 
             TempData["ToasterType"] = "success";
             TempData["ToasterMessage"] = "Assigned location created successfully";
@@ -897,20 +845,11 @@ namespace CRM.WebApp.Controllers.InventoryManagment
                 return NotFound();
             }
 
-            var location = await DbContext.UsedAssignedLocations.FindAsync(id.Value);
-            if (location == null)
+            var model = await _OrderService.GetUsedAssignedLocationByIdAsync(id.Value);
+            if (model == null)
             {
                 return NotFound();
             }
-
-            var model = new UsedAssignedLocationViewModel
-            {
-                Id = location.Id,
-                EmployeeId = location.EmployeeId,
-                CountryId = location.CountryId,
-                StatesId = location.StatesId,
-                CityId = location.CityId
-            };
 
             await PopulateUsedAssignedLocationDropDownsAsync(model);
             return View(model);
@@ -936,18 +875,12 @@ namespace CRM.WebApp.Controllers.InventoryManagment
                 return View(model);
             }
 
-            var location = await DbContext.UsedAssignedLocations.FindAsync(id);
-            if (location == null)
+            var result = await _OrderService.UpdateUsedAssignedLocationAsync(model);
+
+            if (!result)
             {
                 return NotFound();
             }
-
-            location.EmployeeId = model.EmployeeId;
-            location.CountryId = model.CountryId;
-            location.StatesId = model.StatesId;
-            location.CityId = model.CityId;
-
-            await DbContext.SaveChangesAsync();
 
             TempData["ToasterType"] = "success";
             TempData["ToasterMessage"] = "Assigned location updated successfully";
@@ -962,26 +895,7 @@ namespace CRM.WebApp.Controllers.InventoryManagment
                 return NotFound();
             }
 
-            var model = await DbContext.UsedAssignedLocations
-                .AsNoTracking()
-                .Include(x => x.Employee)
-                .Include(x => x.Country)
-                .Include(x => x.State)
-                .Include(x => x.City)
-                .Where(x => x.Id == id.Value)
-                .Select(x => new UsedAssignedLocationViewModel
-                {
-                    Id = x.Id,
-                    EmployeeId = x.EmployeeId,
-                    EmployeeName = x.Employee != null ? x.Employee.Name : string.Empty,
-                    CountryId = x.CountryId,
-                    CountryName = x.Country != null ? x.Country.NameAr ?? x.Country.Name : string.Empty,
-                    StatesId = x.StatesId,
-                    StateName = x.State != null ? x.State.NameAr : string.Empty,
-                    CityId = x.CityId,
-                    CityName = x.City != null ? x.City.NameAr : string.Empty
-                })
-                .FirstOrDefaultAsync();
+            var model = await _OrderService.GetUsedAssignedLocationByIdAsync(id.Value);
 
             if (model == null)
             {
@@ -995,14 +909,12 @@ namespace CRM.WebApp.Controllers.InventoryManagment
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteUsedAssignedLocationConfirmed(int id)
         {
-            var location = await DbContext.UsedAssignedLocations.FindAsync(id);
-            if (location == null)
+            var result = await _OrderService.DeleteUsedAssignedLocationAsync(id);
+
+            if (!result)
             {
                 return NotFound();
             }
-
-            DbContext.UsedAssignedLocations.Remove(location);
-            await DbContext.SaveChangesAsync();
 
             TempData["ToasterType"] = "success";
             TempData["ToasterMessage"] = "Assigned location deleted successfully";

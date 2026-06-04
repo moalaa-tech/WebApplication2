@@ -1,16 +1,16 @@
 @using CRM.WebApp.ViewModels.InventoryManagement.Order
 @model StatisticsViewModel
 @{
-    ViewData["Title"] = Localizer["Order.Statistics.Title", "Statistics"];
+    ViewData["Title"] = Localizer["Shared.Order.Statistics.Title", "Statistics"];
 }
 
-<h1>@Localizer["Order.Statistics.Title", "Statistics"]</h1>
+<h1>@Localizer["Shared.Order.Statistics.Title", "Statistics"]</h1>
 
 <form method="post" asp-action="Statistics" class="row g-3 mb-4">
     <div class="col-md-3">
-        <label class="form-label">@Localizer["Order.Statistics.Employee", "Employee"]</label>
+        <label class="form-label">@Localizer["Shared.Order.Statistics.Employee", "Employee"]</label>
         <select asp-for="EmployeeId" class="form-select">
-            <option value="">@Localizer["Order.Statistics.SelectEmployee", "Select Employee"]</option>
+            <option value="">@Localizer["Shared.Order.Statistics.SelectEmployee", "Select Employee"]</option>
             @if (ViewBag.Employees != null)
             {
                 @foreach (var employee in ViewBag.Employees as List<SelectListItem>)
@@ -22,18 +22,18 @@
     </div>
 
     <div class="col-md-3">
-        <label class="form-label">@Localizer["Order.Statistics.DateFrom", "Date From"]</label>
+        <label class="form-label">@Localizer["Shared.Order.Statistics.DateFrom", "Date From"]</label>
         <input asp-for="DateFrom" type="date" class="form-control" />
     </div>
 
     <div class="col-md-3">
-        <label class="form-label">@Localizer["Order.Statistics.DateTo", "Date To"]</label>
+        <label class="form-label">@Localizer["Shared.Order.Statistics.DateTo", "Date To"]</label>
         <input asp-for="DateTo" type="date" class="form-control" />
     </div>
 
     <div class="col-md-3">
         <label class="form-label">&nbsp;</label>
-        <button type="submit" class="btn btn-primary d-block w-100">@Localizer["Order.Statistics.Calculate", "Calculate"]</button>
+        <button type="submit" class="btn btn-primary d-block w-100">@Localizer["Shared.Order.Statistics.Calculate", "Calculate"]</button>
     </div>
 </form>
 
@@ -43,7 +43,7 @@
         <div class="col-md-3">
             <div class="card text-center">
                 <div class="card-body">
-                    <h5 class="card-title">@Localizer["Order.Statistics.TotalOrders", "Total Orders"]</h5>
+                    <h5 class="card-title">@Localizer["Shared.Order.Statistics.TotalOrders", "Total Orders"]</h5>
                     <h3 class="text-primary">@Model.Statistics.TotalOrders</h3>
                 </div>
             </div>
@@ -51,7 +51,7 @@
         <div class="col-md-3">
             <div class="card text-center">
                 <div class="card-body">
-                    <h5 class="card-title">@Localizer["Order.Statistics.Pending", "Pending"]</h5>
+                    <h5 class="card-title">@Localizer["Shared.Order.Statistics.Pending", "Pending"]</h5>
                     <h3 class="text-warning">@Model.Statistics.PendingOrders</h3>
                 </div>
             </div>
@@ -59,7 +59,7 @@
         <div class="col-md-3">
             <div class="card text-center">
                 <div class="card-body">
-                    <h5 class="card-title">@Localizer["Order.Statistics.Confirmed", "Confirmed"]</h5>
+                    <h5 class="card-title">@Localizer["Shared.Order.Statistics.Confirmed", "Confirmed"]</h5>
                     <h3 class="text-info">@Model.Statistics.ConfirmedOrders</h3>
                 </div>
             </div>
@@ -67,7 +67,7 @@
         <div class="col-md-3">
             <div class="card text-center">
                 <div class="card-body">
-                    <h5 class="card-title">@Localizer["Order.Statistics.Paid", "Paid"]</h5>
+                    <h5 class="card-title">@Localizer["Shared.Order.Statistics.Paid", "Paid"]</h5>
                     <h3 class="text-success">@Model.Statistics.PaidOrders</h3>
                 </div>
             </div>
@@ -78,7 +78,7 @@
         <div class="col-md-3">
             <div class="card text-center">
                 <div class="card-body">
-                    <h5 class="card-title">@Localizer["Order.Statistics.Delivered", "Delivered"]</h5>
+                    <h5 class="card-title">@Localizer["Shared.Order.Statistics.Delivered", "Delivered"]</h5>
                     <h3 class="text-dark">@Model.Statistics.DeliveredOrders</h3>
                 </div>
             </div>
@@ -86,7 +86,7 @@
         <div class="col-md-3">
             <div class="card text-center">
                 <div class="card-body">
-                    <h5 class="card-title">@Localizer["Order.Statistics.Canceled", "Canceled"]</h5>
+                    <h5 class="card-title">@Localizer["Shared.Order.Statistics.Canceled", "Canceled"]</h5>
                     <h3 class="text-danger">@Model.Statistics.CanceledOrders</h3>
                 </div>
             </div>
@@ -94,7 +94,7 @@
         <div class="col-md-6">
             <div class="card text-center">
                 <div class="card-body">
-                    <h5 class="card-title">@Localizer["Order.Statistics.TotalAmount", "Total Amount"]</h5>
+                    <h5 class="card-title">@Localizer["Shared.Order.Statistics.TotalAmount", "Total Amount"]</h5>
                     <h3 class="text-success">@Model.Statistics.TotalAmount.ToString("C")</h3>
                 </div>
             </div>
@@ -107,15 +107,15 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <h5 class="mb-0">@Localizer["Order.Statistics.OrdersPerMonth", "Orders Per Month"]</h5>
+                        <h5 class="mb-0">@Localizer["Shared.Order.Statistics.OrdersPerMonth", "Orders Per Month"]</h5>
                     </div>
                     <div class="card-body">
                         <table class="table table-striped">
                             <thead>
                                 <tr>
-                                    <th>@Localizer["Order.Statistics.Year", "Year"]</th>
-                                    <th>@Localizer["Order.Statistics.Month", "Month"]</th>
-                                    <th>@Localizer["Order.Statistics.OrderCount", "Order Count"]</th>
+                                    <th>@Localizer["Shared.Order.Statistics.Year", "Year"]</th>
+                                    <th>@Localizer["Shared.Order.Statistics.Month", "Month"]</th>
+                                    <th>@Localizer["Shared.Order.Statistics.OrderCount", "Order Count"]</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -123,7 +123,7 @@
                                 {
                                     <tr>
                                         <td>@monthData.Year</td>
-                                        <td>@monthData.MonthName</td>
+                                        <td>@Localizer[$"common.Months.{monthData.MonthName}", monthData.MonthName]</td>
                                         <td>@monthData.OrderCount</td>
                                     </tr>
                                 }

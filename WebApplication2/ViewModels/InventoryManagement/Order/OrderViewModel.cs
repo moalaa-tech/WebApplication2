@@ -24,10 +24,11 @@ namespace CRM.WebApp.ViewModels.InventoryManagement.Order
         public int? StateId { get; set; }
 
         public int? CountryId { get; set; }
+        public int? CityId { get; set; }
 
 
         public int PageIndex { get; set; } = 1;
         public int pageSize { get; set; } = 10;
-        public PaginatedList<OrderDto> Result { get; set; }
+        public PaginatedList<OrderDto>? Result { get; set; }
     }
 }

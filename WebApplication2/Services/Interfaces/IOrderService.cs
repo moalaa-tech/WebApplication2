@@ -18,7 +18,15 @@ namespace CRM.WebApp.Services.Interfaces
 
         Task<bool> ChangeStatusAsync(int id, InvoiceStatus newStatus);
         Task<bool> SaveAssignedLocationAsync(UpdateAreaDto model);
+        Task<bool> UpdateAreaAsync(int orderId, int areaId);
         Task<StatisticsData> CalculateStatisticsAsync(int? employeeId, DateTime? dateFrom, DateTime? dateTo);
+
+        // UsedAssignedLocations methods
+        Task<IEnumerable<UsedAssignedLocationViewModel>> GetAllUsedAssignedLocationsAsync();
+        Task<UsedAssignedLocationViewModel?> GetUsedAssignedLocationByIdAsync(int id);
+        Task<bool> CreateUsedAssignedLocationAsync(UsedAssignedLocationViewModel model);
+        Task<bool> UpdateUsedAssignedLocationAsync(UsedAssignedLocationViewModel model);
+        Task<bool> DeleteUsedAssignedLocationAsync(int id);
 
     }
 }

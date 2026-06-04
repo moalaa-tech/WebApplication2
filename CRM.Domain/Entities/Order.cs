@@ -16,6 +16,11 @@ namespace CRM.Domain.Entities
         public ApplicationUser? AssignedTo { get; set; }
         public int? StatesId { get; set; }
         public State? State { get; set; }
+
+
+        public int? CityId { get; set; }
+        public City? City { get; set; }
+
         public Guid? EasyOrderRequestId { get; set; }
         public EasyOrderRequest? EasyOrderRequest { get; set; }
         public ICollection<OrderDetails>? OrderDetails { get; set; }

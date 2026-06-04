@@ -123,7 +123,7 @@
                 </td>
 
                 <td>
-                    <select class="form-select form-select-sm state-dropdown" name="State_@item.Id" id="State_@item.Id" onchange="loadCities(@item.Id, this.value)" data-order-id="@item.Id">
+                    <select class="form-select form-select-sm state-dropdown" name="State_@item.StatesId" id="State_@item.StatesId" onchange="loadCities(@item.Id, this.value)" data-order-id="@item.Id">
                         <option value="">@Localizer["Common.SelectState", "Select State"]</option>
                         @if (ViewBag.AllStates != null)
                         {
@@ -143,10 +143,23 @@
                 </td>
 
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">@Localizer["Common.Edit", "Edit"]</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">@Localizer["Common.Details", "Details"]</a> |
-@*                     <a asp-action="ExportPdf" asp-route-id="@item.Id">@Localizer["Shared.Order.Index.Export", "Export"]</a>
- *@
+                    <div class="dropdown">
+                        <button class="btn btn-light btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-three-dots-vertical"></i>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a class="dropdown-item" asp-action="Edit" asp-route-id="@item.Id">
+                                    <i class="bi bi-pencil me-2"></i>@Localizer["Common.Edit", "Edit"]
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" asp-action="Details" asp-route-id="@item.Id">
+                                    <i class="bi bi-eye me-2"></i>@Localizer["Common.Details", "Details"]
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                 </td>
             </tr>
         }
@@ -352,7 +365,7 @@
                 (function() {
                     const orderId = @item.Id;
                     const statesId = @(item.StatesId ?? 0);
-                    const cityStateId = @(item.CityStateId ?? 0);
+                    const cityStateId = @(item.CityId ?? 0);
 
                     const stateDropdown = document.getElementById('State_' + orderId);
                     const cityDropdown = document.getElementById('Area_' + orderId);

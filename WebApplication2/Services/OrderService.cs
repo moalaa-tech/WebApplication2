@@ -45,6 +45,7 @@ namespace CRM.WebApp.Services
             var orders = _orderRepository.GetAllAsync(
                 include: q => q
                     .Include(o => o.Customer)
+                    .Include(o => o.State)
                     .Include(o => o.OrderDetails).ThenInclude(i => i.Product)
             ).OrderByDescending(a => a.Id).AsQueryable();
 
@@ -103,7 +104,8 @@ namespace CRM.WebApp.Services
                 DateCreated = m.DateCreated.Value,
                 TotalAmount = m.OrderDetails.Sum(od => od.Product.TotalCost),
                 StatesId = m.StatesId,
-                CityStateId = _cityRepository.GetAll()
+                CountryId = m.State.CountryId,
+                CityId = _cityRepository.GetAll()
                     .Where(c => c.Id == m.StatesId)
                     .Select(c => (int?)c.StateId)
                     .FirstOrDefault()
@@ -265,6 +267,18 @@ namespace CRM.WebApp.Services
             return true;
         }
 
+        public async Task<bool> UpdateAreaAsync(int orderId, int areaId)
+        {
+            var order = await _orderRepository.GetByIdAsync(orderId);
+            if (order == null) return false;
+
+            order.StatesId = areaId;
+            _orderRepository.Update(order);
+            await _orderRepository.SaveChangesAsync();
+
+            return true;
+        }
+
 
         public async Task<bool> AddProductToOrderAsync(UpdateOrderDto dto)
         {
@@ -342,6 +356,100 @@ namespace CRM.WebApp.Services
                     OrderCount = x.Count
                 }).ToList()
             };
+        }
+
+        public async Task<IEnumerable<UsedAssignedLocationViewModel>> GetAllUsedAssignedLocationsAsync()
+        {
+            var locations = _usedAssignedLocationRepository.GetAllAsync(
+                include: q => q
+                    .Include(x => x.Employee)
+                    .Include(x => x.Country)
+                    .Include(x => x.State)
+                    .Include(x => x.City)).AsQueryable();
+
+            return locations.OrderByDescending(x => x.Id)
+                .Select(x => new UsedAssignedLocationViewModel
+                {
+                    Id = x.Id,
+                    EmployeeId = x.EmployeeId,
+                    EmployeeName = x.Employee != null ? x.Employee.Name : string.Empty,
+                    CountryId = x.CountryId,
+                    CountryName = x.Country != null ? x.Country.NameAr ?? x.Country.Name : string.Empty,
+                    StatesId = x.StatesId,
+                    StateName = x.State != null ? x.State.NameAr : string.Empty,
+                    CityId = x.CityId,
+                    CityName = x.City != null ? x.City.NameAr : string.Empty
+                });
+        }
+
+        public async Task<UsedAssignedLocationViewModel?> GetUsedAssignedLocationByIdAsync(int id)
+        {
+            var location = await _usedAssignedLocationRepository.GetAllAsync(
+                x => x.Id == id,
+                include: q => q
+                    .Include(x => x.Employee)
+                    .Include(x => x.Country)
+                    .Include(x => x.State)
+                    .Include(x => x.City))
+                .FirstOrDefaultAsync();
+
+            if (location == null) return null;
+
+            return new UsedAssignedLocationViewModel
+            {
+                Id = location.Id,
+                EmployeeId = location.EmployeeId,
+                EmployeeName = location.Employee != null ? location.Employee.Name : string.Empty,
+                CountryId = location.CountryId,
+                CountryName = location.Country != null ? location.Country.NameAr ?? location.Country.Name : string.Empty,
+                StatesId = location.StatesId,
+                StateName = location.State != null ? location.State.NameAr : string.Empty,
+                CityId = location.CityId,
+                CityName = location.City != null ? location.City.NameAr : string.Empty
+            };
+        }
+
+        public async Task<bool> CreateUsedAssignedLocationAsync(UsedAssignedLocationViewModel model)
+        {
+            var location = new UsedAssignedLocation
+            {
+                EmployeeId = model.EmployeeId,
+                CountryId = model.CountryId,
+                StatesId = model.StatesId,
+                CityId = model.CityId
+            };
+
+            await _usedAssignedLocationRepository.AddAsync(location);
+            await _usedAssignedLocationRepository.SaveChangesAsync();
+
+            return true;
+        }
+
+        public async Task<bool> UpdateUsedAssignedLocationAsync(UsedAssignedLocationViewModel model)
+        {
+            var location = await _usedAssignedLocationRepository.GetByIdAsync(model.Id);
+            if (location == null) return false;
+
+            location.EmployeeId = model.EmployeeId;
+            location.CountryId = model.CountryId;
+            location.StatesId = model.StatesId;
+            location.CityId = model.CityId;
+
+            _usedAssignedLocationRepository.Update(location);
+            await _usedAssignedLocationRepository.SaveChangesAsync();
+
+            return true;
+        }
+
+        public async Task<bool> DeleteUsedAssignedLocationAsync(int id)
+        {
+            var location = await _usedAssignedLocationRepository.GetByIdAsync(id);
+            if (location == null) return false;
+
+            _usedAssignedLocationRepository.Delete(location);
+            await _usedAssignedLocationRepository.SaveChangesAsync();
+
+            return true;
         }
 
 

@@ -21,10 +21,8 @@ namespace CRM.WebApp.DTOs.Order
 
         public decimal TotalAmount { get; set; }
         public int? StatesId { get; set; }
-        /// <summary>
-        /// The StateId that the selected City (StatesId) belongs to
-        /// </summary>
-        public int? CityStateId { get; set; }
+        public int? CountryId { get; set; }
+        public int? CityId { get; set; }
         public string? Note { get; set; }
         public IEnumerable<OrderDetailsDto>? OrderDetails { get; set; }
     }
