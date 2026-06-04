@@ -543,5 +543,22 @@
   "Common.Edit": "Edit",
   "Common.Delete": "Delete",
   "Lookup.States": "States",
-  "Lookup.Countries": "Countries"
+  "Lookup.Countries": "Countries",
+  "Order.Statistics.Title": "Statistics",
+  "Order.Statistics.Employee": "Employee",
+  "Order.Statistics.SelectEmployee": "Select Employee",
+  "Order.Statistics.DateFrom": "Date From",
+  "Order.Statistics.DateTo": "Date To",
+  "Order.Statistics.Calculate": "Calculate",
+  "Order.Statistics.TotalOrders": "Total Orders",
+  "Order.Statistics.Pending": "Pending",
+  "Order.Statistics.Confirmed": "Confirmed",
+  "Order.Statistics.Paid": "Paid",
+  "Order.Statistics.Delivered": "Delivered",
+  "Order.Statistics.Canceled": "Canceled",
+  "Order.Statistics.TotalAmount": "Total Amount",
+  "Order.Statistics.OrdersPerMonth": "Orders Per Month",
+  "Order.Statistics.Year": "Year",
+  "Order.Statistics.Month": "Month",
+  "Order.Statistics.OrderCount": "Order Count"
 }

@@ -1039,7 +1039,7 @@ namespace CRM.WebApp.Controllers.InventoryManagment
         }
 
         [HttpPost]
-        public async Task<IActionResult> CalculateStatistics(StatisticsViewModel model)
+        public async Task<IActionResult> Statistics(StatisticsViewModel model)
         {
             model.Statistics = await _OrderService.CalculateStatisticsAsync(model.EmployeeId, model.DateFrom, model.DateTo);
 

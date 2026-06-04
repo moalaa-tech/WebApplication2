@@ -549,5 +549,22 @@
   "Common.Edit": "تعديل",
   "Common.Delete": "حذف",
   "Lookup.States": "المحافظات",
-  "Lookup.Countries": "الدول"
+  "Lookup.Countries": "الدول",
+  "Order.Statistics.Title": "الإحصائيات",
+  "Order.Statistics.Employee": "الموظف",
+  "Order.Statistics.SelectEmployee": "اختر الموظف",
+  "Order.Statistics.DateFrom": "التاريخ من",
+  "Order.Statistics.DateTo": "التاريخ إلى",
+  "Order.Statistics.Calculate": "حساب",
+  "Order.Statistics.TotalOrders": "إجمالي الطلبات",
+  "Order.Statistics.Pending": "قيد الانتظار",
+  "Order.Statistics.Confirmed": "مؤكد",
+  "Order.Statistics.Paid": "مدفوع",
+  "Order.Statistics.Delivered": "تم التسليم",
+  "Order.Statistics.Canceled": "ملغي",
+  "Order.Statistics.TotalAmount": "إجمالي المبلغ",
+  "Order.Statistics.OrdersPerMonth": "الطلبات شهرياً",
+  "Order.Statistics.Year": "السنة",
+  "Order.Statistics.Month": "الشهر",
+  "Order.Statistics.OrderCount": "عدد الطلبات"
 }
