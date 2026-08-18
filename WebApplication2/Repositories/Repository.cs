@@ -17,6 +17,12 @@ namespace CRM.WebApp.Repositories
             _dbSet = _dbContext.Set<T>();
         }
 
+
+        public virtual IQueryable<T> Table => _dbSet;
+
+        public virtual IQueryable<T> TableNoTracking => _dbSet.AsNoTracking();
+
+
         public virtual IQueryable<T> Query() => _dbSet.AsQueryable();
         public IQueryable<T> GetAll()
         {

@@ -98,7 +98,7 @@
                 </td>
 
                 <td>
-                    <select class="form-select form-select-sm" name="Status_@item.Id" id="Status_@item.Id" onchange="updateStatus(@item.Id, this.value)">
+                    <select class="form-select form-select-sm" asp-for="Status" onchange="updateStatus(@item.Id, this.value)">
                         @foreach (var status in Enum.GetValues(typeof(InvoiceStatus)))
                         {
                             <option value="@((int)status)" selected="@(item.Status == (InvoiceStatus)status)">
@@ -123,7 +123,7 @@
                 </td>
 
                 <td>
-                    <select class="form-select form-select-sm state-dropdown" name="State_@item.StatesId" id="State_@item.StatesId" onchange="loadCities(@item.Id, this.value)" data-order-id="@item.Id">
+                    <select class="form-select form-select-sm state-dropdown" asp-for="StateId" onchange="loadCities(@item.Id, this.value)" data-order-id="@item.Id">
                         <option value="">@Localizer["Common.SelectState", "Select State"]</option>
                         @if (ViewBag.AllStates != null)
                         {
@@ -136,7 +136,7 @@
                 </td>
 
                 <td>
-                    <select class="form-select form-select-sm city-dropdown" name="Area_@item.Id" id="Area_@item.Id" onchange="updateArea(@item.Id, this.value)" disabled>
+                    <select class="form-select form-select-sm city-dropdown" asp-for="CityId" id="Area_@item.Id" onchange="updateArea(@item.Id, this.value)" disabled>
                         <option value="">@Localizer["Common.SelectArea", "Select Area"]</option>
                     </select>
                     <input type="hidden" name="SelectedStateId_@item.Id" id="SelectedStateId_@item.Id" value="" />
@@ -309,7 +309,7 @@
                 });
         }
 
-        function updateArea(orderId, areaId) {
+        function updateArea(orderId, StateId) {
             // Store the selected city ID for restoration after state changes
             let hiddenInput = document.getElementById('SelectedCityId_' + orderId);
             if (!hiddenInput) {
@@ -319,7 +319,7 @@
                 hiddenInput.name = 'SelectedCityId_' + orderId;
                 document.body.appendChild(hiddenInput);
             }
-            hiddenInput.value = areaId;
+            hiddenInput.value = StateId;
 
             fetch('/Order/UpdateArea', {
                 method: 'POST',
@@ -327,7 +327,7 @@
                     'Content-Type': 'application/json',
                     'RequestVerificationToken': document.querySelector('input[name="AntiforgeryFieldname"]').value
                 },
-                body: JSON.stringify({ orderId: orderId, areaId: areaId })
+                body: JSON.stringify({ orderId: orderId, StateId: StateId , CityId : StateId })
             })
             .then(response => response.json())
             .then(data => {

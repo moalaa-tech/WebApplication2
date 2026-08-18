@@ -267,12 +267,16 @@ namespace CRM.WebApp.Services
             return true;
         }
 
-        public async Task<bool> UpdateAreaAsync(int orderId, int areaId)
+        public async Task<bool> UpdateAreaAsync(int orderId, int CityId)
         {
             var order = await _orderRepository.GetByIdAsync(orderId);
+
+            var StateId = await _cityRepository.Query().Where(c => c.Id == CityId).Select(c => c.StateId).FirstOrDefaultAsync();
+
             if (order == null) return false;
 
-            order.StatesId = areaId;
+            order.StatesId = StateId;
+            order.CityId = CityId;
             _orderRepository.Update(order);
             await _orderRepository.SaveChangesAsync();
 
@@ -312,7 +316,11 @@ namespace CRM.WebApp.Services
             // Filter by employee (AssignedToId)
             if (employeeId.HasValue)
             {
-                orders = orders.Where(o => o.AssignedToId == employeeId.Value);
+               var CityIDs =  _usedAssignedLocationRepository.TableNoTracking.Where(u => u.EmployeeId == employeeId.Value)
+                    .Select(u => u.CityId)
+                    .ToList();  
+
+                orders = orders.Where(o => o.CityId.HasValue && CityIDs.Any() && CityIDs.Contains(o.CityId.Value));
             }
 
             // Filter by date range

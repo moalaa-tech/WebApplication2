@@ -331,7 +331,7 @@ namespace CRM.WebApp.Controllers.InventoryManagment
                 Description = orderDto.Description,
                 Customer = orderDto.Customer,
                 CustomerId = orderDto.CustomerId,
-                
+
             };
 
             ViewBag.customer = new SelectList(await CustomerService.GetAllCustomersAsync(), "Id", "Name");
@@ -396,7 +396,7 @@ namespace CRM.WebApp.Controllers.InventoryManagment
             {
                 return NotFound();
             }
-           var mm = await _OrderService.UpdateOrderAsync(updateOrderDto);
+            var mm = await _OrderService.UpdateOrderAsync(updateOrderDto);
             return RedirectToAction(nameof(Index));
         }
 
@@ -641,7 +641,7 @@ namespace CRM.WebApp.Controllers.InventoryManagment
                 return Json(new { success = false, message = "Invalid data" });
             }
 
-            var result = await _OrderService.UpdateAreaAsync(model.OrderId, model.AreaId);
+            var result = await _OrderService.UpdateAreaAsync(model.OrderId, model.CityId);
 
             if (!result)
             {
@@ -659,12 +659,13 @@ namespace CRM.WebApp.Controllers.InventoryManagment
                 return Json(new { success = false, message = "Invalid data" });
             }
 
-            //if (!Enum.IsDefined(typeof(InvoiceStatus), model.Status))
-            //{
-            //    return Json(new { success = false, message = "Invalid status" });
-            //}
+            if (!Enum.IsDefined(typeof(InvoiceStatus), model.Status))
+            {
+                return Json(new { success = false, message = "Invalid status" });
+            }
 
-            var result = await _OrderService.ChangeStatusAsync(model.OrderId, InvoiceStatus.Confirmed);
+
+            bool result = await _OrderService.ChangeStatusAsync(model.OrderId, InvoiceStatus.Confirmed);
 
             if (!result)
             {
@@ -974,17 +975,17 @@ namespace CRM.WebApp.Controllers.InventoryManagment
 
         public int CityId { get; set; }
         public int StateId { get; set; }
-         public int AreaId { get; set; }
-         public int? EmployeeId { get; set; }
-     }
+        public int AreaId { get; set; }
+        public int? EmployeeId { get; set; }
+    }
 
-     public class UpdateStatusDto
-     {
+    public class UpdateStatusDto
+    {
         [JsonPropertyName("orderId")]
-         public int OrderId { get; set; }
+        public int OrderId { get; set; }
 
 
-        //[JsonPropertyName("status")]
-        //public InvoiceStatus Status { get; set; }
-     }
- }
+        [JsonPropertyName("status")]
+        public InvoiceStatus Status { get; set; }
+    }
+}

@@ -1,4 +1,5 @@
 ﻿using CRM.WebApp.Paging;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 using System.Linq.Expressions;
 
@@ -10,7 +11,9 @@ namespace CRM.WebApp.Repositories
         IQueryable<T> GetAllAsync(params Expression<Func<T, object>>[] includes);
         IQueryable<T> Query();
 
+        IQueryable<T> Table { get; }
 
+        IQueryable<T> TableNoTracking { get; }
         IQueryable<T> GetAllAsync(
                        Expression<Func<T, bool>>? filter = null,
                        Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null,
