@@ -1,0 +1,65 @@
+<section class="page">
+  <div class="page-head">
+    <h2>Lead Scoring</h2>
+    @if (leadScores().length) {
+      <span class="count">{{ leadScores().length }}</span>
+    }
+  </div>
+
+  @if (loading()) {
+    <p class="hint">Loading&hellip;</p>
+  }
+
+  @if (error(); as message) {
+    <p class="error">{{ message }}</p>
+  }
+
+  <div class="toolbar">
+    <input
+      class="search"
+      type="search"
+      placeholder="Filter by score type"
+      [value]="query()"
+      (input)="query.set(($any($event.target)).value); load()"
+    />
+  </div>
+
+  @if (leadScores().length) {
+    <table class="list-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Score type</th>
+          <th>Score</th>
+          <th>Criteria</th>
+          <th>Active</th>
+          <th>Rules</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (leadScore of leadScores(); track leadScore.id) {
+          <tr>
+            <td>{{ leadScore.name }}</td>
+            <td>{{ leadScore.scoreType }}</td>
+            <td>{{ leadScore.score }}</td>
+            <td>{{ leadScore.criteria }}</td>
+            <td>{{ leadScore.isActive ? 'Yes' : 'No' }}</td>
+            <td>{{ leadScore.rules.length }}</td>
+            <td class="actions">
+              <button
+                class="btn btn-danger"
+                (click)="remove(leadScore.id)"
+                [disabled]="removingId() === leadScore.id"
+              >
+                Delete
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  } @else if (!loading() && !error()) {
+    <p class="empty">No lead scores found.</p>
+  }
+</section>

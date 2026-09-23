@@ -1,0 +1,45 @@
+<section class="page">
+  <div class="page-head">
+    <h2>Products</h2>
+    @if (products().length) {
+      <span class="count">{{ products().length }}</span>
+    }
+  </div>
+
+  @if (loading()) {
+    <p class="hint">Loading&hellip;</p>
+  }
+
+  @if (error(); as message) {
+    <p class="error">{{ message }}</p>
+  }
+
+  @if (products().length) {
+    <table class="list-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>SKU</th>
+          <th>Type</th>
+          <th>Current stock</th>
+          <th>Min stock</th>
+          <th>Sales price</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (product of products(); track product.id) {
+          <tr>
+            <td>{{ product.name ?? product.nameAr ?? '' }}</td>
+            <td>{{ product.sku ?? '' }}</td>
+            <td>{{ product.productTypeName ?? '' }}</td>
+            <td>{{ product.currentStock ?? '' }}</td>
+            <td>{{ product.minimumStockLevel ?? '' }}</td>
+            <td>{{ product.salesPrice ?? '' }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  } @else if (!loading() && !error()) {
+    <p class="empty">No products found.</p>
+  }
+</section>

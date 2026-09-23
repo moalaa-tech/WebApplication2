@@ -1,0 +1,55 @@
+<section class="page">
+  <div class="page-head">
+    <h2>Fixed Assets</h2>
+    @if (assets().length) {
+      <span class="count">{{ assets().length }}</span>
+    }
+  </div>
+
+  @if (loading()) {
+    <p class="hint">Loading&hellip;</p>
+  }
+
+  @if (error(); as message) {
+    <p class="error">{{ message }}</p>
+  }
+
+  @if (assets().length) {
+    <table class="list-table">
+      <thead>
+        <tr>
+          <th>Asset number</th>
+          <th>Name</th>
+          <th>Acquisition date</th>
+          <th>Acquisition cost</th>
+          <th>Book value</th>
+          <th>Active</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (asset of assets(); track asset.id) {
+          <tr>
+            <td>{{ asset.assetNumber }}</td>
+            <td>{{ asset.name }}</td>
+            <td>{{ asset.acquisitionDate }}</td>
+            <td>{{ asset.acquisitionCost }}</td>
+            <td>{{ asset.currentBookValue }}</td>
+            <td>{{ asset.isActive ? 'Yes' : 'No' }}</td>
+            <td class="actions">
+              <button
+                class="btn btn-danger"
+                (click)="remove(asset.id)"
+                [disabled]="removingId() === asset.id"
+              >
+                Delete
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  } @else if (!loading() && !error()) {
+    <p class="empty">No fixed assets found.</p>
+  }
+</section>

@@ -1,0 +1,55 @@
+<section class="page">
+  <div class="page-head">
+    <h2>Segmentation</h2>
+    @if (segments().length) {
+      <span class="count">{{ segments().length }}</span>
+    }
+  </div>
+
+  @if (loading()) {
+    <p class="hint">Loading&hellip;</p>
+  }
+
+  @if (error(); as message) {
+    <p class="error">{{ message }}</p>
+  }
+
+  @if (segments().length) {
+    <table class="list-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Segment type</th>
+          <th>Criteria</th>
+          <th>Description</th>
+          <th>Active</th>
+          <th>Created</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (segment of segments(); track segment.id) {
+          <tr>
+            <td>{{ segment.name }}</td>
+            <td>{{ segment.segmentType }}</td>
+            <td>{{ segment.criteria }}</td>
+            <td>{{ segment.description }}</td>
+            <td>{{ segment.isActive ? 'Yes' : 'No' }}</td>
+            <td>{{ segment.createdDate }}</td>
+            <td class="actions">
+              <button
+                class="btn btn-danger"
+                (click)="remove(segment.id)"
+                [disabled]="removingId() === segment.id"
+              >
+                Delete
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  } @else if (!loading() && !error()) {
+    <p class="empty">No segments found.</p>
+  }
+</section>

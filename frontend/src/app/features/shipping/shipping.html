@@ -1,0 +1,85 @@
+<section class="page">
+  <div class="page-head">
+    <h2>Shipping</h2>
+    @if (carriers().length) {
+      <span class="count">{{ carriers().length }}</span>
+    }
+  </div>
+
+  @if (loading()) {
+    <p class="hint">Loading&hellip;</p>
+  }
+
+  @if (error(); as message) {
+    <p class="error">{{ message }}</p>
+  }
+
+  <div class="toolbar">
+    <input
+      class="search"
+      type="search"
+      placeholder="Tracking number"
+      [value]="trackingNumber()"
+      (input)="trackingNumber.set(($any($event.target)).value)"
+    />
+    <button class="btn" (click)="track()" [disabled]="trackingLoading()">
+      {{ trackingLoading() ? 'Tracking…' : 'Track' }}
+    </button>
+  </div>
+
+  @if (tracking(); as info) {
+    <div class="key-value">
+      <div class="kv">
+        <span class="k">Tracking number</span>
+        <span class="v">{{ info.trackingNumber }}</span>
+      </div>
+      <div class="kv">
+        <span class="k">Carrier</span>
+        <span class="v">{{ info.carrier }}</span>
+      </div>
+      <div class="kv">
+        <span class="k">Status</span>
+        <span class="v">{{ info.currentStatus ?? info.status }}</span>
+      </div>
+      <div class="kv">
+        <span class="k">Estimated delivery</span>
+        <span class="v">{{ info.estimatedDeliveryDate }}</span>
+      </div>
+      <div class="kv">
+        <span class="k">Weight</span>
+        <span class="v">{{ info.weight }} {{ info.weightUnit }}</span>
+      </div>
+      <div class="kv">
+        <span class="k">Destination</span>
+        <span class="v">{{ info.destination?.city }}, {{ info.destination?.country }}</span>
+      </div>
+    </div>
+  }
+
+  @if (carriers().length) {
+    <table class="list-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Arabic name</th>
+          <th>Max weight</th>
+          <th>Active</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (carrier of carriers(); track carrier.id) {
+          <tr>
+            <td>{{ carrier.name }}</td>
+            <td>{{ carrier.nameAr }}</td>
+            <td>{{ carrier.maximumPackageWeight }}</td>
+            <td>{{ carrier.isActive ? 'Yes' : 'No' }}</td>
+            <td>{{ carrier.description }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  } @else if (!loading() && !error()) {
+    <p class="empty">No carriers found.</p>
+  }
+</section>

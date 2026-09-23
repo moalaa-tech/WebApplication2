@@ -1,0 +1,62 @@
+<section class="page">
+  <div class="page-head">
+    <h2>Payrolls</h2>
+    @if (payrolls().length) {
+      <span class="count">{{ payrolls().length }}</span>
+    }
+  </div>
+
+  @if (loading()) {
+    <p class="hint">Loading&hellip;</p>
+  }
+
+  @if (error(); as message) {
+    <p class="error">{{ message }}</p>
+  }
+
+  <div class="toolbar">
+    <input
+      class="search"
+      type="date"
+      [value]="startDate()"
+      (change)="onStart($any($event.target).value)"
+    />
+    <input
+      class="search"
+      type="date"
+      [value]="endDate()"
+      (change)="onEnd($any($event.target).value)"
+    />
+  </div>
+
+  @if (payrolls().length) {
+    <table class="list-table">
+      <thead>
+        <tr>
+          <th>Employee</th>
+          <th>Number</th>
+          <th>Basic salary</th>
+          <th>Net salary</th>
+          <th>Pay period</th>
+          <th>Payment date</th>
+          <th>Processed</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (payroll of payrolls(); track payroll.id) {
+          <tr>
+            <td>{{ payroll.employeeName }}</td>
+            <td>{{ payroll.employeeNumber }}</td>
+            <td>{{ payroll.basicSalary }}</td>
+            <td>{{ payroll.netSalary }}</td>
+            <td>{{ payroll.payPeriodStart }} &ndash; {{ payroll.payPeriodEnd }}</td>
+            <td>{{ payroll.paymentDate }}</td>
+            <td>{{ payroll.isProcessed ? 'Yes' : 'No' }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  } @else if (!loading() && !error()) {
+    <p class="empty">No payrolls found.</p>
+  }
+</section>

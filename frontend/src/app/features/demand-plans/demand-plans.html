@@ -1,0 +1,53 @@
+<section class="page">
+  <div class="page-head">
+    <h2>Demand Plans</h2>
+    @if (demandPlans().length) {
+      <span class="count">{{ demandPlans().length }}</span>
+    }
+  </div>
+
+  @if (loading()) {
+    <p class="hint">Loading&hellip;</p>
+  }
+
+  @if (error(); as message) {
+    <p class="error">{{ message }}</p>
+  }
+
+  @if (demandPlans().length) {
+    <table class="list-table">
+      <thead>
+        <tr>
+          <th>Plan name</th>
+          <th>Start date</th>
+          <th>End date</th>
+          <th>Status</th>
+          <th>Notes</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (plan of demandPlans(); track plan.id) {
+          <tr>
+            <td>{{ plan.planName }}</td>
+            <td>{{ plan.startDate }}</td>
+            <td>{{ plan.endDate }}</td>
+            <td>{{ plan.status }}</td>
+            <td>{{ plan.notes }}</td>
+            <td class="actions">
+              <button
+                class="btn btn-danger"
+                (click)="remove(plan.id)"
+                [disabled]="removingId() === plan.id"
+              >
+                Delete
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  } @else if (!loading() && !error()) {
+    <p class="empty">No demand plans found.</p>
+  }
+</section>

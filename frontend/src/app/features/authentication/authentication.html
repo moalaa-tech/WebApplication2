@@ -1,0 +1,38 @@
+<section class="page">
+  <div class="page-head">
+    <h2>Authentication</h2>
+    @if (signedOut()) {
+      <span class="count">Signed out</span>
+    } @else {
+      <span class="count">Signed in</span>
+    }
+  </div>
+
+  @if (result(); as message) {
+    <p class="hint">{{ message }}</p>
+  }
+
+  @if (error(); as message) {
+    <p class="error">{{ message }}</p>
+  }
+
+  <div class="toolbar">
+    <input
+      class="search"
+      type="email"
+      placeholder="Email"
+      [value]="email()"
+      (input)="email.set(($any($event.target)).value)"
+    />
+    <input
+      class="search"
+      type="password"
+      placeholder="Password"
+      [value]="password()"
+      (input)="password.set(($any($event.target)).value)"
+    />
+    <button class="btn" (click)="login()" [disabled]="busy()">Login</button>
+    <button class="btn" (click)="register()" [disabled]="busy()">Register</button>
+    <button class="btn btn-danger" (click)="logout()" [disabled]="busy()">Logout</button>
+  </div>
+</section>

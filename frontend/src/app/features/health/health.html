@@ -1,0 +1,56 @@
+<section class="page">
+  <div class="page-head">
+    <h2>Health</h2>
+    @if (report(); as r) {
+      <span class="count">{{ r.status }}</span>
+    }
+  </div>
+
+  @if (loading()) {
+    <p class="hint">Loading&hellip;</p>
+  }
+
+  @if (error(); as message) {
+    <p class="error">{{ message }}</p>
+  }
+
+  @if (report(); as r) {
+    <div class="key-value">
+      <div class="kv">
+        <span class="k">Status</span>
+        <span class="v">{{ r.status }}</span>
+      </div>
+      <div class="kv">
+        <span class="k">Total duration</span>
+        <span class="v">{{ r.totalDuration }}</span>
+      </div>
+      <div class="kv">
+        <span class="k">Entries</span>
+        <span class="v">{{ r.entries.length }}</span>
+      </div>
+    </div>
+
+    @if (r.entries.length) {
+      <table class="list-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Status</th>
+            <th>Duration</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (entry of r.entries; track entry.name) {
+            <tr>
+              <td>{{ entry.name }}</td>
+              <td>{{ entry.status }}</td>
+              <td>{{ entry.duration }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    } @else {
+      <p class="empty">No health entries reported.</p>
+    }
+  }
+</section>

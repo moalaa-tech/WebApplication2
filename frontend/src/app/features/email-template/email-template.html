@@ -1,0 +1,49 @@
+<section class="page">
+  <div class="page-head">
+    <h2>Email Templates</h2>
+    @if (templates().length) {
+      <span class="count">{{ templates().length }}</span>
+    }
+  </div>
+
+  @if (loading()) {
+    <p class="hint">Loading&hellip;</p>
+  }
+
+  @if (error(); as message) {
+    <p class="error">{{ message }}</p>
+  }
+
+  @if (templates().length) {
+    <table class="list-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Subject</th>
+          <th>Content</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (template of templates(); track template.id) {
+          <tr>
+            <td>{{ template.name }}</td>
+            <td>{{ template.subject }}</td>
+            <td>{{ template.content }}</td>
+            <td class="actions">
+              <button
+                class="btn btn-danger"
+                (click)="remove(template.id)"
+                [disabled]="removingId() === template.id"
+              >
+                Delete
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  } @else if (!loading() && !error()) {
+    <p class="empty">No email templates found.</p>
+  }
+</section>

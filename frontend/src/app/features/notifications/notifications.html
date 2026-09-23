@@ -1,0 +1,60 @@
+<section class="page">
+  <div class="page-head">
+    <h2>Notifications</h2>
+    @if (notifications().length) {
+      <span class="count">{{ notifications().length }}</span>
+    }
+  </div>
+
+  @if (loading()) {
+    <p class="hint">Loading&hellip;</p>
+  }
+
+  @if (error(); as message) {
+    <p class="error">{{ message }}</p>
+  }
+
+  @if (notifications().length) {
+    <table class="list-table">
+      <thead>
+        <tr>
+          <th>Message</th>
+          <th>User</th>
+          <th>Read</th>
+          <th>Created</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (notification of notifications(); track notification.id) {
+          <tr>
+            <td>{{ notification.message }}</td>
+            <td>{{ notification.userId }}</td>
+            <td>{{ notification.isRead ? 'Yes' : 'No' }}</td>
+            <td>{{ notification.dateCreated ?? '&mdash;' }}</td>
+            <td class="actions">
+              @if (!notification.isRead) {
+                <button
+                  class="btn"
+                  (click)="markAsRead(notification.id)"
+                  [disabled]="busyId() === notification.id"
+                >
+                  Mark read
+                </button>
+              }
+              <button
+                class="btn btn-danger"
+                (click)="remove(notification.id)"
+                [disabled]="busyId() === notification.id"
+              >
+                Delete
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  } @else if (!loading() && !error()) {
+    <p class="empty">No notifications found.</p>
+  }
+</section>

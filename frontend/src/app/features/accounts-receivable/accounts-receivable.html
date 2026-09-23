@@ -1,0 +1,53 @@
+<section class="page">
+  <div class="page-head">
+    <h2>Accounts Receivable</h2>
+    @if (accountsReceivables().length) {
+      <span class="count">{{ accountsReceivables().length }}</span>
+    }
+  </div>
+
+  @if (loading()) {
+    <p class="hint">Loading&hellip;</p>
+  }
+
+  @if (error(); as message) {
+    <p class="error">{{ message }}</p>
+  }
+
+  @if (accountsReceivables().length) {
+    <table class="list-table">
+      <thead>
+        <tr>
+          <th>Customer</th>
+          <th>Invoice</th>
+          <th>Invoice date</th>
+          <th>Amount due</th>
+          <th>Due date</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (item of accountsReceivables(); track item.id) {
+          <tr>
+            <td>{{ item.customerName }}</td>
+            <td>{{ item.invoiceNumber }}</td>
+            <td>{{ item.invoiceDate }}</td>
+            <td>{{ item.amountDue }}</td>
+            <td>{{ item.dueDate }}</td>
+            <td class="actions">
+              <button
+                class="btn btn-danger"
+                (click)="remove(item.id)"
+                [disabled]="removingId() === item.id"
+              >
+                Delete
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  } @else if (!loading() && !error()) {
+    <p class="empty">No accounts receivable found.</p>
+  }
+</section>

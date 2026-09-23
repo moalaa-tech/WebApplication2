@@ -1,0 +1,76 @@
+.shell {
+  display: flex;
+  min-height: 100vh;
+}
+
+.sidebar {
+  width: 230px;
+  flex: 0 0 230px;
+  background: var(--nav-bg);
+  color: var(--nav-fg);
+  padding: 1rem;
+  overflow-y: auto;
+  max-height: 100vh;
+  position: sticky;
+  top: 0;
+}
+
+.brand {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid #1f2937;
+}
+
+.brand a {
+  color: var(--nav-fg);
+  text-decoration: none;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.tag {
+  font-size: 0.75rem;
+  color: #9ca3af;
+}
+
+.groups details {
+  margin-bottom: 0.4rem;
+}
+
+.groups summary {
+  cursor: pointer;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #9ca3af;
+  padding: 0.35rem 0;
+  font-weight: 700;
+}
+
+.groups a {
+  display: block;
+  color: #d1d5db;
+  text-decoration: none;
+  font-size: 0.85rem;
+  padding: 0.3rem 0.5rem;
+  border-radius: 5px;
+}
+
+.groups a:hover {
+  background: #1f2937;
+  color: #ffffff;
+}
+
+.groups a.active {
+  background: #374151;
+  color: #ffffff;
+}
+
+.content {
+  flex: 1;
+  min-width: 0;
+  background: #f9fafb;
+}

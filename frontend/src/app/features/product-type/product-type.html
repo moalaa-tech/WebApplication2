@@ -1,0 +1,49 @@
+<section class="page">
+  <div class="page-head">
+    <h2>Product types</h2>
+    @if (productTypes().length) {
+      <span class="count">{{ productTypes().length }}</span>
+    }
+  </div>
+
+  @if (loading()) {
+    <p class="hint">Loading&hellip;</p>
+  }
+
+  @if (error(); as message) {
+    <p class="error">{{ message }}</p>
+  }
+
+  @if (productTypes().length) {
+    <table class="list-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Name (AR)</th>
+          <th>Description</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (productType of productTypes(); track productType.id) {
+          <tr>
+            <td>{{ productType.name ?? '' }}</td>
+            <td>{{ productType.nameAR ?? '' }}</td>
+            <td>{{ productType.description ?? '' }}</td>
+            <td class="actions">
+              <button
+                class="btn btn-danger"
+                (click)="remove(productType.id)"
+                [disabled]="removingId() === productType.id"
+              >
+                Delete
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  } @else if (!loading() && !error()) {
+    <p class="empty">No product types found.</p>
+  }
+</section>

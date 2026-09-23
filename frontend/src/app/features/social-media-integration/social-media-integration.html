@@ -1,0 +1,55 @@
+<section class="page">
+  <div class="page-head">
+    <h2>Social Media Integration</h2>
+    @if (posts().length) {
+      <span class="count">{{ posts().length }}</span>
+    }
+  </div>
+
+  @if (loading()) {
+    <p class="hint">Loading&hellip;</p>
+  }
+
+  @if (error(); as message) {
+    <p class="error">{{ message }}</p>
+  }
+
+  <div class="toolbar">
+    <a class="btn" href="/api/SocialMediaIntegration/login">Login</a>
+  </div>
+
+  @if (posts().length) {
+    <table class="list-table">
+      <thead>
+        <tr>
+          <th>Content</th>
+          <th>Platform</th>
+          <th>Scheduled time</th>
+          <th>Status</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (post of posts(); track post.id) {
+          <tr>
+            <td>{{ post.content }}</td>
+            <td>{{ post.platform }}</td>
+            <td>{{ post.scheduledTime }}</td>
+            <td>{{ post.status }}</td>
+            <td class="actions">
+              <button
+                class="btn btn-danger"
+                (click)="remove(post.id)"
+                [disabled]="removingId() === post.id"
+              >
+                Delete
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  } @else if (!loading() && !error()) {
+    <p class="empty">No social media posts found.</p>
+  }
+</section>

@@ -1,0 +1,65 @@
+<section class="page">
+  <div class="page-head">
+    <h2>Locations</h2>
+    @if (cities().length) {
+      <span class="count">{{ cities().length }} cities</span>
+    }
+  </div>
+
+  @if (loading()) {
+    <p class="hint">Loading&hellip;</p>
+  }
+
+  @if (error(); as message) {
+    <p class="error">{{ message }}</p>
+  }
+
+  <div class="toolbar">
+    <select
+      class="search"
+      [value]="selectedCountryId() === null ? '' : `${selectedCountryId()}`"
+      (change)="onCountryChange($any($event.target).value)"
+    >
+      <option value="">Select country&hellip;</option>
+      @for (country of countries(); track country.id) {
+        <option [value]="country.id">{{ country.name ?? country.nameAr }}</option>
+      }
+    </select>
+    <select
+      class="search"
+      [value]="selectedStateId() === null ? '' : `${selectedStateId()}`"
+      (change)="onStateChange($any($event.target).value)"
+      [disabled]="selectedCountryId() === null"
+    >
+      <option value="">Select state&hellip;</option>
+      @for (state of states(); track state.id) {
+        <option [value]="state.id">{{ state.name }}</option>
+      }
+    </select>
+  </div>
+
+  @if (selectedStateId() !== null) {
+    @if (cities().length) {
+      <table class="list-table">
+        <thead>
+          <tr>
+            <th>City</th>
+            <th>Arabic name</th>
+            <th>State</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (city of cities(); track city.id) {
+            <tr>
+              <td>{{ city.name }}</td>
+              <td>{{ city.nameAr }}</td>
+              <td>{{ city.stateName ?? city.state?.name }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    } @else if (!loading() && !error()) {
+      <p class="empty">No cities found.</p>
+    }
+  }
+</section>

@@ -1,0 +1,57 @@
+<section class="page">
+  <div class="page-head">
+    <h2>Campaigns</h2>
+    @if (campaigns().length) {
+      <span class="count">{{ campaigns().length }}</span>
+    }
+  </div>
+
+  @if (loading()) {
+    <p class="hint">Loading&hellip;</p>
+  }
+
+  @if (error(); as message) {
+    <p class="error">{{ message }}</p>
+  }
+
+  @if (campaigns().length) {
+    <table class="list-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Description</th>
+          <th>Start date</th>
+          <th>End date</th>
+          <th>Budget</th>
+          <th>Status</th>
+          <th>Contacts</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (campaign of campaigns(); track campaign.id) {
+          <tr>
+            <td>{{ campaign.name }}</td>
+            <td>{{ campaign.description }}</td>
+            <td>{{ campaign.startDate }}</td>
+            <td>{{ campaign.endDate ?? '—' }}</td>
+            <td>{{ campaign.budget }}</td>
+            <td>{{ campaign.status }}</td>
+            <td>{{ campaign.contactCount }}</td>
+            <td class="actions">
+              <button
+                class="btn"
+                (click)="toggleStatus(campaign)"
+                [disabled]="changingId() === campaign.id"
+              >
+                {{ campaign.status === 'Active' ? 'Pause' : 'Activate' }}
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  } @else if (!loading() && !error()) {
+    <p class="empty">No campaigns found.</p>
+  }
+</section>

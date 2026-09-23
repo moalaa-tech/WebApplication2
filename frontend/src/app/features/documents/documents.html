@@ -1,0 +1,72 @@
+<section class="page">
+  <div class="page-head">
+    <h2>Documents</h2>
+    @if (documents().length) {
+      <span class="count">{{ documents().length }}</span>
+    }
+  </div>
+
+  @if (loading()) {
+    <p class="hint">Loading&hellip;</p>
+  }
+
+  @if (error(); as message) {
+    <p class="error">{{ message }}</p>
+  }
+
+  <div class="toolbar">
+    <input
+      class="search"
+      type="search"
+      placeholder="Search documents"
+      [value]="query()"
+      (input)="query.set(($any($event.target)).value); load()"
+    />
+  </div>
+
+  @if (documents().length) {
+    <table class="list-table">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>File name</th>
+          <th>Category</th>
+          <th>Folder</th>
+          <th>Status</th>
+          <th>Size</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (document of documents(); track document.id) {
+          <tr>
+            <td>{{ document.title }}</td>
+            <td>{{ document.fileName }}</td>
+            <td>{{ document.categoryName }}</td>
+            <td>{{ document.folderName }}</td>
+            <td>{{ document.status }}</td>
+            <td>{{ document.fileSizeFormatted }}</td>
+            <td class="actions">
+              <button
+                class="btn"
+                (click)="download(document.id)"
+                [disabled]="downloadingId() === document.id"
+              >
+                Download
+              </button>
+              <button
+                class="btn btn-danger"
+                (click)="remove(document.id)"
+                [disabled]="removingId() === document.id"
+              >
+                Delete
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  } @else if (!loading() && !error()) {
+    <p class="empty">No documents found.</p>
+  }
+</section>

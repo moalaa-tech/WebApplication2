@@ -1,0 +1,43 @@
+<section class="page">
+  <div class="page-head">
+    <h2>Service level agreements</h2>
+    @if (agreements().length) {
+      <span class="count">{{ agreements().length }}</span>
+    }
+  </div>
+
+  @if (loading()) {
+    <p class="hint">Loading&hellip;</p>
+  }
+
+  @if (error(); as message) {
+    <p class="error">{{ message }}</p>
+  }
+
+  @if (agreements().length) {
+    <table class="list-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Service type</th>
+          <th>Response time</th>
+          <th>Resolution time</th>
+          <th>Compliance rate</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (agreement of agreements(); track agreement.id) {
+          <tr>
+            <td>{{ agreement.name }}</td>
+            <td>{{ agreement.serviceType }}</td>
+            <td>{{ agreement.responseTime }}</td>
+            <td>{{ agreement.resolutionTime }}</td>
+            <td>{{ agreement.metrics.complianceRate }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  } @else if (!loading() && !error()) {
+    <p class="empty">No service level agreements found.</p>
+  }
+</section>

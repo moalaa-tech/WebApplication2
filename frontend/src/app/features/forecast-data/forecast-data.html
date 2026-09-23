@@ -1,0 +1,63 @@
+<section class="page">
+  <div class="page-head">
+    <h2>Forecast Data</h2>
+    @if (items().length) {
+      <span class="count">{{ items().length }}</span>
+    }
+  </div>
+
+  @if (loading()) {
+    <p class="hint">Loading&hellip;</p>
+  }
+
+  @if (error(); as message) {
+    <p class="error">{{ message }}</p>
+  }
+
+  <div class="toolbar">
+    <input
+      class="search"
+      type="number"
+      placeholder="Forecast id (empty = list)"
+      [value]="selectedId() ?? ''"
+      (change)="onIdInput(($any($event.target)).value)"
+    />
+  </div>
+
+  @if (items().length) {
+    <table class="list-table">
+      <thead>
+        <tr>
+          <th>Data type</th>
+          <th>Data date</th>
+          <th>Value</th>
+          <th>Decimal value</th>
+          <th>Demand plan</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (item of items(); track item.id) {
+          <tr>
+            <td>{{ item.dataType }}</td>
+            <td>{{ item.dataDate }}</td>
+            <td>{{ item.value }}</td>
+            <td>{{ item.valueDecimal }}</td>
+            <td>{{ item.demandPlanName ?? '&mdash;' }}</td>
+            <td class="actions">
+              <button
+                class="btn btn-danger"
+                (click)="remove(item.id)"
+                [disabled]="removingId() === item.id"
+              >
+                Delete
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  } @else if (!loading() && !error()) {
+    <p class="empty">No forecast data found.</p>
+  }
+</section>

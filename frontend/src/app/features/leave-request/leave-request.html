@@ -1,0 +1,55 @@
+<section class="page">
+  <div class="page-head">
+    <h2>Leave requests</h2>
+    @if (leaveRequests().length) {
+      <span class="count">{{ leaveRequests().length }}</span>
+    }
+  </div>
+
+  @if (loading()) {
+    <p class="hint">Loading&hellip;</p>
+  }
+
+  @if (error(); as message) {
+    <p class="error">{{ message }}</p>
+  }
+
+  @if (leaveRequests().length) {
+    <table class="list-table">
+      <thead>
+        <tr>
+          <th>Employee</th>
+          <th>Leave type</th>
+          <th>Start</th>
+          <th>End</th>
+          <th>Days</th>
+          <th>Status</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (request of leaveRequests(); track request.id) {
+          <tr>
+            <td>{{ request.employee.name }}</td>
+            <td>{{ request.leaveType.name }}</td>
+            <td>{{ request.startDate }}</td>
+            <td>{{ request.endDate }}</td>
+            <td>{{ request.numberOfDays }}</td>
+            <td>{{ request.status }}</td>
+            <td class="actions">
+              <button
+                class="btn btn-danger"
+                (click)="remove(request.id)"
+                [disabled]="removingId() === request.id"
+              >
+                Delete
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  } @else if (!loading() && !error()) {
+    <p class="empty">No leave requests found.</p>
+  }
+</section>

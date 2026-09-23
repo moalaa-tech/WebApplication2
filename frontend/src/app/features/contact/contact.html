@@ -1,0 +1,53 @@
+<section class="page">
+  <div class="page-head">
+    <h2>Contacts</h2>
+    @if (contacts().length) {
+      <span class="count">{{ contacts().length }}</span>
+    }
+  </div>
+
+  @if (loading()) {
+    <p class="hint">Loading&hellip;</p>
+  }
+
+  @if (error(); as message) {
+    <p class="error">{{ message }}</p>
+  }
+
+  @if (contacts().length) {
+    <table class="list-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Phone</th>
+          <th>Position</th>
+          <th>Company</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (contact of contacts(); track contact.id) {
+          <tr>
+            <td>{{ contact.fullName }}</td>
+            <td>{{ contact.email }}</td>
+            <td>{{ contact.phone }}</td>
+            <td>{{ contact.position }}</td>
+            <td>{{ contact.companyName }}</td>
+            <td class="actions">
+              <button
+                class="btn btn-danger"
+                (click)="remove(contact.id)"
+                [disabled]="removingId() === contact.id"
+              >
+                Delete
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  } @else if (!loading() && !error()) {
+    <p class="empty">No contacts found.</p>
+  }
+</section>

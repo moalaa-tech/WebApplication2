@@ -1,0 +1,55 @@
+<section class="page">
+  <div class="page-head">
+    <h2>Invoices</h2>
+    @if (invoices().length) {
+      <span class="count">{{ invoices().length }}</span>
+    }
+  </div>
+
+  @if (loading()) {
+    <p class="hint">Loading&hellip;</p>
+  }
+
+  @if (error(); as message) {
+    <p class="error">{{ message }}</p>
+  }
+
+  @if (invoices().length) {
+    <table class="list-table">
+      <thead>
+        <tr>
+          <th>Invoice number</th>
+          <th>Vendor</th>
+          <th>Invoice date</th>
+          <th>Due date</th>
+          <th>Amount</th>
+          <th>Status</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (invoice of invoices(); track invoice.id) {
+          <tr>
+            <td>{{ invoice.invoiceNumber }}</td>
+            <td>{{ invoice.vendorName ?? invoice.vendorId }}</td>
+            <td>{{ invoice.invoiceDate }}</td>
+            <td>{{ invoice.dueDate }}</td>
+            <td>{{ invoice.amount }}</td>
+            <td>{{ invoice.status }}</td>
+            <td class="actions">
+              <button
+                class="btn btn-danger"
+                (click)="remove(invoice.id)"
+                [disabled]="removingId() === invoice.id"
+              >
+                Delete
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  } @else if (!loading() && !error()) {
+    <p class="empty">No invoices found.</p>
+  }
+</section>

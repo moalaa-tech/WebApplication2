@@ -1,0 +1,26 @@
+<section class="page">
+  <div class="page-head">
+    <h2>Home</h2>
+  </div>
+
+  @if (loading()) {
+    <p class="hint">Loading&hellip;</p>
+  }
+
+  @if (error(); as message) {
+    <p class="error">{{ message }}</p>
+  }
+
+  @if (!loading() && !error() && status()) {
+    <div class="key-value">
+      <div class="kv">
+        <span class="k">Endpoint</span>
+        <span class="v">Home</span>
+      </div>
+      <div class="kv">
+        <span class="k">Status</span>
+        <span class="v">{{ status() }}</span>
+      </div>
+    </div>
+  }
+</section>

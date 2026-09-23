@@ -1,0 +1,63 @@
+<section class="page">
+  <div class="page-head">
+    <h2>Instagram Webhook</h2>
+  </div>
+
+  @if (error(); as message) {
+    <p class="error">{{ message }}</p>
+  }
+
+  <p class="hint">
+    Instagram calls the verify URL with a GET request when you configure the webhook subscription.
+    Enter your hub parameters below and click Verify to confirm the endpoint echoes the challenge.
+  </p>
+
+  <div class="key-value">
+    <div class="kv">
+      <span class="k">Verify URL</span>
+      <span class="v">{{ verifyUrl() }}</span>
+    </div>
+    <div class="kv">
+      <span class="k">hub.mode</span>
+      <input
+        class="search"
+        type="text"
+        [value]="mode()"
+        (input)="mode.set(($any($event.target)).value)"
+      />
+    </div>
+    <div class="kv">
+      <span class="k">hub.verify_token</span>
+      <input
+        class="search"
+        type="text"
+        [value]="verifyToken()"
+        (input)="verifyToken.set(($any($event.target)).value)"
+      />
+    </div>
+    <div class="kv">
+      <span class="k">hub.challenge</span>
+      <input
+        class="search"
+        type="text"
+        [value]="challenge()"
+        (input)="challenge.set(($any($event.target)).value)"
+      />
+    </div>
+  </div>
+
+  <div class="toolbar">
+    <button class="btn" (click)="verify()" [disabled]="loading()">
+      {{ loading() ? 'Verifying...' : 'Verify' }}
+    </button>
+  </div>
+
+  @if (result()) {
+    <div class="key-value">
+      <div class="kv">
+        <span class="k">Response</span>
+        <span class="v">{{ result() }}</span>
+      </div>
+    </div>
+  }
+</section>

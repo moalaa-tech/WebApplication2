@@ -1,0 +1,89 @@
+<section class="page">
+  <div class="page-head">
+    <h2>System logs</h2>
+    @if (index(); as data) {
+      <span class="count">{{ data.logSummary.totalCount }}</span>
+    }
+  </div>
+
+  @if (loading()) {
+    <p class="hint">Loading&hellip;</p>
+  }
+
+  @if (error(); as message) {
+    <p class="error">{{ message }}</p>
+  }
+
+  <div class="toolbar">
+    <input
+      class="search"
+      type="search"
+      placeholder="Search logs"
+      [value]="search()"
+      (input)="search.set(($any($event.target)).value); load()"
+    />
+    <input
+      class="search"
+      type="number"
+      min="1"
+      placeholder="Page"
+      [value]="page()"
+      (change)="onPageChange(($any($event.target)).value)"
+    />
+    <input
+      class="search"
+      type="number"
+      min="1"
+      placeholder="Page size"
+      [value]="pageSize()"
+      (change)="onPageSizeChange(($any($event.target)).value)"
+    />
+  </div>
+
+  @if (index(); as data) {
+    <div class="toolbar">
+      <button
+        class="btn"
+        (click)="goTo(data.pageNumber - 1)"
+        [disabled]="!data.hasPreviousPage"
+      >
+        Previous
+      </button>
+      <span class="hint">Page {{ data.pageNumber }} of {{ data.totalPages }}</span>
+      <button
+        class="btn"
+        (click)="goTo(data.pageNumber + 1)"
+        [disabled]="!data.hasNextPage"
+      >
+        Next
+      </button>
+    </div>
+  }
+
+  @if (logs().length) {
+    <table class="list-table">
+      <thead>
+        <tr>
+          <th>Timestamp</th>
+          <th>Level</th>
+          <th>Message</th>
+          <th>Logger</th>
+          <th>User</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (log of logs(); track log.id) {
+          <tr>
+            <td>{{ log.timestamp }}</td>
+            <td>{{ log.level }}</td>
+            <td>{{ log.message }}</td>
+            <td>{{ log.logger }}</td>
+            <td>{{ log.userName }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  } @else if (!loading() && !error()) {
+    <p class="empty">No logs found.</p>
+  }
+</section>

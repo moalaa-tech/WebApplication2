@@ -1,0 +1,53 @@
+<section class="page">
+  <div class="page-head">
+    <h2>Document categories</h2>
+    @if (categories().length) {
+      <span class="count">{{ categories().length }}</span>
+    }
+  </div>
+
+  @if (loading()) {
+    <p class="hint">Loading&hellip;</p>
+  }
+
+  @if (error(); as message) {
+    <p class="error">{{ message }}</p>
+  }
+
+  @if (categories().length) {
+    <table class="list-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Parent</th>
+          <th>Active</th>
+          <th>Order</th>
+          <th>Documents</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (category of categories(); track category.id) {
+          <tr>
+            <td>{{ category.name }}</td>
+            <td>{{ category.parentName }}</td>
+            <td>{{ category.isActive ? 'Yes' : 'No' }}</td>
+            <td>{{ category.order }}</td>
+            <td>{{ category.documentCount }}</td>
+            <td class="actions">
+              <button
+                class="btn btn-danger"
+                (click)="remove(category.id)"
+                [disabled]="removingId() === category.id"
+              >
+                Delete
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  } @else if (!loading() && !error()) {
+    <p class="empty">No document categories found.</p>
+  }
+</section>

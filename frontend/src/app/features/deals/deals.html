@@ -1,0 +1,55 @@
+<section class="page">
+  <div class="page-head">
+    <h2>Deals</h2>
+    @if (deals().length) {
+      <span class="count">{{ deals().length }}</span>
+    }
+  </div>
+
+  @if (loading()) {
+    <p class="hint">Loading&hellip;</p>
+  }
+
+  @if (error(); as message) {
+    <p class="error">{{ message }}</p>
+  }
+
+  @if (deals().length) {
+    <table class="list-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Opportunity</th>
+          <th>Account</th>
+          <th>Type</th>
+          <th>Amount</th>
+          <th>Closing date</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (deal of deals(); track deal.id) {
+          <tr>
+            <td>{{ deal.name ?? '&mdash;' }}</td>
+            <td>{{ deal.opportunityName ?? '&mdash;' }}</td>
+            <td>{{ deal.accountName ?? '&mdash;' }}</td>
+            <td>{{ deal.type ? 'Won' : 'Lost' }}</td>
+            <td>{{ deal.amount }}</td>
+            <td>{{ deal.closingDate }}</td>
+            <td class="actions">
+              <button
+                class="btn btn-danger"
+                (click)="remove(deal.id)"
+                [disabled]="removingId() === deal.id"
+              >
+                Delete
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  } @else if (!loading() && !error()) {
+    <p class="empty">No deals found.</p>
+  }
+</section>

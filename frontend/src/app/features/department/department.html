@@ -1,0 +1,55 @@
+<section class="page">
+  <div class="page-head">
+    <h2>Departments</h2>
+    @if (departments().length) {
+      <span class="count">{{ departments().length }}</span>
+    }
+  </div>
+
+  @if (loading()) {
+    <p class="hint">Loading&hellip;</p>
+  }
+
+  @if (error(); as message) {
+    <p class="error">{{ message }}</p>
+  }
+
+  @if (departments().length) {
+    <table class="list-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Arabic name</th>
+          <th>Location</th>
+          <th>Manager</th>
+          <th>Budget</th>
+          <th>Status</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (department of departments(); track department.id) {
+          <tr>
+            <td>{{ department.name }}</td>
+            <td>{{ department.nameAr }}</td>
+            <td>{{ department.location }}</td>
+            <td>{{ department.managerName }}</td>
+            <td>{{ department.budget }}</td>
+            <td>{{ department.isActive ? 'Active' : 'Inactive' }}</td>
+            <td class="actions">
+              <button
+                class="btn btn-danger"
+                (click)="remove(department.id)"
+                [disabled]="removingId() === department.id"
+              >
+                Delete
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  } @else if (!loading() && !error()) {
+    <p class="empty">No departments found.</p>
+  }
+</section>

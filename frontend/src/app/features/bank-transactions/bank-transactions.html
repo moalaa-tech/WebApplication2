@@ -1,0 +1,77 @@
+<section class="page">
+  <div class="page-head">
+    <h2>Bank Transactions</h2>
+    @if (transactions().length) {
+      <span class="count">{{ transactions().length }}</span>
+    }
+  </div>
+
+  @if (loading()) {
+    <p class="hint">Loading&hellip;</p>
+  }
+
+  @if (error(); as message) {
+    <p class="error">{{ message }}</p>
+  }
+
+  <div class="toolbar">
+    <input
+      class="search"
+      type="date"
+      placeholder="From date"
+      [value]="from()"
+      (input)="from.set(($any($event.target)).value); load()"
+    />
+    <input
+      class="search"
+      type="date"
+      placeholder="To date"
+      [value]="to()"
+      (input)="to.set(($any($event.target)).value); load()"
+    />
+    <input
+      class="search"
+      type="text"
+      placeholder="Type"
+      [value]="type()"
+      (input)="type.set(($any($event.target)).value); load()"
+    />
+  </div>
+
+  @if (transactions().length) {
+    <table class="list-table">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Reference</th>
+          <th>Description</th>
+          <th>Amount</th>
+          <th>Running balance</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (transaction of transactions(); track transaction.id) {
+          <tr>
+            <td>{{ transaction.transactionDate }}</td>
+            <td>{{ transaction.referenceNumber }}</td>
+            <td>{{ transaction.description }}</td>
+            <td>{{ transaction.amount }}</td>
+            <td>{{ transaction.runningBalance }}</td>
+            <td class="actions">
+              <button
+                class="btn btn-danger"
+                (click)="remove(transaction.id)"
+                [disabled]="removingId() === transaction.id"
+              >
+                Delete
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  } @else if (!loading() && !error()) {
+    <p class="empty">No bank transactions found.</p>
+  }
+</section>

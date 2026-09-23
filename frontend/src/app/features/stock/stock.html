@@ -1,0 +1,51 @@
+<section class="page">
+  <div class="page-head">
+    <h2>Stock</h2>
+    @if (items().length) {
+      <span class="count">{{ items().length }}</span>
+    }
+  </div>
+
+  @if (loading()) {
+    <p class="hint">Loading&hellip;</p>
+  }
+
+  @if (error(); as message) {
+    <p class="error">{{ message }}</p>
+  }
+
+  <div class="toolbar">
+    <button class="btn" (click)="setView('in')" [disabled]="view() === 'in'">
+      Stock in
+    </button>
+    <button class="btn" (click)="setView('out')" [disabled]="view() === 'out'">
+      Stock out
+    </button>
+    <button class="btn" (click)="setView('adjust')" [disabled]="view() === 'adjust'">
+      Adjust
+    </button>
+  </div>
+
+  @if (items().length) {
+    <table class="list-table">
+      <thead>
+        <tr>
+          <th>Value</th>
+          <th>Text</th>
+          <th>Selected</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (item of items(); track item.value) {
+          <tr>
+            <td>{{ item.value }}</td>
+            <td>{{ item.text }}</td>
+            <td>{{ item.selected ? 'Yes' : 'No' }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  } @else if (!loading() && !error()) {
+    <p class="empty">No stock items found.</p>
+  }
+</section>

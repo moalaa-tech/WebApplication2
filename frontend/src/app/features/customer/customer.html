@@ -1,0 +1,63 @@
+<section class="page">
+  <div class="page-head">
+    <h2>Customers</h2>
+    @if (customers().length) {
+      <span class="count">{{ customers().length }}</span>
+    }
+  </div>
+
+  @if (loading()) {
+    <p class="hint">Loading&hellip;</p>
+  }
+
+  @if (error(); as message) {
+    <p class="error">{{ message }}</p>
+  }
+
+  <div class="toolbar">
+    <input
+      class="search"
+      type="number"
+      placeholder="Page"
+      [value]="page()"
+      (change)="onPageChange(($any($event.target)).value)"
+    />
+  </div>
+
+  @if (customers().length) {
+    <table class="list-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Arabic name</th>
+          <th>Email</th>
+          <th>Phone</th>
+          <th>Address</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (customer of customers(); track customer.id) {
+          <tr>
+            <td>{{ customer.name ?? '&mdash;' }}</td>
+            <td>{{ customer.nameAr ?? '&mdash;' }}</td>
+            <td>{{ customer.email ?? '&mdash;' }}</td>
+            <td>{{ customer.phone ?? '&mdash;' }}</td>
+            <td>{{ customer.address ?? '&mdash;' }}</td>
+            <td class="actions">
+              <button
+                class="btn btn-danger"
+                (click)="remove(customer.id)"
+                [disabled]="removingId() === customer.id"
+              >
+                Delete
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  } @else if (!loading() && !error()) {
+    <p class="empty">No customers found.</p>
+  }
+</section>

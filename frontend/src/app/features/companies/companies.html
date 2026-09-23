@@ -1,0 +1,53 @@
+<section class="page">
+  <div class="page-head">
+    <h2>Companies</h2>
+    @if (companies().length) {
+      <span class="count">{{ companies().length }}</span>
+    }
+  </div>
+
+  @if (loading()) {
+    <p class="hint">Loading&hellip;</p>
+  }
+
+  @if (error(); as message) {
+    <p class="error">{{ message }}</p>
+  }
+
+  @if (companies().length) {
+    <table class="list-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Name (AR)</th>
+          <th>City</th>
+          <th>Address</th>
+          <th>Email</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (company of companies(); track company.id) {
+          <tr>
+            <td>{{ company.name }}</td>
+            <td>{{ company.nameAr }}</td>
+            <td>{{ company.city }}</td>
+            <td>{{ company.address }}</td>
+            <td>{{ company.email }}</td>
+            <td class="actions">
+              <button
+                class="btn btn-danger"
+                (click)="remove(company.id)"
+                [disabled]="removingId() === company.id"
+              >
+                Delete
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  } @else if (!loading() && !error()) {
+    <p class="empty">No companies found.</p>
+  }
+</section>

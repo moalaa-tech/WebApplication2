@@ -1,0 +1,68 @@
+<section class="page">
+  <div class="page-head">
+    <h2>Purchase Orders</h2>
+    @if (purchaseOrders().length) {
+      <span class="count">{{ purchaseOrders().length }}</span>
+    }
+  </div>
+
+  @if (loading()) {
+    <p class="hint">Loading&hellip;</p>
+  }
+
+  @if (error(); as message) {
+    <p class="error">{{ message }}</p>
+  }
+
+  <div class="toolbar">
+    <input
+      class="search"
+      type="search"
+      placeholder="Verify PO number"
+      [value]="verifyNumber()"
+      (input)="verifyNumber.set(($any($event.target)).value)"
+    />
+    <button class="btn" (click)="verify()">Verify PO</button>
+  </div>
+
+  @if (verifyResult(); as result) {
+    <p class="hint">{{ result }}</p>
+  }
+
+  @if (purchaseOrders().length) {
+    <table class="list-table">
+      <thead>
+        <tr>
+          <th>PO number</th>
+          <th>Supplier</th>
+          <th>Order date</th>
+          <th>Total</th>
+          <th>Status</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (po of purchaseOrders(); track po.id) {
+          <tr>
+            <td>{{ po.poNumber }}</td>
+            <td>{{ po.supplierName }}</td>
+            <td>{{ po.orderDate }}</td>
+            <td>{{ po.totalAmount }}</td>
+            <td>{{ po.status }}</td>
+            <td class="actions">
+              <button
+                class="btn btn-danger"
+                (click)="remove(po.id)"
+                [disabled]="removingId() === po.id"
+              >
+                Delete
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  } @else if (!loading() && !error()) {
+    <p class="empty">No purchase orders found.</p>
+  }
+</section>

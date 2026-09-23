@@ -1,0 +1,63 @@
+<section class="page">
+  <div class="page-head">
+    <h2>Vendors</h2>
+    @if (vendors().length) {
+      <span class="count">{{ vendors().length }}</span>
+    }
+  </div>
+
+  @if (loading()) {
+    <p class="hint">Loading&hellip;</p>
+  }
+
+  @if (error(); as message) {
+    <p class="error">{{ message }}</p>
+  }
+
+  <div class="toolbar">
+    <input
+      class="search"
+      type="search"
+      placeholder="Search vendors"
+      [value]="query()"
+      (input)="query.set(($any($event.target)).value); load()"
+    />
+  </div>
+
+  @if (vendors().length) {
+    <table class="list-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Contact person</th>
+          <th>Email</th>
+          <th>Phone</th>
+          <th>Address</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (vendor of vendors(); track vendor.id) {
+          <tr>
+            <td>{{ vendor.name }}</td>
+            <td>{{ vendor.contactPerson }}</td>
+            <td>{{ vendor.email }}</td>
+            <td>{{ vendor.phone }}</td>
+            <td>{{ vendor.address }}</td>
+            <td class="actions">
+              <button
+                class="btn btn-danger"
+                (click)="remove(vendor.id)"
+                [disabled]="removingId() === vendor.id"
+              >
+                Delete
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  } @else if (!loading() && !error()) {
+    <p class="empty">No vendors found.</p>
+  }
+</section>

@@ -1,0 +1,72 @@
+<section class="page">
+  <div class="page-head">
+    <h2>Journal</h2>
+    @if (entries().length) {
+      <span class="count">{{ entries().length }}</span>
+    }
+  </div>
+
+  @if (loading()) {
+    <p class="hint">Loading&hellip;</p>
+  }
+
+  @if (error(); as message) {
+    <p class="error">{{ message }}</p>
+  }
+
+  <div class="toolbar">
+    <input
+      class="search"
+      type="date"
+      placeholder="From date"
+      [value]="fromDate()"
+      (input)="fromDate.set(($any($event.target)).value); load()"
+    />
+    <input
+      class="search"
+      type="date"
+      placeholder="To date"
+      [value]="toDate()"
+      (input)="toDate.set(($any($event.target)).value); load()"
+    />
+  </div>
+
+  @if (entries().length) {
+    <table class="list-table">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Reference</th>
+          <th>Description</th>
+          <th>Status</th>
+          <th>Debit</th>
+          <th>Credit</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (entry of entries(); track entry.id) {
+          <tr>
+            <td>{{ entry.entryDate }}</td>
+            <td>{{ entry.reference }}</td>
+            <td>{{ entry.description }}</td>
+            <td>{{ entry.status }}</td>
+            <td>{{ entry.debit }}</td>
+            <td>{{ entry.credit }}</td>
+            <td class="actions">
+              <button
+                class="btn"
+                (click)="post(entry.id)"
+                [disabled]="postingId() === entry.id"
+              >
+                Post
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  } @else if (!loading() && !error()) {
+    <p class="empty">No journal entries found.</p>
+  }
+</section>

@@ -1,0 +1,43 @@
+<section class="page">
+  <div class="page-head">
+    <h2>Users</h2>
+    @if (users().length) {
+      <span class="count">{{ users().length }}</span>
+    }
+  </div>
+
+  @if (loading()) {
+    <p class="hint">Loading&hellip;</p>
+  }
+
+  @if (error(); as message) {
+    <p class="error">{{ message }}</p>
+  }
+
+  @if (users().length) {
+    <table class="list-table">
+      <thead>
+        <tr>
+          <th>User name</th>
+          <th>Email</th>
+          <th>First name</th>
+          <th>Last name</th>
+          <th>Arabic name</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (user of users(); track user.id) {
+          <tr>
+            <td>{{ user.userName ?? '&mdash;' }}</td>
+            <td>{{ user.email ?? '&mdash;' }}</td>
+            <td>{{ user.firstName }}</td>
+            <td>{{ user.lastName }}</td>
+            <td>{{ user.nameAR }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  } @else if (!loading() && !error()) {
+    <p class="empty">No users found.</p>
+  }
+</section>

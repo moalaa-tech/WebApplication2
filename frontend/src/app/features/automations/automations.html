@@ -1,0 +1,53 @@
+<section class="page">
+  <div class="page-head">
+    <h2>Automations</h2>
+    @if (automations().length) {
+      <span class="count">{{ automations().length }}</span>
+    }
+  </div>
+
+  @if (loading()) {
+    <p class="hint">Loading&hellip;</p>
+  }
+
+  @if (error(); as message) {
+    <p class="error">{{ message }}</p>
+  }
+
+  @if (automations().length) {
+    <table class="list-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Description</th>
+          <th>Trigger</th>
+          <th>Last run</th>
+          <th>Active</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (automation of automations(); track automation.id) {
+          <tr>
+            <td>{{ automation.name }}</td>
+            <td>{{ automation.description ?? '&mdash;' }}</td>
+            <td>{{ automation.trigger }}</td>
+            <td>{{ automation.lastRunDate ?? '&mdash;' }}</td>
+            <td>{{ automation.isActive ? 'Yes' : 'No' }}</td>
+            <td class="actions">
+              <button
+                class="btn"
+                (click)="toggle(automation.id)"
+                [disabled]="togglingId() === automation.id"
+              >
+                {{ automation.isActive ? 'Deactivate' : 'Activate' }}
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  } @else if (!loading() && !error()) {
+    <p class="empty">No automations found.</p>
+  }
+</section>

@@ -1,0 +1,65 @@
+<section class="page">
+  <div class="page-head">
+    <h2>Quotes</h2>
+    @if (quotesPage()?.quotes.length) {
+      <span class="count">{{ quotesPage()?.quotes.length }}</span>
+    }
+  </div>
+
+  @if (loading()) {
+    <p class="hint">Loading&hellip;</p>
+  }
+
+  @if (error(); as message) {
+    <p class="error">{{ message }}</p>
+  }
+
+  <div class="toolbar">
+    <input
+      class="search"
+      type="search"
+      placeholder="Search quotes"
+      [value]="query()"
+      (input)="query.set(($any($event.target)).value); load()"
+    />
+  </div>
+
+  @if (quotesPage()?.quotes.length) {
+    <table class="list-table">
+      <thead>
+        <tr>
+          <th>Number</th>
+          <th>Issue date</th>
+          <th>Expiry date</th>
+          <th>Subtotal</th>
+          <th>Tax</th>
+          <th>Total</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (quote of quotesPage()?.quotes ?? []; track quote.id) {
+          <tr>
+            <td>{{ quote.quoteNumber }}</td>
+            <td>{{ quote.issueDate }}</td>
+            <td>{{ quote.expiryDate }}</td>
+            <td>{{ quote.subTotal }}</td>
+            <td>{{ quote.taxAmount }}</td>
+            <td>{{ quote.totalAmount }}</td>
+            <td class="actions">
+              <button
+                class="btn btn-danger"
+                (click)="remove(quote.id)"
+                [disabled]="removingId() === quote.id"
+              >
+                Delete
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  } @else if (!loading() && !error()) {
+    <p class="empty">No quotes found.</p>
+  }
+</section>

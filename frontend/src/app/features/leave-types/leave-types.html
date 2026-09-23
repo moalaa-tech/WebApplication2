@@ -1,0 +1,47 @@
+<section class="page">
+  <div class="page-head">
+    <h2>Leave types</h2>
+    @if (leaveTypes().length) {
+      <span class="count">{{ leaveTypes().length }}</span>
+    }
+  </div>
+
+  @if (loading()) {
+    <p class="hint">Loading&hellip;</p>
+  }
+
+  @if (error(); as message) {
+    <p class="error">{{ message }}</p>
+  }
+
+  @if (leaveTypes().length) {
+    <table class="list-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Arabic name</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (leaveType of leaveTypes(); track leaveType.id) {
+          <tr>
+            <td>{{ leaveType.name }}</td>
+            <td>{{ leaveType.nameAr }}</td>
+            <td class="actions">
+              <button
+                class="btn btn-danger"
+                (click)="remove(leaveType.id)"
+                [disabled]="removingId() === leaveType.id"
+              >
+                Delete
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  } @else if (!loading() && !error()) {
+    <p class="empty">No leave types found.</p>
+  }
+</section>

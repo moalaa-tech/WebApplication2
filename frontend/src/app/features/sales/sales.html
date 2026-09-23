@@ -1,0 +1,55 @@
+<section class="page">
+  <div class="page-head">
+    <h2>Sales</h2>
+    @if (leads().length) {
+      <span class="count">{{ leads().length }}</span>
+    }
+  </div>
+
+  @if (loading()) {
+    <p class="hint">Loading&hellip;</p>
+  }
+
+  @if (error(); as message) {
+    <p class="error">{{ message }}</p>
+  }
+
+  @if (leads().length) {
+    <table class="list-table">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Company</th>
+          <th>Contact person</th>
+          <th>Email</th>
+          <th>Phone</th>
+          <th>Status</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (lead of leads(); track lead.id) {
+          <tr>
+            <td>{{ lead.title }}</td>
+            <td>{{ lead.companyName }}</td>
+            <td>{{ lead.contactPerson }}</td>
+            <td>{{ lead.email }}</td>
+            <td>{{ lead.phone }}</td>
+            <td>{{ lead.status }}</td>
+            <td class="actions">
+              <button
+                class="btn btn-danger"
+                (click)="remove(lead.id)"
+                [disabled]="removingId() === lead.id"
+              >
+                Delete
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  } @else if (!loading() && !error()) {
+    <p class="empty">No sales found.</p>
+  }
+</section>

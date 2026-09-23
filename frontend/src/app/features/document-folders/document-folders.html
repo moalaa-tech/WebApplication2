@@ -1,0 +1,53 @@
+<section class="page">
+  <div class="page-head">
+    <h2>Document folders</h2>
+    @if (folders().length) {
+      <span class="count">{{ folders().length }}</span>
+    }
+  </div>
+
+  @if (loading()) {
+    <p class="hint">Loading&hellip;</p>
+  }
+
+  @if (error(); as message) {
+    <p class="error">{{ message }}</p>
+  }
+
+  @if (folders().length) {
+    <table class="list-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Path</th>
+          <th>Parent folder</th>
+          <th>Documents</th>
+          <th>Subfolders</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (folder of folders(); track folder.id) {
+          <tr>
+            <td>{{ folder.name }}</td>
+            <td>{{ folder.path }}</td>
+            <td>{{ folder.parentFolderName }}</td>
+            <td>{{ folder.documentCount }}</td>
+            <td>{{ folder.subFolderCount }}</td>
+            <td class="actions">
+              <button
+                class="btn btn-danger"
+                (click)="remove(folder.id)"
+                [disabled]="removingId() === folder.id"
+              >
+                Delete
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  } @else if (!loading() && !error()) {
+    <p class="empty">No document folders found.</p>
+  }
+</section>

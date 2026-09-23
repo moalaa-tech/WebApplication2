@@ -1,0 +1,61 @@
+<section class="page">
+  <div class="page-head">
+    <h2>Reconciliation Items</h2>
+    @if (items().length) {
+      <span class="count">{{ items().length }}</span>
+    }
+  </div>
+
+  @if (loading()) {
+    <p class="hint">Loading&hellip;</p>
+  }
+
+  @if (error(); as message) {
+    <p class="error">{{ message }}</p>
+  }
+
+  <div class="toolbar">
+    <input
+      class="search"
+      type="number"
+      placeholder="Reconciliation ID"
+      [value]="reconciliationId()"
+      (input)="setReconciliationId(($any($event.target)).value)"
+    />
+  </div>
+
+  @if (items().length) {
+    <table class="list-table">
+      <thead>
+        <tr>
+          <th>Bank transaction</th>
+          <th>Status</th>
+          <th>Adjusted amount</th>
+          <th>Notes</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (item of items(); track item.id) {
+          <tr>
+            <td>{{ item.bankTransactionId }}</td>
+            <td>{{ item.status }}</td>
+            <td>{{ item.adjustedAmount }}</td>
+            <td>{{ item.notes }}</td>
+            <td class="actions">
+              <button
+                class="btn btn-danger"
+                (click)="remove(item.id)"
+                [disabled]="removingId() === item.id"
+              >
+                Delete
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  } @else if (!loading() && !error()) {
+    <p class="empty">No reconciliation items found.</p>
+  }
+</section>

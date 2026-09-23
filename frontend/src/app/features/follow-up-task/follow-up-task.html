@@ -1,0 +1,62 @@
+<section class="page">
+  <div class="page-head">
+    <h2>Follow-Up Tasks</h2>
+    @if (followUpTasks().length) {
+      <span class="count">{{ followUpTasks().length }}</span>
+    }
+  </div>
+
+  @if (loading()) {
+    <p class="hint">Loading&hellip;</p>
+  }
+
+  @if (error(); as message) {
+    <p class="error">{{ message }}</p>
+  }
+
+  @if (followUpTasks().length) {
+    <table class="list-table">
+      <thead>
+        <tr>
+          <th>Subject</th>
+          <th>Contact</th>
+          <th>Due date</th>
+          <th>Status</th>
+          <th>Priority</th>
+          <th>Completed</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (task of followUpTasks(); track task.id) {
+          <tr>
+            <td>{{ task.subject ?? '—' }}</td>
+            <td>{{ task.contactName ?? '—' }}</td>
+            <td>{{ task.dueDate }}</td>
+            <td>{{ task.status }}</td>
+            <td>{{ task.priority }}</td>
+            <td>{{ task.completed ? 'Yes' : 'No' }}</td>
+            <td class="actions">
+              <button
+                class="btn"
+                (click)="markComplete(task)"
+                [disabled]="task.completed || completingId() === task.id"
+              >
+                Complete
+              </button>
+              <button
+                class="btn btn-danger"
+                (click)="remove(task.id)"
+                [disabled]="removingId() === task.id"
+              >
+                Delete
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  } @else if (!loading() && !error()) {
+    <p class="empty">No follow-up tasks found.</p>
+  }
+</section>

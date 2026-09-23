@@ -1,0 +1,83 @@
+<section class="page">
+  <div class="page-head">
+    <h2>Orders</h2>
+    @if (orders().length) {
+      <span class="count">{{ orders().length }}</span>
+    }
+  </div>
+
+  @if (loading()) {
+    <p class="hint">Loading&hellip;</p>
+  }
+
+  @if (error(); as message) {
+    <p class="error">{{ message }}</p>
+  }
+
+  <div class="toolbar">
+    <input
+      class="search"
+      type="search"
+      placeholder="Search orders"
+      [value]="query()"
+      (input)="query.set(($any($event.target)).value)"
+    />
+    <input
+      class="search"
+      type="number"
+      placeholder="Status"
+      [value]="status() ?? ''"
+      (input)="onStatusChange(($any($event.target)).value)"
+    />
+    <input
+      class="search"
+      type="date"
+      [value]="dateFrom()"
+      (input)="dateFrom.set(($any($event.target)).value)"
+    />
+    <input
+      class="search"
+      type="date"
+      [value]="dateTo()"
+      (input)="dateTo.set(($any($event.target)).value)"
+    />
+    <button class="btn" (click)="load()">Load</button>
+  </div>
+
+  @if (orders().length) {
+    <table class="list-table">
+      <thead>
+        <tr>
+          <th>Order number</th>
+          <th>Customer</th>
+          <th>Status</th>
+          <th>Created</th>
+          <th>Total amount</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (order of orders(); track order.id) {
+          <tr>
+            <td>{{ order.orderNumber ?? '' }}</td>
+            <td>{{ order.customer ? order.customer.name ?? '' : '' }}</td>
+            <td>{{ order.status }}</td>
+            <td>{{ order.dateCreated }}</td>
+            <td>{{ order.totalAmount }}</td>
+            <td class="actions">
+              <button
+                class="btn"
+                (click)="exportPdf(order.id)"
+                [disabled]="exportingId() === order.id"
+              >
+                Export PDF
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  } @else if (!loading() && !error()) {
+    <p class="empty">No orders found.</p>
+  }
+</section>

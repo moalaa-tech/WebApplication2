@@ -1,0 +1,63 @@
+<section class="page">
+  <div class="page-head">
+    <h2>Activities</h2>
+    @if (activities().length) {
+      <span class="count">{{ activities().length }}</span>
+    }
+  </div>
+
+  @if (loading()) {
+    <p class="hint">Loading&hellip;</p>
+  }
+
+  @if (error(); as message) {
+    <p class="error">{{ message }}</p>
+  }
+
+  <div class="toolbar">
+    <input
+      class="search"
+      type="search"
+      placeholder="Search activities"
+      [value]="query()"
+      (input)="query.set(($any($event.target)).value); load()"
+    />
+  </div>
+
+  @if (activities().length) {
+    <table class="list-table">
+      <thead>
+        <tr>
+          <th>Subject</th>
+          <th>Type</th>
+          <th>Status</th>
+          <th>Due date</th>
+          <th>Owner</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (activity of activities(); track activity.id) {
+          <tr>
+            <td>{{ activity.subject }}</td>
+            <td>{{ activity.typeName }}</td>
+            <td>{{ activity.statusName }}</td>
+            <td>{{ activity.dueDate }}</td>
+            <td>{{ activity.ownerUserName }}</td>
+            <td class="actions">
+              <button
+                class="btn btn-danger"
+                (click)="remove(activity.id)"
+                [disabled]="removingId() === activity.id"
+              >
+                Delete
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  } @else if (!loading() && !error()) {
+    <p class="empty">No activities found.</p>
+  }
+</section>

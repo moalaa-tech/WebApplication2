@@ -1,0 +1,55 @@
+<section class="page">
+  <div class="page-head">
+    <h2>Support agents</h2>
+    @if (supportAgents().length) {
+      <span class="count">{{ supportAgents().length }}</span>
+    }
+  </div>
+
+  @if (loading()) {
+    <p class="hint">Loading&hellip;</p>
+  }
+
+  @if (error(); as message) {
+    <p class="error">{{ message }}</p>
+  }
+
+  @if (supportAgents().length) {
+    <table class="list-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Department</th>
+          <th>Job title</th>
+          <th>Active</th>
+          <th>Open tickets</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (agent of supportAgents(); track agent.id) {
+          <tr>
+            <td>{{ agent.fullName }}</td>
+            <td>{{ agent.email }}</td>
+            <td>{{ agent.department }}</td>
+            <td>{{ agent.jobTitle }}</td>
+            <td>{{ agent.isActive ? 'Yes' : 'No' }}</td>
+            <td>{{ agent.openTickets }}</td>
+            <td class="actions">
+              <button
+                class="btn"
+                (click)="toggle(agent.id, agent.isActive)"
+                [disabled]="togglingId() === agent.id"
+              >
+                {{ agent.isActive ? 'Deactivate' : 'Activate' }}
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  } @else if (!loading() && !error()) {
+    <p class="empty">No support agents found.</p>
+  }
+</section>

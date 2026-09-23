@@ -1,0 +1,63 @@
+<section class="page">
+  <div class="page-head">
+    <h2>Expenses</h2>
+    @if (expenses().length) {
+      <span class="count">{{ expenses().length }}</span>
+    }
+  </div>
+
+  @if (loading()) {
+    <p class="hint">Loading&hellip;</p>
+  }
+
+  @if (error(); as message) {
+    <p class="error">{{ message }}</p>
+  }
+
+  <div class="toolbar">
+    <input
+      class="search"
+      type="search"
+      placeholder="Search expenses"
+      [value]="query()"
+      (input)="query.set(($any($event.target)).value); load()"
+    />
+  </div>
+
+  @if (expenses().length) {
+    <table class="list-table">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Arabic title</th>
+          <th>Amount</th>
+          <th>Date</th>
+          <th>Category</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (expense of expenses(); track expense.id) {
+          <tr>
+            <td>{{ expense.title }}</td>
+            <td>{{ expense.titleAR }}</td>
+            <td>{{ expense.amount }}</td>
+            <td>{{ expense.date }}</td>
+            <td>{{ expense.categoryName ?? '&ndash;' }}</td>
+            <td class="actions">
+              <button
+                class="btn btn-danger"
+                (click)="remove(expense.id)"
+                [disabled]="removingId() === expense.id"
+              >
+                Delete
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  } @else if (!loading() && !error()) {
+    <p class="empty">No expenses found.</p>
+  }
+</section>

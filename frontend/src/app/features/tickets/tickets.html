@@ -1,0 +1,55 @@
+<section class="page">
+  <div class="page-head">
+    <h2>Tickets</h2>
+    @if (tickets().length) {
+      <span class="count">{{ tickets().length }}</span>
+    }
+  </div>
+
+  @if (loading()) {
+    <p class="hint">Loading&hellip;</p>
+  }
+
+  @if (error(); as message) {
+    <p class="error">{{ message }}</p>
+  }
+
+  @if (tickets().length) {
+    <table class="list-table">
+      <thead>
+        <tr>
+          <th>Subject</th>
+          <th>Description</th>
+          <th>Status</th>
+          <th>Priority</th>
+          <th>Customer</th>
+          <th>Created</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (ticket of tickets(); track ticket.id) {
+          <tr>
+            <td>{{ ticket.subject }}</td>
+            <td>{{ ticket.description }}</td>
+            <td>{{ ticket.status }}</td>
+            <td>{{ ticket.priority }}</td>
+            <td>{{ ticket.customer.name }}</td>
+            <td>{{ ticket.createdDate }}</td>
+            <td class="actions">
+              <button
+                class="btn btn-danger"
+                (click)="remove(ticket.id)"
+                [disabled]="removingId() === ticket.id"
+              >
+                Delete
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  } @else if (!loading() && !error()) {
+    <p class="empty">No tickets found.</p>
+  }
+</section>

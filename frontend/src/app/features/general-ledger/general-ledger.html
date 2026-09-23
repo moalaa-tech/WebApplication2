@@ -1,0 +1,64 @@
+<section class="page">
+  <div class="page-head">
+    <h2>General Ledger</h2>
+    @if (ledgers().length) {
+      <span class="count">{{ ledgers().length }}</span>
+    }
+  </div>
+
+  @if (loading()) {
+    <p class="hint">Loading&hellip;</p>
+  }
+
+  @if (error(); as message) {
+    <p class="error">{{ message }}</p>
+  }
+
+  @if (ledgers().length) {
+    <table class="list-table">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Account</th>
+          <th>Description</th>
+          <th>Debit</th>
+          <th>Credit</th>
+          <th>Posted</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (ledger of ledgers(); track ledger.id) {
+          <tr>
+            <td>{{ ledger.transactionDate }}</td>
+            <td>{{ ledger.accountNumber }}</td>
+            <td>{{ ledger.description }}</td>
+            <td>{{ ledger.debitAmount }}</td>
+            <td>{{ ledger.creditAmount }}</td>
+            <td>{{ ledger.isPosted ? 'Yes' : 'No' }}</td>
+            <td class="actions">
+              @if (!ledger.isPosted) {
+                <button
+                  class="btn"
+                  (click)="post(ledger.id)"
+                  [disabled]="postingId() === ledger.id"
+                >
+                  Post
+                </button>
+              }
+              <button
+                class="btn btn-danger"
+                (click)="remove(ledger.id)"
+                [disabled]="removingId() === ledger.id"
+              >
+                Delete
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  } @else if (!loading() && !error()) {
+    <p class="empty">No general ledger entries found.</p>
+  }
+</section>

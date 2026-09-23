@@ -1,0 +1,55 @@
+<section class="page">
+  <div class="page-head">
+    <h2>Suppliers</h2>
+    @if (suppliers().length) {
+      <span class="count">{{ suppliers().length }}</span>
+    }
+  </div>
+
+  @if (loading()) {
+    <p class="hint">Loading&hellip;</p>
+  }
+
+  @if (error(); as message) {
+    <p class="error">{{ message }}</p>
+  }
+
+  @if (suppliers().length) {
+    <table class="list-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Code</th>
+          <th>Contact person</th>
+          <th>Email</th>
+          <th>Phone</th>
+          <th>Active</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (supplier of suppliers(); track supplier.id) {
+          <tr>
+            <td>{{ supplier.name }}</td>
+            <td>{{ supplier.code }}</td>
+            <td>{{ supplier.contactPerson }}</td>
+            <td>{{ supplier.email }}</td>
+            <td>{{ supplier.phone }}</td>
+            <td>{{ supplier.isActive ? 'Yes' : 'No' }}</td>
+            <td class="actions">
+              <button
+                class="btn btn-danger"
+                (click)="remove(supplier.id)"
+                [disabled]="removingId() === supplier.id"
+              >
+                Delete
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  } @else if (!loading() && !error()) {
+    <p class="empty">No suppliers found.</p>
+  }
+</section>

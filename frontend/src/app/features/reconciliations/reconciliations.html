@@ -1,0 +1,43 @@
+<section class="page">
+  <div class="page-head">
+    <h2>Reconciliations</h2>
+    @if (reconciliations().length) {
+      <span class="count">{{ reconciliations().length }}</span>
+    }
+  </div>
+
+  @if (loading()) {
+    <p class="hint">Loading&hellip;</p>
+  }
+
+  @if (error(); as message) {
+    <p class="error">{{ message }}</p>
+  }
+
+  @if (reconciliations().length) {
+    <table class="list-table">
+      <thead>
+        <tr>
+          <th>Bank account</th>
+          <th>Statement date</th>
+          <th>Statement balance</th>
+          <th>Adjusted balance</th>
+          <th>Reconciled</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (reconciliation of reconciliations(); track reconciliation.id) {
+          <tr>
+            <td>{{ reconciliation.bankAccountId }}</td>
+            <td>{{ reconciliation.statementDate }}</td>
+            <td>{{ reconciliation.statementBalance }}</td>
+            <td>{{ reconciliation.adjustedBookBalance }}</td>
+            <td>{{ reconciliation.isReconciled ? 'Yes' : 'No' }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  } @else if (!loading() && !error()) {
+    <p class="empty">No reconciliations found.</p>
+  }
+</section>

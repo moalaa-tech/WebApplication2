@@ -1,0 +1,55 @@
+<section class="page">
+  <div class="page-head">
+    <h2>Projects</h2>
+    @if (projects().length) {
+      <span class="count">{{ projects().length }}</span>
+    }
+  </div>
+
+  @if (loading()) {
+    <p class="hint">Loading&hellip;</p>
+  }
+
+  @if (error(); as message) {
+    <p class="error">{{ message }}</p>
+  }
+
+  @if (projects().length) {
+    <table class="list-table">
+      <thead>
+        <tr>
+          <th>Project code</th>
+          <th>Name</th>
+          <th>Customer</th>
+          <th>Duration</th>
+          <th>Budget</th>
+          <th>Utilization</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (project of projects(); track project.id) {
+          <tr>
+            <td>{{ project.projectCode }}</td>
+            <td>{{ project.name }}</td>
+            <td>{{ project.customerName ?? '&mdash;' }}</td>
+            <td>{{ project.duration }}</td>
+            <td>{{ project.budget }}</td>
+            <td>{{ project.budgetUtilizationPercentage }}%</td>
+            <td class="actions">
+              <button
+                class="btn btn-danger"
+                (click)="remove(project.id)"
+                [disabled]="removingId() === project.id"
+              >
+                Delete
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  } @else if (!loading() && !error()) {
+    <p class="empty">No projects found.</p>
+  }
+</section>

@@ -1,0 +1,53 @@
+<section class="page">
+  <div class="page-head">
+    <h2>Service requests</h2>
+    @if (serviceRequests().length) {
+      <span class="count">{{ serviceRequests().length }}</span>
+    }
+  </div>
+
+  @if (loading()) {
+    <p class="hint">Loading&hellip;</p>
+  }
+
+  @if (error(); as message) {
+    <p class="error">{{ message }}</p>
+  }
+
+  @if (serviceRequests().length) {
+    <table class="list-table">
+      <thead>
+        <tr>
+          <th>Request type</th>
+          <th>Description</th>
+          <th>Status</th>
+          <th>Customer</th>
+          <th>Created</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (serviceRequest of serviceRequests(); track serviceRequest.id) {
+          <tr>
+            <td>{{ serviceRequest.requestType }}</td>
+            <td>{{ serviceRequest.description }}</td>
+            <td>{{ serviceRequest.status }}</td>
+            <td>{{ serviceRequest.customerId }}</td>
+            <td>{{ serviceRequest.createdDate }}</td>
+            <td class="actions">
+              <button
+                class="btn btn-danger"
+                (click)="remove(serviceRequest.id)"
+                [disabled]="removingId() === serviceRequest.id"
+              >
+                Delete
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  } @else if (!loading() && !error()) {
+    <p class="empty">No service requests found.</p>
+  }
+</section>

@@ -1,0 +1,134 @@
+<div class="shell">
+  <aside class="sidebar">
+    <div class="brand">
+      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">WebApplication2</a>
+      <span class="tag">Angular &harr; ASP.NET Core API</span>
+    </div>
+
+    <nav class="groups">
+      <details open>
+        <summary>Core</summary>
+        <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">dashboard</a>
+        <a routerLink="/activities" routerLinkActive="active">activities</a>
+        <a routerLink="/authentication" routerLinkActive="active">authentication</a>
+        <a routerLink="/companies" routerLinkActive="active">companies</a>
+        <a routerLink="/company" routerLinkActive="active">company</a>
+        <a routerLink="/contact" routerLinkActive="active">contact</a>
+        <a routerLink="/health" routerLinkActive="active">health</a>
+        <a routerLink="/home" routerLinkActive="active">home</a>
+        <a routerLink="/lookup" routerLinkActive="active">lookup</a>
+        <a routerLink="/notifications" routerLinkActive="active">notifications</a>
+        <a routerLink="/role" routerLinkActive="active">role</a>
+        <a routerLink="/setting" routerLinkActive="active">setting</a>
+        <a routerLink="/system-logs" routerLinkActive="active">system-logs</a>
+        <a routerLink="/user" routerLinkActive="active">user</a>
+        <a routerLink="/vendors" routerLinkActive="active">vendors</a>
+      </details>
+
+      <details open>
+        <summary>Accounting</summary>
+        <a routerLink="/accounts-payable" routerLinkActive="active">accounts-payable</a>
+        <a routerLink="/accounts-receivable" routerLinkActive="active">accounts-receivable</a>
+        <a routerLink="/expense-categories" routerLinkActive="active">expense-categories</a>
+        <a routerLink="/expenses" routerLinkActive="active">expenses</a>
+        <a routerLink="/general-ledger" routerLinkActive="active">general-ledger</a>
+        <a routerLink="/journal" routerLinkActive="active">journal</a>
+      </details>
+
+      <details open>
+        <summary>Assets</summary>
+        <a routerLink="/fixed-assets" routerLinkActive="active">fixed-assets</a>
+      </details>
+
+      <details open>
+        <summary>Banking</summary>
+        <a routerLink="/bank-accounts" routerLinkActive="active">bank-accounts</a>
+        <a routerLink="/bank-transactions" routerLinkActive="active">bank-transactions</a>
+        <a routerLink="/reconciliation-items" routerLinkActive="active">reconciliation-items</a>
+        <a routerLink="/reconciliations" routerLinkActive="active">reconciliations</a>
+      </details>
+
+      <details open>
+        <summary>Customer service</summary>
+        <a routerLink="/service-level-agreements" routerLinkActive="active">service-level-agreements</a>
+        <a routerLink="/service-request" routerLinkActive="active">service-request</a>
+        <a routerLink="/support-agents" routerLinkActive="active">support-agents</a>
+        <a routerLink="/tickets" routerLinkActive="active">tickets</a>
+      </details>
+
+      <details open>
+        <summary>Documents</summary>
+        <a routerLink="/document-categories" routerLinkActive="active">document-categories</a>
+        <a routerLink="/document-folders" routerLinkActive="active">document-folders</a>
+        <a routerLink="/documents" routerLinkActive="active">documents</a>
+      </details>
+
+      <details open>
+        <summary>Human resources</summary>
+        <a routerLink="/department" routerLinkActive="active">department</a>
+        <a routerLink="/employee" routerLinkActive="active">employee</a>
+        <a routerLink="/job-applications" routerLinkActive="active">job-applications</a>
+        <a routerLink="/job-postings" routerLinkActive="active">job-postings</a>
+        <a routerLink="/job-title" routerLinkActive="active">job-title</a>
+        <a routerLink="/leave-request" routerLinkActive="active">leave-request</a>
+        <a routerLink="/leave-types" routerLinkActive="active">leave-types</a>
+        <a routerLink="/location" routerLinkActive="active">location</a>
+        <a routerLink="/payrolls" routerLinkActive="active">payrolls</a>
+      </details>
+
+      <details open>
+        <summary>Inventory</summary>
+        <a routerLink="/inventory" routerLinkActive="active">inventory</a>
+        <a routerLink="/order" routerLinkActive="active">order</a>
+        <a routerLink="/product" routerLinkActive="active">product</a>
+        <a routerLink="/product-type" routerLinkActive="active">product-type</a>
+        <a routerLink="/stock" routerLinkActive="active">stock</a>
+        <a routerLink="/transactions" routerLinkActive="active">transactions</a>
+        <a routerLink="/warehouse" routerLinkActive="active">warehouse</a>
+      </details>
+
+      <details open>
+        <summary>Marketing</summary>
+        <a routerLink="/analytics-roi-tracking" routerLinkActive="active">analytics-roi-tracking</a>
+        <a routerLink="/campaigns" routerLinkActive="active">campaigns</a>
+        <a routerLink="/email-template" routerLinkActive="active">email-template</a>
+        <a routerLink="/facebook-webhook" routerLinkActive="active">facebook-webhook</a>
+        <a routerLink="/instagram-webhook" routerLinkActive="active">instagram-webhook</a>
+        <a routerLink="/lead-scoring" routerLinkActive="active">lead-scoring</a>
+        <a routerLink="/segmentation" routerLinkActive="active">segmentation</a>
+        <a routerLink="/social-media-integration" routerLinkActive="active">social-media-integration</a>
+      </details>
+
+      <details open>
+        <summary>Projects</summary>
+        <a routerLink="/follow-up-task" routerLinkActive="active">follow-up-task</a>
+        <a routerLink="/job-phases" routerLinkActive="active">job-phases</a>
+        <a routerLink="/projects" routerLinkActive="active">projects</a>
+        <a routerLink="/time-entries" routerLinkActive="active">time-entries</a>
+      </details>
+
+      <details open>
+        <summary>Sales</summary>
+        <a routerLink="/automations" routerLinkActive="active">automations</a>
+        <a routerLink="/automation-step" routerLinkActive="active">automation-step</a>
+        <a routerLink="/customer" routerLinkActive="active">customer</a>
+        <a routerLink="/deals" routerLinkActive="active">deals</a>
+        <a routerLink="/quotes" routerLinkActive="active">quotes</a>
+        <a routerLink="/sales" routerLinkActive="active">sales</a>
+      </details>
+
+      <details open>
+        <summary>Supply chain</summary>
+        <a routerLink="/demand-plans" routerLinkActive="active">demand-plans</a>
+        <a routerLink="/forecast-data" routerLinkActive="active">forecast-data</a>
+        <a routerLink="/purchase-orders" routerLinkActive="active">purchase-orders</a>
+        <a routerLink="/shipping" routerLinkActive="active">shipping</a>
+        <a routerLink="/suppliers" routerLinkActive="active">suppliers</a>
+      </details>
+    </nav>
+  </aside>
+
+  <main class="content">
+    <router-outlet />
+  </main>
+</div>

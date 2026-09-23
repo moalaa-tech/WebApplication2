@@ -1,0 +1,53 @@
+<section class="page">
+  <div class="page-head">
+    <h2>Bank Accounts</h2>
+    @if (accounts().length) {
+      <span class="count">{{ accounts().length }}</span>
+    }
+  </div>
+
+  @if (loading()) {
+    <p class="hint">Loading&hellip;</p>
+  }
+
+  @if (error(); as message) {
+    <p class="error">{{ message }}</p>
+  }
+
+  @if (accounts().length) {
+    <table class="list-table">
+      <thead>
+        <tr>
+          <th>Account number</th>
+          <th>Bank</th>
+          <th>Account name</th>
+          <th>Currency</th>
+          <th>Balance</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (account of accounts(); track account.id) {
+          <tr>
+            <td>{{ account.accountNumber }}</td>
+            <td>{{ account.bankName }}</td>
+            <td>{{ account.accountName }}</td>
+            <td>{{ account.currency }}</td>
+            <td>{{ account.currentBalance }}</td>
+            <td class="actions">
+              <button
+                class="btn btn-danger"
+                (click)="remove(account.id)"
+                [disabled]="removingId() === account.id"
+              >
+                Delete
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  } @else if (!loading() && !error()) {
+    <p class="empty">No bank accounts found.</p>
+  }
+</section>

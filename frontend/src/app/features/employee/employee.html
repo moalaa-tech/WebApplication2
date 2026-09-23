@@ -1,0 +1,58 @@
+<section class="page">
+  <div class="page-head">
+    <h2>Employees</h2>
+    @if (employees().length) {
+      <span class="count">{{ employees().length }}</span>
+    }
+  </div>
+
+  @if (loading()) {
+    <p class="hint">Loading&hellip;</p>
+  }
+
+  @if (error(); as message) {
+    <p class="error">{{ message }}</p>
+  }
+
+  <div class="key-value">
+    <div class="kv">
+      <span class="k">Organization chart rows</span>
+      <span class="v">{{ organizationChart().length }}</span>
+    </div>
+  </div>
+
+  @if (employees().length) {
+    <table class="list-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>First name</th>
+          <th>Last name</th>
+          <th>Department</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (employee of employees(); track employee.id) {
+          <tr>
+            <td>{{ employee.name }}</td>
+            <td>{{ employee.firstName }}</td>
+            <td>{{ employee.lastName }}</td>
+            <td>{{ employee.department?.name }}</td>
+            <td class="actions">
+              <button
+                class="btn btn-danger"
+                (click)="remove(employee.id)"
+                [disabled]="removingId() === employee.id"
+              >
+                Delete
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  } @else if (!loading() && !error()) {
+    <p class="empty">No employees found.</p>
+  }
+</section>

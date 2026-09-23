@@ -1,0 +1,49 @@
+<section class="page">
+  <div class="page-head">
+    <h2>Job titles</h2>
+    @if (jobTitles().length) {
+      <span class="count">{{ jobTitles().length }}</span>
+    }
+  </div>
+
+  @if (loading()) {
+    <p class="hint">Loading&hellip;</p>
+  }
+
+  @if (error(); as message) {
+    <p class="error">{{ message }}</p>
+  }
+
+  @if (jobTitles().length) {
+    <table class="list-table">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Department</th>
+          <th>Departments</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (jobTitle of jobTitles(); track jobTitle.id) {
+          <tr>
+            <td>{{ jobTitle.title }}</td>
+            <td>{{ jobTitle.departmentName }}</td>
+            <td>{{ jobTitle.departments.length }}</td>
+            <td class="actions">
+              <button
+                class="btn btn-danger"
+                (click)="remove(jobTitle.id)"
+                [disabled]="removingId() === jobTitle.id"
+              >
+                Delete
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  } @else if (!loading() && !error()) {
+    <p class="empty">No job titles found.</p>
+  }
+</section>

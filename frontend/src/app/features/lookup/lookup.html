@@ -1,0 +1,114 @@
+<section class="page">
+  <div class="page-head">
+    <h2>Locations lookup</h2>
+    @if (countries().length) {
+      <span class="count">{{ countries().length }}</span>
+    }
+  </div>
+
+  @if (loading()) {
+    <p class="hint">Loading&hellip;</p>
+  }
+
+  @if (error(); as message) {
+    <p class="error">{{ message }}</p>
+  }
+
+  <div class="toolbar">
+    <select
+      class="search"
+      [value]="countryId() ?? ''"
+      (change)="onCountryChange(($any($event.target)).value)"
+    >
+      <option value="">All countries</option>
+      @for (country of countries(); track country.id) {
+        <option [value]="country.id">{{ country.name }}</option>
+      }
+    </select>
+
+    <select
+      class="search"
+      [value]="stateId() ?? ''"
+      (change)="onStateChange(($any($event.target)).value)"
+      [disabled]="countryId() === null"
+    >
+      <option value="">Select a state</option>
+      @for (state of filteredStates(); track state.id) {
+        <option [value]="state.id">{{ state.name }}</option>
+      }
+    </select>
+
+    <select class="search" [value]="cityId() ?? ''" [disabled]="stateId() === null">
+      <option value="">Select a city</option>
+      @for (city of cities(); track city.id) {
+        <option [value]="city.id">{{ city.name }}</option>
+      }
+    </select>
+  </div>
+
+  @if (countries().length) {
+    <h3 class="empty">Countries</h3>
+    <table class="list-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>ISO2</th>
+          <th>ISO3</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (country of countries(); track country.id) {
+          <tr>
+            <td>{{ country.name }}</td>
+            <td>{{ country.iSO2 }}</td>
+            <td>{{ country.iSO3 }}</td>
+            <td class="actions">
+              <button
+                class="btn btn-danger"
+                (click)="removeCountry(country.id)"
+                [disabled]="removingId() === country.id"
+              >
+                Delete
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
+
+  @if (filteredStates().length) {
+    <h3 class="empty">States</h3>
+    <table class="list-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Name (AR)</th>
+          <th>Country</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (state of filteredStates(); track state.id) {
+          <tr>
+            <td>{{ state.name }}</td>
+            <td>{{ state.nameAr }}</td>
+            <td>{{ state.countryName }}</td>
+            <td class="actions">
+              <button
+                class="btn btn-danger"
+                (click)="removeState(state.id)"
+                [disabled]="removingId() === state.id"
+              >
+                Delete
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  } @else if (!loading() && !error()) {
+    <p class="empty">No states for the selected country.</p>
+  }
+</section>

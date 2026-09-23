@@ -1,0 +1,46 @@
+import { Component, inject, OnInit, signal } from '@angular/core';
+import { firstValueFrom } from 'rxjs';
+import { ServiceRequest, ServiceRequestService } from '../../core/api/ServiceRequest.service';
+
+@Component({
+  selector: 'app-service-request',
+  styleUrl: '../shared/list.css',
+  templateUrl: './service-request.html',
+})
+export class ServiceRequestComponent implements OnInit {
+  private readonly serviceRequestService = inject(ServiceRequestService);
+
+  readonly serviceRequests = signal<ServiceRequest[]>([]);
+  readonly loading = signal(true);
+  readonly error = signal('');
+  readonly removingId = signal<number | null>(null);
+
+  async ngOnInit(): Promise<void> {
+    await this.load();
+  }
+
+  async load(): Promise<void> {
+    this.loading.set(true);
+    this.error.set('');
+    try {
+      this.serviceRequests.set(await firstValueFrom(this.serviceRequestService.getServiceRequests()));
+    } catch (e) {
+      this.error.set(e instanceof Error ? e.message : String(e));
+    } finally {
+      this.loading.set(false);
+    }
+  }
+
+  async remove(id: number): Promise<void> {
+    this.removingId.set(id);
+    this.error.set('');
+    try {
+      await firstValueFrom(this.serviceRequestService.deleteServiceRequest(id));
+      await this.load();
+    } catch (e) {
+      this.error.set(e instanceof Error ? e.message : String(e));
+    } finally {
+      this.removingId.set(null);
+    }
+  }
+}

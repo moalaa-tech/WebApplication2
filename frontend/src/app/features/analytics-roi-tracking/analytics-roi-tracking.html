@@ -1,0 +1,79 @@
+<section class="page">
+  <div class="page-head">
+    <h2>Analytics &amp; ROI tracking</h2>
+    @if (index(); as data) {
+      <span class="count">Total ROI {{ data.totalROI }}%</span>
+    }
+  </div>
+
+  @if (loading()) {
+    <p class="hint">Loading&hellip;</p>
+  }
+
+  @if (error(); as message) {
+    <p class="error">{{ message }}</p>
+  }
+
+  @if (index(); as data) {
+    <div class="key-value">
+      <div class="kv">
+        <span class="k">Total ROI</span>
+        <span class="v">{{ data.totalROI }}%</span>
+      </div>
+      @for (entry of channelEntries(); track entry.key) {
+        <div class="kv">
+          <span class="k">{{ entry.key }}</span>
+          <span class="v">{{ entry.value }}</span>
+        </div>
+      }
+    </div>
+
+    @if (data.analytics.length) {
+      <table class="list-table">
+        <thead>
+          <tr>
+            <th>Campaign</th>
+            <th>Channel</th>
+            <th>Start date</th>
+            <th>Budget</th>
+            <th>Spent</th>
+            <th>Revenue</th>
+            <th>ROI</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (item of data.analytics; track item.id) {
+            <tr>
+              <td>{{ item.campaignName }}</td>
+              <td>{{ item.channel }}</td>
+              <td>{{ item.startDate }}</td>
+              <td>{{ item.totalBudget }}</td>
+              <td>{{ item.totalSpent }}</td>
+              <td>{{ item.revenueGenerated }}</td>
+              <td>{{ item.roiPercentage }}%</td>
+              <td class="actions">
+                <button
+                  class="btn btn-danger"
+                  (click)="remove(item.id)"
+                  [disabled]="removingId() === item.id"
+                >
+                  Delete
+                </button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    } @else if (!loading() && !error()) {
+      <p class="empty">No campaign analytics found.</p>
+    }
+
+    <div class="key-value">
+      <div class="kv">
+        <span class="k">ROI calculator</span>
+        <span class="v">Simulation requires a full calculator payload; use the dedicated ROI tool instead.</span>
+      </div>
+    </div>
+  }
+</section>

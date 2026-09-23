@@ -1,0 +1,86 @@
+<section class="page">
+  <div class="page-head">
+    <h2>Time Entries</h2>
+    @if (timeEntries().length) {
+      <span class="count">{{ timeEntries().length }}</span>
+    }
+  </div>
+
+  @if (loading()) {
+    <p class="hint">Loading&hellip;</p>
+  }
+
+  @if (error(); as message) {
+    <p class="error">{{ message }}</p>
+  }
+
+  <div class="toolbar">
+    <input
+      class="search"
+      type="date"
+      [value]="fromDate()"
+      (change)="fromDate.set(($any($event.target)).value); onDateChange()"
+    />
+    <input
+      class="search"
+      type="date"
+      [value]="toDate()"
+      (change)="toDate.set(($any($event.target)).value); onDateChange()"
+    />
+  </div>
+
+  @if (timeEntries().length) {
+    <table class="list-table">
+      <thead>
+        <tr>
+          <th>Phase</th>
+          <th>User</th>
+          <th>Date</th>
+          <th>Hours</th>
+          <th>Total cost</th>
+          <th>Status</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (entry of timeEntries(); track entry.id) {
+          <tr>
+            <td>{{ entry.phaseName }}</td>
+            <td>{{ entry.userName }}</td>
+            <td>{{ entry.entryDate }}</td>
+            <td>{{ entry.hours }}</td>
+            <td>{{ entry.totalCost }}</td>
+            <td>{{ entry.isApproved ? 'Approved' : entry.status ?? 'Pending' }}</td>
+            <td class="actions">
+              @if (!entry.isApproved) {
+                <button
+                  class="btn"
+                  (click)="approve(entry.id)"
+                  [disabled]="busyId() === entry.id"
+                >
+                  Approve
+                </button>
+                <button
+                  class="btn"
+                  (click)="reject(entry.id)"
+                  [disabled]="busyId() === entry.id"
+                >
+                  Reject
+                </button>
+              }
+              <button
+                class="btn btn-danger"
+                (click)="remove(entry.id)"
+                [disabled]="busyId() === entry.id"
+              >
+                Delete
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  } @else if (!loading() && !error()) {
+    <p class="empty">No time entries found.</p>
+  }
+</section>

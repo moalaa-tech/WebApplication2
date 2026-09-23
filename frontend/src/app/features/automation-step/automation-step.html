@@ -1,0 +1,55 @@
+<section class="page">
+  <div class="page-head">
+    <h2>Automation steps</h2>
+    @if (steps().length) {
+      <span class="count">{{ steps().length }}</span>
+    }
+  </div>
+
+  @if (loading()) {
+    <p class="hint">Loading&hellip;</p>
+  }
+
+  @if (error(); as message) {
+    <p class="error">{{ message }}</p>
+  }
+
+  @if (steps().length) {
+    <table class="list-table">
+      <thead>
+        <tr>
+          <th>Automation</th>
+          <th>Order</th>
+          <th>Action</th>
+          <th>Email template</th>
+          <th>Status value</th>
+          <th>Campaign</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (step of steps(); track step.id) {
+          <tr>
+            <td>{{ step.automationId }}</td>
+            <td>{{ step.order }}</td>
+            <td>{{ step.action }}</td>
+            <td>{{ step.emailTemplateName ?? '&mdash;' }}</td>
+            <td>{{ step.statusValue ?? '&mdash;' }}</td>
+            <td>{{ step.campaignName ?? '&mdash;' }}</td>
+            <td class="actions">
+              <button
+                class="btn btn-danger"
+                (click)="remove(step.id)"
+                [disabled]="removingId() === step.id"
+              >
+                Delete
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  } @else if (!loading() && !error()) {
+    <p class="empty">No automation steps found.</p>
+  }
+</section>

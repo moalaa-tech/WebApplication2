@@ -1,0 +1,93 @@
+<section class="page">
+  <div class="page-head">
+    <h2>Job applications</h2>
+    @if (applications().length) {
+      <span class="count">{{ applications().length }}</span>
+    }
+  </div>
+
+  @if (loading()) {
+    <p class="hint">Loading&hellip;</p>
+  }
+
+  @if (error(); as message) {
+    <p class="error">{{ message }}</p>
+  }
+
+  @if (applications().length) {
+    <table class="list-table">
+      <thead>
+        <tr>
+          <th>Applicant</th>
+          <th>Email</th>
+          <th>Job title</th>
+          <th>Status</th>
+          <th>Applied</th>
+          <th>Set status</th>
+          <th>Interview</th>
+          <th>Downloads</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (app of applications(); track app.id) {
+          <tr>
+            <td>{{ app.fullName }}</td>
+            <td>{{ app.email }}</td>
+            <td>{{ app.jobTitle }}</td>
+            <td>{{ app.statusName }}</td>
+            <td>{{ app.applicationDate }}</td>
+            <td>
+              <input
+                class="search"
+                type="text"
+                placeholder="New status"
+                [value]="statusDrafts()[app.id]"
+                (input)="setStatusDraft(app.id, ($any($event.target)).value)"
+              />
+              <button
+                class="btn"
+                (click)="updateStatus(app.id)"
+                [disabled]="busyId() === app.id"
+              >
+                Update
+              </button>
+            </td>
+            <td>
+              <input
+                class="search"
+                type="datetime-local"
+                [value]="interviewDrafts()[app.id]"
+                (input)="setInterviewDraft(app.id, ($any($event.target)).value)"
+              />
+              <button
+                class="btn"
+                (click)="scheduleInterview(app.id)"
+                [disabled]="busyId() === app.id"
+              >
+                Schedule
+              </button>
+            </td>
+            <td class="actions">
+              <button
+                class="btn"
+                (click)="downloadResume(app.id)"
+                [disabled]="downloadingId() === app.id"
+              >
+                Resume
+              </button>
+              <button
+                class="btn"
+                (click)="downloadCoverLetter(app.id)"
+                [disabled]="downloadingId() === app.id"
+              >
+                Cover letter
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  } @else if (!loading() && !error()) {
+    <p class="empty">No job applications found.</p>
+  }
+</section>

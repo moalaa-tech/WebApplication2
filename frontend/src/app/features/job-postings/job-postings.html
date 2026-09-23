@@ -1,0 +1,76 @@
+<section class="page">
+  <div class="page-head">
+    <h2>Job postings</h2>
+    @if (postings().length) {
+      <span class="count">{{ postings().length }}</span>
+    }
+  </div>
+
+  @if (loading()) {
+    <p class="hint">Loading&hellip;</p>
+  }
+
+  @if (error(); as message) {
+    <p class="error">{{ message }}</p>
+  }
+
+  <div class="toolbar">
+    <label>
+      <input
+        class="search"
+        type="checkbox"
+        [checked]="activeOnly()"
+        (change)="activeOnly.set(($any($event.target)).checked); load()"
+      />
+      Active only
+    </label>
+  </div>
+
+  @if (postings().length) {
+    <table class="list-table">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Department</th>
+          <th>Posted</th>
+          <th>Closing</th>
+          <th>Applications</th>
+          <th>Status</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (posting of postings(); track posting.id) {
+          <tr>
+            <td>{{ posting.title }}</td>
+            <td>{{ posting.departmentName }}</td>
+            <td>{{ posting.postingDate }}</td>
+            <td>{{ posting.closingDate }}</td>
+            <td>{{ posting.applicationCount }}</td>
+            <td>{{ posting.isActive ? 'Open' : 'Closed' }}</td>
+            <td class="actions">
+              @if (posting.isActive) {
+                <button
+                  class="btn"
+                  (click)="close(posting.id)"
+                  [disabled]="closingId() === posting.id"
+                >
+                  Close
+                </button>
+              }
+              <button
+                class="btn btn-danger"
+                (click)="remove(posting.id)"
+                [disabled]="removingId() === posting.id"
+              >
+                Delete
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  } @else if (!loading() && !error()) {
+    <p class="empty">No job postings found.</p>
+  }
+</section>

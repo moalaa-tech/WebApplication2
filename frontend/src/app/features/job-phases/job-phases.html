@@ -1,0 +1,65 @@
+<section class="page">
+  <div class="page-head">
+    <h2>Job Phases</h2>
+    @if (jobPhases().length) {
+      <span class="count">{{ jobPhases().length }}</span>
+    }
+  </div>
+
+  @if (loading()) {
+    <p class="hint">Loading&hellip;</p>
+  }
+
+  @if (error(); as message) {
+    <p class="error">{{ message }}</p>
+  }
+
+  <div class="toolbar">
+    <label class="hint">Project id</label>
+    <input
+      class="search"
+      type="number"
+      [value]="projectId()"
+      (change)="onProjectIdChange(($any($event.target)).value)"
+    />
+  </div>
+
+  @if (jobPhases().length) {
+    <table class="list-table">
+      <thead>
+        <tr>
+          <th>Project code</th>
+          <th>Phase code</th>
+          <th>Name</th>
+          <th>Status</th>
+          <th>Completion</th>
+          <th>Cost</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (phase of jobPhases(); track phase.id) {
+          <tr>
+            <td>{{ phase.projectCode }}</td>
+            <td>{{ phase.phaseCode }}</td>
+            <td>{{ phase.name }}</td>
+            <td>{{ phase.status ?? '&mdash;' }}</td>
+            <td>{{ phase.completionPercentage }}%</td>
+            <td>{{ phase.actualCost }} / {{ phase.estimatedCost }}</td>
+            <td class="actions">
+              <button
+                class="btn btn-danger"
+                (click)="remove(phase.id)"
+                [disabled]="removingId() === phase.id"
+              >
+                Delete
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  } @else if (!loading() && !error()) {
+    <p class="empty">No job phases found.</p>
+  }
+</section>
